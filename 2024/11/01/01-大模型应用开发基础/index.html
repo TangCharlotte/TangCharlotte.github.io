@@ -172,279 +172,246 @@
     <div class="divider"></div>
 
     <div class="content">
-        <p><strong>01-大模型应用开发基础</strong></p>
-<p><strong>1 背景</strong></p>
-<p><strong>1.1 概览</strong></p>
-<img src="/2024/11/01/01-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/image1.jpeg" class="">
-
-<p><strong>1.2 应用开发基础</strong></p>
-<p><strong>1.2.1 业务基础</strong></p>
+        <p>**01-**<strong>大模型应用开发基础</strong></p>
+<p><strong>1</strong> <strong>背景</strong></p>
+<p><strong>1.1</strong> <strong>概览</strong></p>
+<p><img src="file:///C:/Users/48548/AppData/Local/Temp/msohtmlclip1/01/clip_image002.jpg" alt="img"></p>
+<p><strong>1.2</strong> <strong>应用开发基础</strong></p>
+<p><strong>1.2.1</strong> <strong>业务基础</strong></p>
 <p>对目标用户、客户需求、市场环境、运营策略、商业模式等方面的深度认知和分析。</p>
-<p><strong>1.2.2 AI基础</strong></p>
+<p><strong>1.2.2 AI****基础</strong></p>
 <p>了解AI可以完成哪些任务，哪些任务超出其能力范围，以及如何更高效地利用AI来解决遇到的问题。</p>
-<p><strong>1.2.3 编程基础</strong></p>
+<p><strong>1.2.3</strong> <strong>编程基础</strong></p>
 <p>编写代码以实现符合业务需求的产品，特别是 AI 产品。</p>
-<p><strong>1.3 学习重点</strong></p>
+<p><strong>1.3</strong> <strong>学习重点</strong></p>
 <p><strong>不同发展方向对应不同的学习重点：</strong></p>
 <p>AI 全栈工程师：业务+AI+编程</p>
 <p>业务向：业务+AI</p>
 <p>编程向：编程+AI</p>
-<p><strong>AI全栈学习的重点</strong>——原理、实践、认知</p>
-<p><strong>2 大模型的工作原理</strong></p>
-<p><strong>2.1 工作原理</strong></p>
+<p><strong>AI****全栈学习的重点</strong>——原理、实践、认知</p>
+<p><strong>2</strong> <strong>大模型的工作原理</strong></p>
+<p><strong>2.1</strong> <strong>工作原理</strong></p>
 <p>功能：按格式输出、分类、聚类、持续互动、处理技术相关问题等。</p>
-<p><strong>2.1.1 输入&amp;输出</strong></p>
+<p><strong>2.1.1</strong> <strong>输入</strong>**&amp;**<strong>输出</strong></p>
 <p>大模型类似于函数，给输入，生成输出。</p>
 <p><strong>输入：</strong>可以用语言描述的问题，编辑成文本作为输入。</p>
 <p><strong>输出：</strong>生成的问题的结果文本。</p>
-<p><strong>2.1.2 预测</strong></p>
+<p><strong>2.1.2</strong> <strong>预测</strong></p>
 <p>根据上下文内容，预测下一个词的概率。</p>
-<img src="/2024/11/01/01-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/image2.gif" class="">
-
-<p><strong>2.2 核心过程</strong></p>
+<p><img src="file:///C:/Users/48548/AppData/Local/Temp/msohtmlclip1/01/clip_image003.gif" alt="img"></p>
+<p><strong>2.2</strong> <strong>核心过程</strong></p>
 <p>大模型工作的核心过程是训练和推理。</p>
-<p><strong>2.2.1 训练</strong></p>
+<p><strong>2.2.1</strong> <strong>训练</strong></p>
 <p>大模型阅读了人类说过的所有的话。这就是「机器学习」。</p>
-<p>训练过程会把不同 token<br>同时出现的概率存入「神经网络」文件。保存的数据就是「参数」，也叫「权重」。</p>
-<p><strong>2.2.1.1 参数&amp;语料</strong></p>
+<p>训练过程会把不同 token 同时出现的概率存入「神经网络」文件。保存的数据就是「参数」，也叫「权重」。</p>
+<p><strong>2.2.1.1</strong> <strong>参数</strong>**&amp;**<strong>语料</strong></p>
 <p><strong>参数：</strong>训练开始，决定要训练有多少参数的模型（参数数量一开始就决定了）</p>
 <p><strong>语料：</strong>训练数据，训练开始就决定了要用多少语料</p>
-<ul>
-<li>语料少，参数大——训练效果差</li>
-</ul>
-<!-- -->
-
-<ul>
-<li>语料多，参数小——训练效果差</li>
-</ul>
-<!-- -->
-
-<ul>
-<li>模型做的好坏的最重要指标：数据——语料库</li>
-</ul>
+<p>•     语料少，参数大——训练效果差</p>
+<p>•     语料多，参数小——训练效果差</p>
+<p>•     模型做的好坏的最重要指标：数据——语料库</p>
 <p>参数规模大的不是绝对比参数规模小的训练效果好——Llama3 7B，数据特别好</p>
-<p><strong>2.2.2 推理</strong></p>
+<p><strong>2.2.2</strong> <strong>推理</strong></p>
 <p>给推理程序若干 token，程序加载大模型权重，算出概率最高的下一个 token 。</p>
 <p>用生成的 token加上上下文，继续生成下一个 token。以此类推，生成更多文字。</p>
 <p><strong>2.2.2.1 Token</strong></p>
 <p>属于计量单位。</p>
 <p>可能是一个英文单词，也可能是半个，三分之一个……</p>
 <p>可能是一个中文词，或者一个汉字，也可能是半个汉字，甚至三分之一个汉字……</p>
-<p>大模型在开训前，需要先训练一个 <strong>tokenizer<br>模型</strong>。它能把所有的文本，切成 token。</p>
-<p><strong>2.2.2.2 幻觉</strong></p>
-<ul>
-<li>有训练资料的，大概率就能做对；</li>
-</ul>
-<!-- -->
-
-<ul>
-<li>过分依赖泛化能力，大概率会出现幻觉。</li>
-</ul>
+<p>大模型在开训前，需要先训练一个 <strong>tokenizer</strong> <strong>模型</strong>。它能把所有的文本，切成 token。</p>
+<p><strong>2.2.2.2</strong> <strong>幻觉</strong></p>
+<p>•     有训练资料的，大概率就能做对；</p>
+<p>•     过分依赖泛化能力，大概率会出现幻觉。</p>
 <p>基于概率生成下一个字，只要一个字跑偏了，后续基本上都会继续跑偏。</p>
-<p><strong>2.3 架构</strong></p>
-<p><strong>2.3.1 Transformer 架构</strong></p>
+<p><strong>2.3</strong> <strong>架构</strong></p>
+<p><strong>2.3.1 Transformer</strong> <strong>架构</strong></p>
 <p>这套生成机制的内核叫「Transformer 架构」</p>
 <p>Transformer 是目前人工智能领域最广泛流行的架构，被用在各个领域。</p>
 <p>Transformer 仍是主流，但并不是最先进的。</p>
 <p>目前只有Transformer被证明了符合scaling-law。</p>
-<hr>
-<p>  <strong>架构</strong>         <strong>设计者</strong>                                       <strong>特点</strong>                                   <strong>链接</strong></p>
-<hr>
-<p>  Transformer      Google                                           最流行，几乎所有大模型都用它               <a target="_blank" rel="noopener" href="https://github.com/openai/finetune-transformer-lm/blob/master/train.py">OpenAI<br>                                                                                                               的代码</a></p>
-<p>  RWKV             <a target="_blank" rel="noopener" href="https://www.zhihu.com/people/bopengbopeng">PENG                                            可并行训练，推理性能极佳，适合在端侧使用   <a target="_blank" rel="noopener" href="https://www.rwkv.com/">官网、RWKV 5 训练代码</a><br>                   Bo</a>                                              </p>
-<p>  Mamba            CMU &amp; Princeton                                  性能更佳，尤其适合长文本生成               <a target="_blank" rel="noopener" href="https://github.com/state-spaces/mamba">GitHub</a></p>
-<h2 id="Test-Time-Stanford-UC-San-Diego-UC-Berkeley-Meta-AI-速度更快，长上下文更佳-GitHub-Training-TTT"><a href="#Test-Time-Stanford-UC-San-Diego-UC-Berkeley-Meta-AI-速度更快，长上下文更佳-GitHub-Training-TTT" class="headerlink" title="  Test-Time        Stanford, UC San Diego, UC Berkeley &amp; Meta AI    速度更快，长上下文更佳                     GitHub  Training (TTT)                                                                                               "></a>  Test-Time        Stanford, UC San Diego, UC Berkeley &amp; Meta AI    速度更快，长上下文更佳                     <a target="_blank" rel="noopener" href="https://github.com/test-time-training">GitHub</a><br>  Training (TTT)                                                                                               </h2><p><strong>2.3.2 大模型应用产品架构</strong></p>
-<img src="/2024/11/01/01-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/image3.bin" class="">
-
-<p>Agent 模式还太超前，Copilot 是当前主流。实现 Copilot 的主流架构是<strong>多<br>Agent 工作流</strong>。</p>
-<ul>
-<li>Agent 工作流模仿人做事，将业务拆成工作流（workflow、SOP、pipeline）</li>
-</ul>
-<!-- -->
-
-<ul>
-<li>每个 Agent 负责一个工作流节点</li>
-</ul>
-<p><strong>2.3.3 大模型应用技术架构</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>架构</strong></th>
+<th><strong>设计者</strong></th>
+<th><strong>特点</strong></th>
+<th><strong>链接</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Transformer</td>
+<td>Google</td>
+<td>最流行，几乎所有大模型都用它</td>
+<td><a target="_blank" rel="noopener" href="https://github.com/openai/finetune-transformer-lm/blob/master/train.py">OpenAI   的代码</a></td>
+</tr>
+<tr>
+<td>RWKV</td>
+<td><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/bopengbopeng">PENG Bo</a></td>
+<td>可并行训练，推理性能极佳，适合在端侧使用</td>
+<td><a target="_blank" rel="noopener" href="https://www.rwkv.com/">官网、RWKV 5 训练代码</a></td>
+</tr>
+<tr>
+<td>Mamba</td>
+<td>CMU &amp; Princeton</td>
+<td>性能更佳，尤其适合长文本生成</td>
+<td><a target="_blank" rel="noopener" href="https://github.com/state-spaces/mamba">GitHub</a></td>
+</tr>
+<tr>
+<td>Test-Time Training (TTT)</td>
+<td>Stanford, UC San Diego, UC Berkeley &amp; Meta AI</td>
+<td>速度更快，长上下文更佳</td>
+<td><a target="_blank" rel="noopener" href="https://github.com/test-time-training">GitHub</a></td>
+</tr>
+</tbody></table>
+<p><strong>2.3.2</strong> <strong>大模型应用产品架构</strong></p>
+<p><img src="file:///C:/Users/48548/AppData/Local/Temp/msohtmlclip1/01/clip_image005.gif" alt="img"></p>
+<p>Agent 模式还太超前，Copilot 是当前主流。实现 Copilot 的主流架构是<strong>多</strong> <strong>Agent</strong> <strong>工作流</strong>。</p>
+<p>•     Agent 工作流模仿人做事，将业务拆成工作流（workflow、SOP、pipeline）</p>
+<p>•     每个 Agent 负责一个工作流节点</p>
+<p><strong>2.3.3</strong> <strong>大模型应用技术架构</strong></p>
 <p>大模型应用技术特点：门槛低，天花板高。</p>
 <p><strong>2.3.3.1 Prompt</strong></p>
 <p>Prompt是一种基于人工智能（AI）指令的技术，通过明确而具体的指导语言模型的输出。</p>
-<ul>
-<li><strong>Prompt 是操作大模型的唯一接口。</strong></li>
-</ul>
-<!-- -->
-
-<ul>
-<li><strong>应用：</strong>应用程序提交prompt，基础大模型返回response。</li>
-</ul>
-<!-- -->
-
-<ul>
-<li><strong>举例：</strong>你说一句，ta 回一句，你再说一句，ta 再回一句……</li>
-</ul>
-<img src="/2024/11/01/01-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/image4.png" class="">
+<p>•     <strong>Prompt</strong> <strong>是操作大模型的唯一接口。</strong></p>
+<p>•     <strong>应用：</strong>应用程序提交prompt，基础大模型返回response。</p>
+<p>•     <strong>举例：</strong>你说一句，ta 回一句，你再说一句，ta 再回一句……</p>
+<img src="file:///C:/Users/48548/AppData/Local/Temp/msohtmlclip1/01/clip_image007.gif" alt="img" style="zoom: 33%;" />
 
 <p><strong>2.3.3.2 Agent + Function Calling</strong></p>
-<ul>
-<li><strong>Agent：</strong>某种能自主理解、规划决策、执行复杂任务的智能体。</li>
-</ul>
-<!-- -->
+<p>•     <strong>Agent****：</strong>某种能自主理解、规划决策、执行复杂任务的智能体。</p>
+<p>•     <strong>Function Calling****：</strong>AI 要求执行某个函数。允许开发者定义特定的函数，并在用户提出问题时，模型可以智能地决定调用哪些函数以及所需的参数。</p>
+<p>•     <strong>应用：</strong>应用程序提交prompt，基础大模型function calling，返回函数调用参数，应用程序依此调用内部&#x2F;外部接口。调用返回的结果加上上下文等形成新的prompt提交给大模型，大模型生成结果并返回（response）。</p>
+<p>•     <strong>举例：</strong>你问 ta「我明天去杭州出差，要带伞吗？」，ta 让你先看天气预报，你看了告诉 ta，ta 再告诉你要不要带伞。</p>
+<img src="file:///C:/Users/48548/AppData/Local/Temp/msohtmlclip1/01/clip_image009.gif" alt="img" style="zoom: 33%;" />
 
-<ul>
-<li><strong>Function Calling：</strong>AI<br>要求执行某个函数。允许开发者定义特定的函数，并在用户提出问题时，模型可以智能地决定调用哪些函数以及所需的参数。</li>
-</ul>
-<!-- -->
+<p><strong>2.3.3.3 RAG<strong><strong>（</strong></strong>Retrieval-Augmented Generation****）</strong></p>
+<p>•     <strong>RAG****：</strong>对大型语言模型输出进行优化，使其能够在生成响应之前引用训练数据来源之外的权威知识库。</p>
+<p>•     <strong>Embeddings****：</strong>是一种将离散变量（如单词、短语、或者文档）转换为连续向量的方法。把文字转换为更易于相似度计算的编码（向量）。</p>
+<p>•     <strong>向量数据库：</strong>存储向量的数据库</p>
+<p>•     <strong>向量搜索：</strong>根据输入向量，找到最相似的向量</p>
+<p>•     <strong>应用：</strong>在function calling的基础上，将所给数据切分并存储进向量数据库，在涉及到向量数据库中的内容时，参考并引用数据库中的内容进行回答的生成。</p>
+<p>•     <strong>举例：</strong>考试答题时，到书上找相关内容，再结合题目组成答案，然后，就都忘了（涉及相似度计算、存储、检索……）</p>
+<img src="file:///C:/Users/48548/AppData/Local/Temp/msohtmlclip1/01/clip_image011.gif" alt="img" style="zoom: 50%;" />
 
-<ul>
-<li><strong>应用：</strong>应用程序提交prompt，基础大模型function<br>calling，返回函数调用参数，应用程序依此调用内部&#x2F;外部接口。调用返回的结果加上上下文等形成新的prompt提交给大模型，大模型生成结果并返回（response）。</li>
-</ul>
-<!-- -->
+<p><strong>2.3.3.4 Fine-tuning**<strong>（精调</strong></strong>&#x2F;**<strong>微调）</strong></p>
+<p>•     <strong>Fine-tuning</strong> ：是指在已经训练好的模型基础上，进一步调整，让模型的输出能够更符合预期。</p>
+<p>•     <strong>应用：</strong>先对模型行进行预训练，再在特定的任务数据上继续训练这个模型，使其适应新的任务。</p>
+<p>•     <strong>举例：</strong>努力学习考试内容，长期记住，活学活用。</p>
+<img src="file:///C:/Users/48548/AppData/Local/Temp/msohtmlclip1/01/clip_image013.gif" alt="img" style="zoom:50%;" />
 
-<ul>
-<li><strong>举例：</strong>你问 ta「我明天去杭州出差，要带伞吗？」，ta<br>让你先看天气预报，你看了告诉 ta，ta 再告诉你要不要带伞。</li>
-</ul>
-<img src="/2024/11/01/01-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/image5.png" class="">
-
-<p><strong>2.3.3.3 RAG（Retrieval-Augmented Generation）</strong></p>
-<ul>
-<li><strong>RAG：</strong>对大型语言模型输出进行优化，使其能够在生成响应之前引用训练数据来源之外的权威知识库。</li>
-</ul>
-<!-- -->
-
-<ul>
-<li><strong>Embeddings：</strong>是一种将离散变量（如单词、短语、或者文档）转换为连续向量的方法。把文字转换为更易于相似度计算的编码（向量）。</li>
-</ul>
-<!-- -->
-
-<ul>
-<li><strong>向量数据库：</strong>存储向量的数据库</li>
-</ul>
-<!-- -->
-
-<ul>
-<li><strong>向量搜索：</strong>根据输入向量，找到最相似的向量</li>
-</ul>
-<!-- -->
-
-<ul>
-<li><strong>应用：</strong>在function<br>calling的基础上，将所给数据切分并存储进向量数据库，在涉及到向量数据库中的内容时，参考并引用数据库中的内容进行回答的生成。</li>
-</ul>
-<!-- -->
-
-<ul>
-<li><strong>举例：</strong>考试答题时，到书上找相关内容，再结合题目组成答案，然后，就都忘了（涉及相似度计算、存储、检索……）</li>
-</ul>
-<img src="/2024/11/01/01-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/image6.png" class="">
-
-<p><strong>2.3.3.4 Fine-tuning（精调&#x2F;微调）</strong></p>
-<ul>
-<li><strong>Fine-tuning</strong><br>：是指在已经训练好的模型基础上，进一步调整，让模型的输出能够更符合预期。</li>
-</ul>
-<!-- -->
-
-<ul>
-<li><strong>应用：</strong>先对模型行进行预训练，再在特定的任务数据上继续训练这个模型，使其适应新的任务。</li>
-</ul>
-<!-- -->
-
-<ul>
-<li><strong>举例：</strong>努力学习考试内容，长期记住，活学活用。</li>
-</ul>
-<img src="/2024/11/01/01-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/image7.png" class="">
-
-<p><strong>值得尝试 Fine-tuning 的情况：</strong></p>
-<ul>
-<li>提高模型输出的稳定性</li>
-</ul>
-<!-- -->
-
-<ul>
-<li>用户量大，降低推理成本的意义很大</li>
-</ul>
-<!-- -->
-
-<ul>
-<li>提高大模型的生成速度</li>
-</ul>
-<!-- -->
-
-<ul>
-<li>需要私有部署</li>
-</ul>
-<p><strong>3 大模型应用开发落地</strong></p>
+<p><strong>值得尝试</strong> <strong>Fine-tuning</strong> <strong>的情况：</strong></p>
+<p>•     提高模型输出的稳定性</p>
+<p>•     用户量大，降低推理成本的意义很大</p>
+<p>•     提高大模型的生成速度</p>
+<p>•     需要私有部署</p>
+<p><strong>3</strong> <strong>大模型应用开发落地</strong></p>
 <p>当下，阻碍大模型落地的最大障碍是没有形成认知对齐。</p>
 <p>促进各行业各角色的认知对齐，是 AGIClass.ai 的使命之一。</p>
-<p><strong>3.1 落地要素</strong></p>
+<p><strong>3.1</strong> <strong>落地要素</strong></p>
 <ol>
 <li>业务人员的积极性</li>
-</ol>
-<!-- -->
-
-<ol start="2">
 <li>对 AI 能力的理解</li>
-</ol>
-<!-- -->
-
-<ol start="3">
 <li>业务团队具备编程能力</li>
-</ol>
-<!-- -->
-
-<ol start="4">
 <li>从小处着手</li>
-</ol>
-<!-- -->
-
-<ol start="5">
 <li>领导的耐心</li>
 </ol>
-<p><strong>3.2 落地场景</strong></p>
+<p><strong>3.2</strong> <strong>落地场景</strong></p>
 <ol>
 <li>从熟悉的领域入手，尽量选择能够用语言描述的任务。</li>
-</ol>
-<!-- -->
-
-<ol start="2">
 <li>避免追求大而全，将任务拆解，首先解决小任务和小场景。</li>
-</ol>
-<!-- -->
-
-<ol start="3">
 <li>让 AI 学习最优秀员工的能力，再利用其辅助其他员工，从而实现降本增效。</li>
 </ol>
-<p><strong>3.3 技术路线选择</strong></p>
+<p><strong>3.3</strong> <strong>技术路线选择</strong></p>
 <p>针对需求，初始阶段常用的技术方案如下。其中最容易被忽略的，是准备测试数据。</p>
-<img src="/2024/11/01/01-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/image8.png" class="">
-
-<p><strong>3.4 基础模型选择</strong></p>
-<ul>
-<li><strong>没有最好的大模型，只有最适合的大模型</strong></li>
-</ul>
-<!-- -->
-
-<ul>
-<li>基础模型选型，<strong>合规和安全</strong>是首要考量因素。</li>
-</ul>
-<!-- -->
-
-<ul>
-<li>初步选择后，用测试数据在模型里做测试，找出最合适的。</li>
-</ul>
-<p>值得相信的模型榜单：<a target="_blank" rel="noopener" href="https://chat.lmsys.org/?leaderboard">LMSYS Chatbot Arena<br>Leaderboard</a></p>
+<p><img src="file:///C:/Users/48548/AppData/Local/Temp/msohtmlclip1/01/clip_image015.gif" alt="img"></p>
+<p><strong>3.4</strong> <strong>基础模型选择</strong></p>
+<p>•     <strong>没有最好的大模型，只有最适合的大模型</strong></p>
+<p>•     基础模型选型，<strong>合规和安全</strong>是首要考量因素。</p>
+<p>•     初步选择后，用测试数据在模型里做测试，找出最合适的。</p>
+<p>值得相信的模型榜单：<a target="_blank" rel="noopener" href="https://chat.lmsys.org/?leaderboard">LMSYS Chatbot Arena Leaderboard</a></p>
 <p><strong>推荐使用的大模型：</strong></p>
-<hr>
-<p>  <strong>国家</strong>   <strong>公司</strong>    <strong>对话产品</strong>   <strong>旗舰大模型</strong>   <strong>网址</strong></p>
-<hr>
-<p>  美国       OpenAI      ChatGPT        GPT              <a target="_blank" rel="noopener" href="https://chatgpt.com/">https://chatgpt.com/</a></p>
-<p>  美国       Microsoft   Copilot        GPT 和未知       <a target="_blank" rel="noopener" href="https://copilot.microsoft.com/">https://copilot.microsoft.com/</a></p>
-<p>  美国       Google      Gemini         Gemini           <a target="_blank" rel="noopener" href="https://gemini.google.com/">https://gemini.google.com/</a></p>
-<p>  美国       Anthropic   Claude         Claude           <a target="_blank" rel="noopener" href="https://claude.ai/">https://claude.ai/</a></p>
-<p>  中国       百度        文心一言       文心             <a target="_blank" rel="noopener" href="https://yiyan.baidu.com/">https://yiyan.baidu.com/</a></p>
-<p>  中国       阿里云      通义千问       通义千问         <a target="_blank" rel="noopener" href="https://tongyi.aliyun.com/qianwen">https://tongyi.aliyun.com/qianwen</a></p>
-<p>  中国       智谱 AI     智谱清言       GLM              <a target="_blank" rel="noopener" href="https://chatglm.cn/">https://chatglm.cn/</a></p>
-<p>  中国       月之暗面    Kimi Chat      Moonshot         <a target="_blank" rel="noopener" href="https://kimi.moonshot.cn/">https://kimi.moonshot.cn/</a></p>
-<p>  中国       MiniMax     星野           abab             <a target="_blank" rel="noopener" href="https://www.xingyeai.com/">https://www.xingyeai.com/</a></p>
-<h2 id="中国-深度探索-deepseek-DeepSeek-https-chat-deepseek-com"><a href="#中国-深度探索-deepseek-DeepSeek-https-chat-deepseek-com" class="headerlink" title="  中国       深度探索    deepseek       DeepSeek         https://chat.deepseek.com/"></a>  中国       深度探索    deepseek       DeepSeek         <a target="_blank" rel="noopener" href="https://chat.deepseek.com/">https://chat.deepseek.com/</a></h2><p>来源：<a target="_blank" rel="noopener" href="https://www.zhihu.com/education/training/course-detail/1783865163000090624">AI<br>大模型全栈工程师培养计划（第八期）</a></p>
+<table>
+<thead>
+<tr>
+<th><strong>国家</strong></th>
+<th><strong>公司</strong></th>
+<th><strong>对话产品</strong></th>
+<th><strong>旗舰大模型</strong></th>
+<th><strong>网址</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>美国</td>
+<td>OpenAI</td>
+<td>ChatGPT</td>
+<td>GPT</td>
+<td><a target="_blank" rel="noopener" href="https://chatgpt.com/">https://chatgpt.com/</a></td>
+</tr>
+<tr>
+<td>美国</td>
+<td>Microsoft</td>
+<td>Copilot</td>
+<td>GPT 和未知</td>
+<td><a target="_blank" rel="noopener" href="https://copilot.microsoft.com/">https://copilot.microsoft.com/</a></td>
+</tr>
+<tr>
+<td>美国</td>
+<td>Google</td>
+<td>Gemini</td>
+<td>Gemini</td>
+<td><a target="_blank" rel="noopener" href="https://gemini.google.com/">https://gemini.google.com/</a></td>
+</tr>
+<tr>
+<td>美国</td>
+<td>Anthropic</td>
+<td>Claude</td>
+<td>Claude</td>
+<td><a target="_blank" rel="noopener" href="https://claude.ai/">https://claude.ai/</a></td>
+</tr>
+<tr>
+<td>中国</td>
+<td>百度</td>
+<td>文心一言</td>
+<td>文心</td>
+<td><a target="_blank" rel="noopener" href="https://yiyan.baidu.com/">https://yiyan.baidu.com/</a></td>
+</tr>
+<tr>
+<td>中国</td>
+<td>阿里云</td>
+<td>通义千问</td>
+<td>通义千问</td>
+<td><a target="_blank" rel="noopener" href="https://tongyi.aliyun.com/qianwen">https://tongyi.aliyun.com/qianwen</a></td>
+</tr>
+<tr>
+<td>中国</td>
+<td>智谱 AI</td>
+<td>智谱清言</td>
+<td>GLM</td>
+<td><a target="_blank" rel="noopener" href="https://chatglm.cn/">https://chatglm.cn/</a></td>
+</tr>
+<tr>
+<td>中国</td>
+<td>月之暗面</td>
+<td>Kimi Chat</td>
+<td>Moonshot</td>
+<td><a target="_blank" rel="noopener" href="https://kimi.moonshot.cn/">https://kimi.moonshot.cn/</a></td>
+</tr>
+<tr>
+<td>中国</td>
+<td>MiniMax</td>
+<td>星野</td>
+<td>abab</td>
+<td><a target="_blank" rel="noopener" href="https://www.xingyeai.com/">https://www.xingyeai.com/</a></td>
+</tr>
+<tr>
+<td>中国</td>
+<td>深度探索</td>
+<td>deepseek</td>
+<td>DeepSeek</td>
+<td><a target="_blank" rel="noopener" href="https://chat.deepseek.com/">https://chat.deepseek.com/</a></td>
+</tr>
+</tbody></table>
+<p>来源：<a target="_blank" rel="noopener" href="https://www.zhihu.com/education/training/course-detail/1783865163000090624">AI 大模型全栈工程师培养计划（第八期）</a></p>
 
     </div>
 
