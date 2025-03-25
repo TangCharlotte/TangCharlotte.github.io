@@ -1,0 +1,1434 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="04-RAG Embedding, Blog">
+    <meta name="description" content="1 检索增强的生成模型（RAG）1.1 LLM 固有的局限性
+LLM 的知识不是实时的
+LLM 可能不知道你私有的领域&amp;#x2F;业务知识
+
+1.2 检索增强生成RAG（Retrieval Augmented Generation）顾名思义">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>04-RAG Embedding | Blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/reward.css">
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Index</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>Contact</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Blog</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Index
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			Contact
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/TangCharlotte/AI-Classes" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/TangCharlotte/AI-Classes" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">04-RAG Embedding</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/LLM/">
+                                <span class="chip bg-color">LLM</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2025-03-25
+                </div>
+                
+
+                
+
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+        <!-- 代码块折行 -->
+        <style type="text/css">
+            code[class*="language-"], pre[class*="language-"] { white-space: pre-wrap !important; }
+        </style>
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="1-检索增强的生成模型（RAG）"><a href="#1-检索增强的生成模型（RAG）" class="headerlink" title="1 检索增强的生成模型（RAG）"></a>1 检索增强的生成模型（RAG）</h2><h3 id="1-1-LLM-固有的局限性"><a href="#1-1-LLM-固有的局限性" class="headerlink" title="1.1 LLM 固有的局限性"></a>1.1 LLM 固有的局限性</h3><ol>
+<li>LLM 的知识不是实时的</li>
+<li>LLM 可能不知道你私有的领域&#x2F;业务知识</li>
+</ol>
+<h3 id="1-2-检索增强生成"><a href="#1-2-检索增强生成" class="headerlink" title="1.2 检索增强生成"></a>1.2 检索增强生成</h3><p>RAG（Retrieval Augmented Generation）顾名思义，通过<strong>检索</strong>的方法来增强<strong>生成模型</strong>的能力。</p>
+<h2 id="2-RAG-系统的基本搭建流程"><a href="#2-RAG-系统的基本搭建流程" class="headerlink" title="2 RAG 系统的基本搭建流程"></a>2 RAG 系统的基本搭建流程</h2><p>先看效果：<a target="_blank" rel="noopener" href="http://localhost:9999/">http://localhost:9999/</a></p>
+<p>搭建过程：</p>
+<ol>
+<li>文档加载，并按一定条件<strong>切割</strong>成片段</li>
+<li>将切割的文本片段灌入<strong>检索引擎</strong></li>
+<li>封装<strong>检索接口</strong></li>
+<li>构建<strong>调用流程</strong>：Query -&gt; 检索 -&gt; Prompt -&gt; LLM -&gt; 回复</li>
+</ol>
+<h3 id="2-1-文档的加载与切割"><a href="#2-1-文档的加载与切割" class="headerlink" title="2.1 文档的加载与切割"></a>2.1 文档的加载与切割</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># !pip install --upgrade openai</span></span><br><span class="line"><span class="comment"># 安装 pdf 解析库</span></span><br><span class="line"><span class="comment"># !pip install pdfminer.six</span></span><br><span class="line">from pdfminer.high_level import extract_pages</span><br><span class="line">from pdfminer.layout import LTTextContainer</span><br><span class="line"></span><br><span class="line">def extract_text_from_pdf(filename, page_numbers=None, min_line_length=1):</span><br><span class="line">    <span class="string">&#x27;&#x27;</span><span class="string">&#x27;从 PDF 文件中（按指定页码）提取文字&#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line">    paragraphs = []</span><br><span class="line">    buffer = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    full_text = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="comment"># 提取全部文本</span></span><br><span class="line">    <span class="keyword">for</span> i, page_layout <span class="keyword">in</span> enumerate(extract_pages(filename)):</span><br><span class="line">        <span class="comment"># 如果指定了页码范围，跳过范围外的页</span></span><br><span class="line">        <span class="keyword">if</span> page_numbers is not None and i not <span class="keyword">in</span> page_numbers:</span><br><span class="line">            <span class="built_in">continue</span></span><br><span class="line">        <span class="keyword">for</span> element <span class="keyword">in</span> page_layout:</span><br><span class="line">            <span class="keyword">if</span> isinstance(element, LTTextContainer):</span><br><span class="line">                full_text += element.get_text() + <span class="string">&#x27;\n&#x27;</span></span><br><span class="line">    <span class="comment"># 按空行分隔，将文本重新组织成段落</span></span><br><span class="line">    lines = full_text.split(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> text <span class="keyword">in</span> lines:</span><br><span class="line">        <span class="keyword">if</span> len(text) &gt;= min_line_length:</span><br><span class="line">            buffer += (<span class="string">&#x27; &#x27;</span>+text) <span class="keyword">if</span> not text.endswith(<span class="string">&#x27;-&#x27;</span>) <span class="keyword">else</span> text.strip(<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line">        <span class="keyword">elif</span> buffer:</span><br><span class="line">            paragraphs.append(buffer)</span><br><span class="line">            buffer = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">if</span> buffer:</span><br><span class="line">        paragraphs.append(buffer)</span><br><span class="line">    <span class="built_in">return</span> paragraphs</span><br><span class="line"></span><br><span class="line">paragraphs = extract_text_from_pdf(<span class="string">&quot;llama2.pdf&quot;</span>, min_line_length=10)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> para <span class="keyword">in</span> paragraphs[:4]:</span><br><span class="line">    <span class="built_in">print</span>(para+<span class="string">&quot;\n&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Llama 2: Open Foundation and Fine-Tuned Chat Models</p>
+<p> Hugo Touvron∗ Louis Martin† Kevin Stone† Peter Albert Amjad Almahairi Yasmine Babaei Nikolay Bashlykov Soumya Batra Prajjwal Bhargava Shruti Bhosale Dan Bikel Lukas Blecher Cristian Canton Ferrer Moya Chen Guillem Cucurull David Esiobu Jude Fernandes Jeremy Fu Wenyin Fu Brian Fuller Cynthia Gao Vedanuj Goswami Naman Goyal Anthony Hartshorn Saghar Hosseini Rui Hou Hakan Inan Marcin Kardas Viktor Kerkez Madian Khabsa Isabel Kloumann Artem Korenev Punit Singh Koura Marie-Anne Lachaux Thibaut Lavril Jenya Lee Diana Liskovich Yinghai Lu Yuning Mao Xavier Martinet Todor Mihaylov Pushkar Mishra Igor Molybog Yixin Nie Andrew Poulton Jeremy Reizenstein Rashi Rungta Kalyan Saladi Alan Schelten Ruan Silva Eric Michael Smith Ranjan Subramanian Xiaoqing Ellen Tan Binh Tang Ross Taylor Adina Williams Jian Xiang Kuan Puxin Xu Zheng Yan Iliyan Zarov Yuchen Zhang Angela Fan Melanie Kambadur Sharan Narang Aurelien Rodriguez Robert Stojnic Sergey Edunov Thomas Scialom∗</p>
+<p> GenAI, Meta</p>
+<p> In this work, we develop and release Llama 2, a collection of pretrained and ﬁne-tuned large language models (LLMs) ranging in scale from 7 billion to 70 billion parameters. Our ﬁne-tuned LLMs, called Llama 2-Chat, are optimized for dialogue use cases. Our models outperform open-source chat models on most benchmarks we tested, and based onour human evaluations for helpfulness and safety, may be a suitable substitute for closed source models. We provide a detailed description of our approach to ﬁne-tuning and safety improvements of Llama 2-Chat in order to enable the community to build on our work and contribute to the responsible development of LLMs.</p>
+</blockquote>
+<h3 id="2-2-检索引擎"><a href="#2-2-检索引擎" class="headerlink" title="2.2 检索引擎"></a>2.2 检索引擎</h3><h4 id="2-2-1-安装-ES-客户端"><a href="#2-2-1-安装-ES-客户端" class="headerlink" title="2.2.1 安装 ES 客户端"></a>2.2.1 安装 ES 客户端</h4><p><strong>为了实验室性能</strong></p>
+<ul>
+<li>以下安装包已经内置实验平台</li>
+</ul>
+<p>#!pip install elasticsearch7</p>
+<h4 id="2-2-2-安装-NLTK（文本处理方法库）"><a href="#2-2-2-安装-NLTK（文本处理方法库）" class="headerlink" title="2.2.2 安装 NLTK（文本处理方法库）"></a>2.2.2 安装 NLTK（文本处理方法库）</h4><p>#!pip install nltk</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> elasticsearch7 <span class="keyword">import</span> Elasticsearch, helpers</span><br><span class="line"><span class="keyword">from</span> nltk.stem <span class="keyword">import</span> PorterStemmer</span><br><span class="line"><span class="keyword">from</span> nltk.tokenize <span class="keyword">import</span> word_tokenize</span><br><span class="line"><span class="keyword">from</span> nltk.corpus <span class="keyword">import</span> stopwords</span><br><span class="line"><span class="keyword">import</span> nltk</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> warnings</span><br><span class="line">warnings.simplefilter(<span class="string">&quot;ignore&quot;</span>)  <span class="comment"># 屏蔽 ES 的一些Warnings</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 实验室平台已经内置</span></span><br><span class="line">nltk.download(<span class="string">&#x27;punkt&#x27;</span>)  <span class="comment"># 英文切词、词根、切句等方法</span></span><br><span class="line">nltk.download(<span class="string">&#x27;stopwords&#x27;</span>)  <span class="comment"># 英文停用词库</span></span><br><span class="line">nltk.download(<span class="string">&#x27;punkt_tab&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>[nltk_data] Downloading package punkt to &#x2F;home&#x2F;jovyan&#x2F;nltk_data…</p>
+<p>[nltk_data]   Package punkt is already up-to-date!</p>
+<p>[nltk_data] Downloading package stopwords to &#x2F;home&#x2F;jovyan&#x2F;nltk_data…</p>
+<p>[nltk_data]   Package stopwords is already up-to-date!</p>
+<p>[nltk_data] Downloading package punkt_tab to &#x2F;home&#x2F;jovyan&#x2F;nltk_data…</p>
+<p>[nltk_data]   Unzipping tokenizers&#x2F;punkt_tab.zip.</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">to_keywords</span>(<span class="params">input_string</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;（英文）文本只保留关键字&#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="comment"># 使用正则表达式替换所有非字母数字的字符为空格</span></span><br><span class="line">    no_symbols = re.sub(<span class="string">r&#x27;[^a-zA-Z0-9\s]&#x27;</span>, <span class="string">&#x27; &#x27;</span>, input_string)</span><br><span class="line">    word_tokens = word_tokenize(no_symbols)</span><br><span class="line">    <span class="comment"># 加载停用词表</span></span><br><span class="line">    stop_words = <span class="built_in">set</span>(stopwords.words(<span class="string">&#x27;english&#x27;</span>))</span><br><span class="line">    ps = PorterStemmer()</span><br><span class="line">    <span class="comment"># 去停用词，取词根</span></span><br><span class="line">    filtered_sentence = [ps.stem(w)</span><br><span class="line">                         <span class="keyword">for</span> w <span class="keyword">in</span> word_tokens <span class="keyword">if</span> <span class="keyword">not</span> w.lower() <span class="keyword">in</span> stop_words]</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27; &#x27;</span>.join(filtered_sentence)</span><br></pre></td></tr></table></figure>
+
+<p>此处 to_keywords 为针对英文的实现，针对中文的实现请参考 chinese_utils.py</p>
+<p>将文本灌入检索引擎</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os, time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 引入配置文件</span></span><br><span class="line">ELASTICSEARCH_BASE_URL = os.getenv(<span class="string">&#x27;ELASTICSEARCH_BASE_URL&#x27;</span>)</span><br><span class="line">ELASTICSEARCH_PASSWORD = os.getenv(<span class="string">&#x27;ELASTICSEARCH_PASSWORD&#x27;</span>)</span><br><span class="line">ELASTICSEARCH_NAME= os.getenv(<span class="string">&#x27;ELASTICSEARCH_NAME&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># tips: 如果想在本地运行，请在下面一行 print(ELASTICSEARCH_BASE_URL) 获取真实的配置</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 创建Elasticsearch连接</span></span><br><span class="line">es = Elasticsearch(</span><br><span class="line">    hosts=[ELASTICSEARCH_BASE_URL],  <span class="comment"># 服务地址与端口</span></span><br><span class="line">    http_auth=(ELASTICSEARCH_NAME, ELASTICSEARCH_PASSWORD),  <span class="comment"># 用户名，密码</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 定义索引名称</span></span><br><span class="line">index_name = <span class="string">&quot;teacher_demo_index0&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 如果索引已存在，删除它（仅供演示，实际应用时不需要这步）</span></span><br><span class="line"><span class="keyword">if</span> es.indices.exists(index=index_name):</span><br><span class="line">    es.indices.delete(index=index_name)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 创建索引</span></span><br><span class="line">es.indices.create(index=index_name)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 灌库指令</span></span><br><span class="line">actions = [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;_index&quot;</span>: index_name,</span><br><span class="line">        <span class="string">&quot;_source&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;keywords&quot;</span>: to_keywords(para),</span><br><span class="line">            <span class="string">&quot;text&quot;</span>: para</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> para <span class="keyword">in</span> paragraphs</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 6. 文本灌库</span></span><br><span class="line">helpers.bulk(es, actions)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 灌库是异步的</span></span><br><span class="line">time.sleep(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
+<p>实现关键字检索</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">search</span>(<span class="params">query_string, top_n=<span class="number">3</span></span>):</span><br><span class="line">    <span class="comment"># ES 的查询语言</span></span><br><span class="line">    search_query = &#123;</span><br><span class="line">        <span class="string">&quot;match&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;keywords&quot;</span>: to_keywords(query_string)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    res = es.search(index=index_name, query=search_query, size=top_n)</span><br><span class="line">    <span class="keyword">return</span> [hit[<span class="string">&quot;_source&quot;</span>][<span class="string">&quot;text&quot;</span>] <span class="keyword">for</span> hit <span class="keyword">in</span> res[<span class="string">&quot;hits&quot;</span>][<span class="string">&quot;hits&quot;</span>]]</span><br><span class="line">    </span><br><span class="line">results = search(<span class="string">&quot;how many parameters does llama 2 have?&quot;</span>, <span class="number">2</span>)</span><br><span class="line"><span class="keyword">for</span> r <span class="keyword">in</span> results:</span><br><span class="line">    <span class="built_in">print</span>(r+<span class="string">&quot;\n&quot;</span>)   </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol>
+<li>Llama 2, an updated version of Llama 1, trained on a new mix of publicly available data. We also increased the size of the pretraining corpus by 40%, doubled the context length of the model, and adopted grouped-query attention (Ainslie et al., 2023). We are releasing variants of Llama 2 with 7B, 13B, and 70B parameters. We have also trained 34B variants, which we report on in this paper but are not releasing.§</li>
+</ol>
+<p> In this work, we develop and release Llama 2, a collection of pretrained and ﬁne-tuned large language models (LLMs) ranging in scale from 7 billion to 70 billion parameters. Our ﬁne-tuned LLMs, called Llama 2-Chat, are optimized for dialogue use cases. Our models outperform open-source chat models on most benchmarks we tested, and based onour human evaluations for helpfulness and safety, may be a suitable substitute for closed source models. We provide a detailed description of our approach to ﬁne-tuning and safety improvements of Llama 2-Chat in order to enable the community to build on our work and contribute to the responsible development of LLMs.</p>
+</blockquote>
+<h3 id="2-3-LLM-接口封装"><a href="#2-3-LLM-接口封装" class="headerlink" title="2.3 LLM 接口封装"></a>2.3 LLM 接口封装</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> OpenAI</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="comment"># 加载环境变量</span></span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv, find_dotenv</span><br><span class="line">_ = load_dotenv(find_dotenv())  <span class="comment"># 读取本地 .env 文件，里面定义了 OPENAI_API_KEY</span></span><br><span class="line"></span><br><span class="line">client = OpenAI()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_completion</span>(<span class="params">prompt, model=<span class="string">&quot;gpt-3.5-turbo&quot;</span></span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;封装 openai 接口&#x27;&#x27;&#x27;</span></span><br><span class="line">    messages = [&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: prompt&#125;]</span><br><span class="line">    response = client.chat.completions.create(</span><br><span class="line">        model=model,</span><br><span class="line">        messages=messages,</span><br><span class="line">        temperature=<span class="number">0</span>,  <span class="comment"># 模型输出的随机性，0 表示随机性最小</span></span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> response.choices[<span class="number">0</span>].message.content</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-Prompt-模板"><a href="#2-4-Prompt-模板" class="headerlink" title="2.4 Prompt 模板"></a>2.4 Prompt 模板</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">build_prompt</span>(<span class="params">prompt_template, **kwargs</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;将 Prompt 模板赋值&#x27;&#x27;&#x27;</span></span><br><span class="line">    inputs = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> k, v <span class="keyword">in</span> kwargs.items():</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(v, <span class="built_in">list</span>) <span class="keyword">and</span> <span class="built_in">all</span>(<span class="built_in">isinstance</span>(elem, <span class="built_in">str</span>) <span class="keyword">for</span> elem <span class="keyword">in</span> v):</span><br><span class="line">            val = <span class="string">&#x27;\n\n&#x27;</span>.join(v)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            val = v</span><br><span class="line">        inputs[k] = val</span><br><span class="line">    <span class="keyword">return</span> prompt_template.<span class="built_in">format</span>(**inputs)</span><br><span class="line">prompt_template = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">你是一个问答机器人。</span></span><br><span class="line"><span class="string">你的任务是根据下述给定的已知信息回答用户问题。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">已知信息:</span></span><br><span class="line"><span class="string">&#123;context&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">用户问：</span></span><br><span class="line"><span class="string">&#123;query&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">如果已知信息不包含用户问题的答案，或者已知信息不足以回答用户的问题，请直接回复&quot;我无法回答您的问题&quot;。</span></span><br><span class="line"><span class="string">请不要输出已知信息中不包含的信息或答案。</span></span><br><span class="line"><span class="string">请用中文回答用户问题。</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-RAG-Pipeline-初探"><a href="#2-5-RAG-Pipeline-初探" class="headerlink" title="2.5 RAG Pipeline 初探"></a>2.5 RAG Pipeline 初探</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">user_query = <span class="string">&quot;how many parameters does llama 2 have?&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 检索</span></span><br><span class="line">search_results = search(user_query, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 构建 Prompt</span></span><br><span class="line">prompt = build_prompt(prompt_template, context=search_results, query=user_query)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;===Prompt===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(prompt)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 调用 LLM</span></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;===回复===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>&#x3D;&#x3D;&#x3D;Prompt&#x3D;&#x3D;&#x3D;</p>
+<p>你是一个问答机器人。</p>
+<p>你的任务是根据下述给定的已知信息回答用户问题。</p>
+<p>已知信息:</p>
+<ol>
+<li>Llama 2, an updated version of Llama 1, trained on a new mix of publicly available data. We also increased the size of the pretraining corpus by 40%, doubled the context length of the model, and adopted grouped-query attention (Ainslie et al., 2023). We are releasing variants of Llama 2 with 7B, 13B, and 70B parameters. We have also trained 34B variants, which we report on in this paper but are not releasing.§</li>
+</ol>
+<p> In this work, we develop and release Llama 2, a collection of pretrained and ﬁne-tuned large language models (LLMs) ranging in scale from 7 billion to 70 billion parameters. Our ﬁne-tuned LLMs, called Llama 2-Chat, are optimized for dialogue use cases. Our models outperform open-source chat models on most benchmarks we tested, and based onour human evaluations for helpfulness and safety, may be a suitable substitute for closed source models. We provide a detailed description of our approach to ﬁne-tuning and safety improvements of Llama 2-Chat in order to enable the community to build on our work and contribute to the responsible development of LLMs.</p>
+<p>用户问：</p>
+<p>how many parameters does llama 2 have?</p>
+<p>如果已知信息不包含用户问题的答案，或者已知信息不足以回答用户的问题，请直接回复”我无法回答您的问题”。</p>
+<p>请不要输出已知信息中不包含的信息或答案。</p>
+<p>请用中文回答用户问题。</p>
+<p>&#x3D;&#x3D;&#x3D;回复&#x3D;&#x3D;&#x3D;</p>
+<p>Llama 2有7B, 13B和70B参数。</p>
+</blockquote>
+<p><strong>扩展阅读：</strong>Elasticsearch（简称ES）是一个广泛应用的开源搜索引擎: <a target="_blank" rel="noopener" href="https://www.elastic.co/%E5%85%B3%E4%BA%8EES%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E9%83%A8%E7%BD%B2%E7%AD%89%E7%9F%A5%E8%AF%86%EF%BC%8C%E7%BD%91%E4%B8%8A%E5%8F%AF%E4%BB%A5%E6%89%BE%E5%88%B0%E5%A4%A7%E9%87%8F%E8%B5%84%E6%96%99%EF%BC%8C%E4%BE%8B%E5%A6%82">https://www.elastic.co/关于ES的安装、部署等知识，网上可以找到大量资料，例如</a>: <a target="_blank" rel="noopener" href="https://juejin.cn/post/7104875268166123528%E5%85%B3%E4%BA%8E%E7%BB%8F%E5%85%B8%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2%E6%8A%80%E6%9C%AF%E7%9A%84%E6%9B%B4%E5%A4%9A%E7%BB%86%E8%8A%82%EF%BC%8C%E5%8F%AF%E4%BB%A5%E5%8F%82%E8%80%83">https://juejin.cn/post/7104875268166123528关于经典信息检索技术的更多细节，可以参考</a>: <a target="_blank" rel="noopener" href="https://nlp.stanford.edu/IR-book/information-retrieval-book.html">https://nlp.stanford.edu/IR-book/information-retrieval-book.html</a></p>
+<h3 id="2-6-关键字检索的局限性"><a href="#2-6-关键字检索的局限性" class="headerlink" title="2.6 关键字检索的局限性"></a>2.6 关键字检索的局限性</h3><p>同一个语义，用词不同，可能导致检索不到有效的结果</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># user_query=&quot;Does llama 2 have a chat version?&quot;</span></span><br><span class="line">user_query = <span class="string">&quot;Does llama 2 have a conversational variant?&quot;</span></span><br><span class="line"></span><br><span class="line">search_results = search(user_query, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> res <span class="keyword">in</span> search_results:</span><br><span class="line">    <span class="built_in">print</span>(res+<span class="string">&quot;\n&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol>
+<li>Llama 2, an updated version of Llama 1, trained on a new mix of publicly available data. We also increased the size of the pretraining corpus by 40%, doubled the context length of the model, and adopted grouped-query attention (Ainslie et al., 2023). We are releasing variants of Llama 2 with 7B, 13B, and 70B parameters. We have also trained 34B variants, which we report on in this paper but are not releasing.</li>
+</ol>
+<p> variants of this model with 7B, 13B, and 70B parameters as well.</p>
+</blockquote>
+<h2 id="3-向量检索"><a href="#3-向量检索" class="headerlink" title="3 向量检索"></a>3 向量检索</h2><h3 id="3-1-什么是向量"><a href="#3-1-什么是向量" class="headerlink" title="3.1 什么是向量"></a>3.1 什么是向量</h3><p>向量是一种有大小和方向的数学对象。它可以表示为从一个点到另一个点的有向线段。例如，二维空间中的向量可以表示为$$(x,y)$$，表示从原点$$(0,0)$$  到点$$(x,y)$$ 的有向线段。</p>
+<img src="/2025/03/25/04-RAG-Embedding/1742878293246-11.png" class="">
+
+<p>以此类推，我可以用一组坐标 $$(x_0, x_1, \dots, x_{N-1})$$ 表示一个 <em>N</em> 维空间中的向量，<em>N</em> 叫向量的维度。</p>
+<h4 id="3-1-1-文本向量（Text-Embeddings）"><a href="#3-1-1-文本向量（Text-Embeddings）" class="headerlink" title="3.1.1 文本向量（Text Embeddings）"></a>3.1.1 文本向量（Text Embeddings）</h4><ol>
+<li>将文本转成一组 <em>N</em> 维浮点数，即<strong>文本向量</strong>又叫 Embeddings</li>
+<li>向量之间可以计算距离，距离远近对应<strong>语义相似度</strong>大小</li>
+</ol>
+<img src="/2025/03/25/04-RAG-Embedding/1742878293245-1.png" class="">
+
+<h4 id="3-1-2-文本向量是怎么得到的"><a href="#3-1-2-文本向量是怎么得到的" class="headerlink" title="3.1.2 文本向量是怎么得到的"></a>3.1.2 文本向量是怎么得到的</h4><ol>
+<li>构建相关（正立）与不相关（负例）的句子对儿样本</li>
+<li>训练双塔式模型，让正例间的距离小，负例间的距离大</li>
+</ol>
+<p>例如：</p>
+<img src="/2025/03/25/04-RAG-Embedding/1742878293245-2.png" class="">
+
+<p><strong>扩展阅读：****<a target="_blank" rel="noopener" href="https://www.sbert.net/">https://www.sbert.net</a></strong></p>
+<h3 id="3-2-向量间的相似度计算"><a href="#3-2-向量间的相似度计算" class="headerlink" title="3.2 向量间的相似度计算"></a>3.2 向量间的相似度计算</h3><img src="/2025/03/25/04-RAG-Embedding/1742878293245-3.png" class="">
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> dot</span><br><span class="line"><span class="keyword">from</span> numpy.linalg <span class="keyword">import</span> norm</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cos_sim</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;余弦距离 -- 越大越相似&#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> dot(a, b)/(norm(a)*norm(b))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">l2</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;欧氏距离 -- 越小越相似&#x27;&#x27;&#x27;</span></span><br><span class="line">    x = np.asarray(a)-np.asarray(b)</span><br><span class="line">    <span class="keyword">return</span> norm(x)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_embeddings</span>(<span class="params">texts, model=<span class="string">&quot;text-embedding-ada-002&quot;</span>, dimensions=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;封装 OpenAI 的 Embedding 模型接口&#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">if</span> model == <span class="string">&quot;text-embedding-ada-002&quot;</span>:</span><br><span class="line">        dimensions = <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> dimensions:</span><br><span class="line">        data = client.embeddings.create(</span><br><span class="line">            <span class="built_in">input</span>=texts, model=model, dimensions=dimensions).data</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        data = client.embeddings.create(<span class="built_in">input</span>=texts, model=model).data</span><br><span class="line">    <span class="keyword">return</span> [x.embedding <span class="keyword">for</span> x <span class="keyword">in</span> data]</span><br><span class="line">    </span><br><span class="line">test_query = [<span class="string">&quot;测试文本&quot;</span>]</span><br><span class="line">vec = get_embeddings(test_query)[<span class="number">0</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Total dimension: <span class="subst">&#123;<span class="built_in">len</span>(vec)&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;First 10 elements: <span class="subst">&#123;vec[:<span class="number">10</span>]&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Total dimension: 1536</p>
+<p>First 10 elements: [-0.007280634716153145, -0.006147929932922125, -0.010664181783795357, 0.001484171487390995, -0.010678750462830067, 0.029253656044602394, -0.01976952701807022, 0.005444996990263462, -0.01687038503587246, -0.01207733154296875]</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># query = &quot;国际争端&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 且能支持跨语言</span></span><br><span class="line">query = <span class="string">&quot;global conflicts&quot;</span></span><br><span class="line"></span><br><span class="line">documents = [</span><br><span class="line">    <span class="string">&quot;联合国就苏丹达尔富尔地区大规模暴力事件发出警告&quot;</span>,</span><br><span class="line">    <span class="string">&quot;土耳其、芬兰、瑞典与北约代表将继续就瑞典“入约”问题进行谈判&quot;</span>,</span><br><span class="line">    <span class="string">&quot;日本岐阜市陆上自卫队射击场内发生枪击事件 3人受伤&quot;</span>,</span><br><span class="line">    <span class="string">&quot;国家游泳中心（水立方）：恢复游泳、嬉水乐园等水上项目运营&quot;</span>,</span><br><span class="line">    <span class="string">&quot;我国首次在空间站开展舱外辐射生物学暴露实验&quot;</span>,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">query_vec = get_embeddings([query])[<span class="number">0</span>]</span><br><span class="line">doc_vecs = get_embeddings(documents)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Query与自己的余弦距离: &#123;:.2f&#125;&quot;</span>.<span class="built_in">format</span>(cos_sim(query_vec, query_vec)))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Query与Documents的余弦距离:&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> vec <span class="keyword">in</span> doc_vecs:</span><br><span class="line">    <span class="built_in">print</span>(cos_sim(query_vec, vec))</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Query与自己的欧氏距离: &#123;:.2f&#125;&quot;</span>.<span class="built_in">format</span>(l2(query_vec, query_vec)))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Query与Documents的欧氏距离:&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> vec <span class="keyword">in</span> doc_vecs:</span><br><span class="line">    <span class="built_in">print</span>(l2(query_vec, vec))</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Query与自己的余弦距离: 1.00</p>
+<p>Query与Documents的余弦距离:</p>
+<p>0.7622749944010915</p>
+<p>0.7563038106493584</p>
+<p>0.7426665802579038</p>
+<p>0.7079273699608006</p>
+<p>0.7254355321045072</p>
+<p>Query与自己的欧氏距离: 0.00</p>
+<p>Query与Documents的欧氏距离:</p>
+<p>0.6895288502682277</p>
+<p>0.6981349637998769</p>
+<p>0.7174028746492277</p>
+<p>0.7642939833636829</p>
+<p>0.7410323668625171</p>
+</blockquote>
+<h3 id="3-3-向量数据库"><a href="#3-3-向量数据库" class="headerlink" title="3.3 向量数据库"></a>3.3 向量数据库</h3><p>向量数据库，是专门为向量检索设计的中间件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># !pip install chromadb</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 由于学生端与教师端环境的区别</span></span><br><span class="line"><span class="comment"># 对pysqlite的兼容处理</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">if</span> os.environ.get(<span class="string">&#x27;CUR_ENV_IS_STUDENT&#x27;</span>,<span class="literal">False</span>):</span><br><span class="line">    <span class="keyword">import</span> sys</span><br><span class="line">    <span class="built_in">__import__</span>(<span class="string">&#x27;pysqlite3&#x27;</span>)</span><br><span class="line">    sys.modules[<span class="string">&#x27;sqlite3&#x27;</span>] = sys.modules.pop(<span class="string">&#x27;pysqlite3&#x27;</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 为了演示方便，我们只取两页（第一章）</span></span><br><span class="line">paragraphs = extract_text_from_pdf(</span><br><span class="line">    <span class="string">&quot;llama2.pdf&quot;</span>,</span><br><span class="line">    page_numbers=[<span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">    min_line_length=<span class="number">10</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> chromadb</span><br><span class="line"><span class="keyword">from</span> chromadb.config <span class="keyword">import</span> Settings</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyVectorDBConnector</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, collection_name, embedding_fn</span>):</span><br><span class="line">        chroma_client = chromadb.Client(Settings(allow_reset=<span class="literal">True</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 为了演示，实际不需要每次 reset()</span></span><br><span class="line">        chroma_client.reset()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 创建一个 collection</span></span><br><span class="line">        <span class="variable language_">self</span>.collection = chroma_client.get_or_create_collection(</span><br><span class="line">            name=collection_name)</span><br><span class="line">        <span class="variable language_">self</span>.embedding_fn = embedding_fn</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add_documents</span>(<span class="params">self, documents</span>):</span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;向 collection 中添加文档与向量&#x27;&#x27;&#x27;</span></span><br><span class="line">        <span class="variable language_">self</span>.collection.add(</span><br><span class="line">            embeddings=<span class="variable language_">self</span>.embedding_fn(documents),  <span class="comment"># 每个文档的向量</span></span><br><span class="line">            documents=documents,  <span class="comment"># 文档的原文</span></span><br><span class="line">            ids=[<span class="string">f&quot;id<span class="subst">&#123;i&#125;</span>&quot;</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(documents))]  <span class="comment"># 每个文档的 id</span></span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">search</span>(<span class="params">self, query, top_n</span>):</span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;检索向量数据库&#x27;&#x27;&#x27;</span></span><br><span class="line">        results = <span class="variable language_">self</span>.collection.query(</span><br><span class="line">            query_embeddings=<span class="variable language_">self</span>.embedding_fn([query]),</span><br><span class="line">            n_results=top_n</span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">return</span> results</span><br><span class="line">        </span><br><span class="line"><span class="comment"># 创建一个向量数据库对象</span></span><br><span class="line">vector_db = MyVectorDBConnector(<span class="string">&quot;demo&quot;</span>, get_embeddings)</span><br><span class="line"><span class="comment"># 向向量数据库中添加文档</span></span><br><span class="line">vector_db.add_documents(paragraphs)</span><br><span class="line"></span><br><span class="line"><span class="comment"># user_query = &quot;Llama 2有多少参数&quot;</span></span><br><span class="line">user_query = <span class="string">&quot;Does Llama 2 have a conversational variant&quot;</span></span><br><span class="line">results = vector_db.search(user_query, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> para <span class="keyword">in</span> results[<span class="string">&#x27;documents&#x27;</span>][<span class="number">0</span>]:</span><br><span class="line">    <span class="built_in">print</span>(para+<span class="string">&quot;\n&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol>
+<li><p>Llama 2-Chat, a ﬁne-tuned version of Llama 2 that is optimized for dialogue use cases. We release</p>
+</li>
+<li><p>Llama 2, an updated version of Llama 1, trained on a new mix of publicly available data. We also increased the size of the pretraining corpus by 40%, doubled the context length of the model, and adopted grouped-query attention (Ainslie et al., 2023). We are releasing variants of Llama 2 with 7B, 13B, and 70B parameters. We have also trained 34B variants, which we report on in this paper but are not releasing.§</p>
+</li>
+</ol>
+</blockquote>
+<p><strong>澄清几个关键概念：</strong></p>
+<ul>
+<li>向量数据库的意义是快速的检索；</li>
+<li>向量数据库本身不生成向量，向量是由 Embedding 模型产生的；</li>
+<li>向量数据库与传统的关系型数据库是互补的，不是替代关系，在实际应用中根据实际需求经常同时使用。</li>
+</ul>
+<h4 id="3-3-1-向量数据库服务"><a href="#3-3-1-向量数据库服务" class="headerlink" title="3.3.1 向量数据库服务"></a>3.3.1 向量数据库服务</h4><p>Server 端</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chroma run --path /db_path</span><br></pre></td></tr></table></figure>
+
+<p>Client 端</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> chromadb</span><br><span class="line">chroma_client = chromadb.HttpClient(host=<span class="string">&#x27;localhost&#x27;</span>, port=<span class="number">8000</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-3-2-主流向量数据库功能对比"><a href="#3-3-2-主流向量数据库功能对比" class="headerlink" title="3.3.2 主流向量数据库功能对比"></a>3.3.2 主流向量数据库功能对比</h4><img src="/2025/03/25/04-RAG-Embedding/1742878293245-4.png" class="">
+
+<ul>
+<li>FAISS: Meta 开源的向量检索引擎 <a target="_blank" rel="noopener" href="https://github.com/facebookresearch/faiss">https://github.com/facebookresearch/faiss</a></li>
+<li>Pinecone: 商用向量数据库，只有云服务 <a target="_blank" rel="noopener" href="https://www.pinecone.io/">https://www.pinecone.io/</a></li>
+<li>Milvus: 开源向量数据库，同时有云服务 <a target="_blank" rel="noopener" href="https://milvus.io/">https://milvus.io/</a></li>
+<li>Weaviate: 开源向量数据库，同时有云服务 <a target="_blank" rel="noopener" href="https://weaviate.io/">https://weaviate.io/</a></li>
+<li>Qdrant: 开源向量数据库，同时有云服务 <a target="_blank" rel="noopener" href="https://qdrant.tech/">https://qdrant.tech/</a></li>
+<li>PGVector: Postgres 的开源向量检索引擎 <a target="_blank" rel="noopener" href="https://github.com/pgvector/pgvector">https://github.com/pgvector/pgvector</a></li>
+<li>RediSearch: Redis 的开源向量检索引擎 <a target="_blank" rel="noopener" href="https://github.com/RediSearch/RediSearch">https://github.com/RediSearch/RediSearch</a></li>
+<li>ElasticSearch 也支持向量检索 <a target="_blank" rel="noopener" href="https://www.elastic.co/enterprise-search/vector-search">https://www.elastic.co/enterprise-search/vector-search</a></li>
+</ul>
+<h3 id="3-4-基于向量检索的-RAG"><a href="#3-4-基于向量检索的-RAG" class="headerlink" title="3.4 基于向量检索的 RAG"></a>3.4 基于向量检索的 RAG</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">RAG_Bot</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, vector_db, llm_api, n_results=<span class="number">2</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.vector_db = vector_db</span><br><span class="line">        <span class="variable language_">self</span>.llm_api = llm_api</span><br><span class="line">        <span class="variable language_">self</span>.n_results = n_results</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">chat</span>(<span class="params">self, user_query</span>):</span><br><span class="line">        <span class="comment"># 1. 检索</span></span><br><span class="line">        search_results = <span class="variable language_">self</span>.vector_db.search(user_query, <span class="variable language_">self</span>.n_results)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 2. 构建 Prompt</span></span><br><span class="line">        prompt = build_prompt(</span><br><span class="line">            prompt_template, context=search_results[<span class="string">&#x27;documents&#x27;</span>][<span class="number">0</span>], query=user_query)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 3. 调用 LLM</span></span><br><span class="line">        response = <span class="variable language_">self</span>.llm_api(prompt)</span><br><span class="line">        <span class="keyword">return</span> response</span><br><span class="line">        </span><br><span class="line"><span class="comment"># 创建一个RAG机器人</span></span><br><span class="line">bot = RAG_Bot(</span><br><span class="line">    vector_db,</span><br><span class="line">    llm_api=get_completion</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">user_query = <span class="string">&quot;llama 2有多少参数?&quot;</span></span><br><span class="line"></span><br><span class="line">response = bot.chat(user_query)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>llama 2有7B, 13B和70B参数。</p>
+</blockquote>
+<h3 id="3-5-国产模型替代"><a href="#3-5-国产模型替代" class="headerlink" title="3.5 国产模型替代"></a>3.5 国产模型替代</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过鉴权接口获取 access token</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_access_token</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    使用 AK，SK 生成鉴权签名（Access Token）</span></span><br><span class="line"><span class="string">    :return: access_token，或是None(如果错误)</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    url = <span class="string">&quot;https://aip.baidubce.com/oauth/2.0/token&quot;</span></span><br><span class="line">    params = &#123;</span><br><span class="line">        <span class="string">&quot;grant_type&quot;</span>: <span class="string">&quot;client_credentials&quot;</span>,</span><br><span class="line">        <span class="string">&quot;client_id&quot;</span>: os.getenv(<span class="string">&#x27;ERNIE_CLIENT_ID&#x27;</span>),</span><br><span class="line">        <span class="string">&quot;client_secret&quot;</span>: os.getenv(<span class="string">&#x27;ERNIE_CLIENT_SECRET&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">str</span>(requests.post(url, params=params).json().get(<span class="string">&quot;access_token&quot;</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 调用文心千帆 调用 BGE Embedding 接口</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_embeddings_bge</span>(<span class="params">prompts</span>):</span><br><span class="line">    url = <span class="string">&quot;https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/embeddings/bge_large_en?access_token=&quot;</span> + get_access_token()</span><br><span class="line">    payload = json.dumps(&#123;</span><br><span class="line">        <span class="string">&quot;input&quot;</span>: prompts</span><br><span class="line">    &#125;)</span><br><span class="line">    headers = &#123;<span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span>&#125;</span><br><span class="line"></span><br><span class="line">    response = requests.request(</span><br><span class="line">        <span class="string">&quot;POST&quot;</span>, url, headers=headers, data=payload).json()</span><br><span class="line">    data = response[<span class="string">&quot;data&quot;</span>]</span><br><span class="line">    <span class="keyword">return</span> [x[<span class="string">&quot;embedding&quot;</span>] <span class="keyword">for</span> x <span class="keyword">in</span> data]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 调用文心4.0对话接口</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_completion_ernie</span>(<span class="params">prompt</span>):</span><br><span class="line"></span><br><span class="line">    url = <span class="string">&quot;https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token=&quot;</span> + get_access_token()</span><br><span class="line">    payload = json.dumps(&#123;</span><br><span class="line">        <span class="string">&quot;messages&quot;</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>,</span><br><span class="line">                <span class="string">&quot;content&quot;</span>: prompt</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    headers = &#123;<span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span>&#125;</span><br><span class="line"></span><br><span class="line">    response = requests.request(</span><br><span class="line">        <span class="string">&quot;POST&quot;</span>, url, headers=headers, data=payload).json()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> response[<span class="string">&quot;result&quot;</span>]</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 创建一个向量数据库对象</span></span><br><span class="line">new_vector_db = MyVectorDBConnector(</span><br><span class="line">    <span class="string">&quot;demo_ernie&quot;</span>,</span><br><span class="line">    embedding_fn=get_embeddings_bge</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 向向量数据库中添加文档</span></span><br><span class="line">new_vector_db.add_documents(paragraphs)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个RAG机器人</span></span><br><span class="line">new_bot = RAG_Bot(</span><br><span class="line">    new_vector_db,</span><br><span class="line">    llm_api=get_completion_ernie</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">user_query = <span class="string">&quot;how many parameters does llama 2 have?&quot;</span></span><br><span class="line"></span><br><span class="line">response = new_bot.chat(user_query)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Llama 2具有7B、13B和70B的参数。我们还训练了34B的变体，但在本文中未发布。</p>
+</blockquote>
+<h3 id="3-6-OpenAI-新发布的两个-Embedding-模型"><a href="#3-6-OpenAI-新发布的两个-Embedding-模型" class="headerlink" title="3.6 OpenAI 新发布的两个 Embedding 模型"></a>3.6 OpenAI 新发布的两个 Embedding 模型</h3><p>2024 年 1 月 25 日，OpenAI 新发布了两个 Embedding 模型</p>
+<ul>
+<li>text-embedding-3-large</li>
+<li>text-embedding-3-small</li>
+</ul>
+<p>其最大特点是，支持自定义的缩短向量维度，从而在几乎不影响最终效果的情况下降低向量检索与相似度计算的复杂度。</p>
+<p>通俗的说：<strong>越大越准、越小越快。</strong> 官方公布的评测结果:</p>
+<img src="/2025/03/25/04-RAG-Embedding/1742878293245-5.png" class="">
+
+<p>注：<a target="_blank" rel="noopener" href="https://huggingface.co/blog/mteb">MTEB</a> 是一个大规模多任务的 Embedding 模型公开评测集</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">model = <span class="string">&quot;text-embedding-3-large&quot;</span></span><br><span class="line">dimensions = <span class="number">128</span></span><br><span class="line"></span><br><span class="line">query = <span class="string">&quot;国际争端&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 且能支持跨语言</span></span><br><span class="line"><span class="comment"># query = &quot;global conflicts&quot;</span></span><br><span class="line"></span><br><span class="line">documents = [</span><br><span class="line">    <span class="string">&quot;联合国就苏丹达尔富尔地区大规模暴力事件发出警告&quot;</span>,</span><br><span class="line">    <span class="string">&quot;土耳其、芬兰、瑞典与北约代表将继续就瑞典“入约”问题进行谈判&quot;</span>,</span><br><span class="line">    <span class="string">&quot;日本岐阜市陆上自卫队射击场内发生枪击事件 3人受伤&quot;</span>,</span><br><span class="line">    <span class="string">&quot;国家游泳中心（水立方）：恢复游泳、嬉水乐园等水上项目运营&quot;</span>,</span><br><span class="line">    <span class="string">&quot;我国首次在空间站开展舱外辐射生物学暴露实验&quot;</span>,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">query_vec = get_embeddings([query], model=model, dimensions=dimensions)[<span class="number">0</span>]</span><br><span class="line">doc_vecs = get_embeddings(documents, model=model, dimensions=dimensions)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;向量维度: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">len</span>(query_vec)))</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Query与Documents的余弦距离:&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> vec <span class="keyword">in</span> doc_vecs:</span><br><span class="line">    <span class="built_in">print</span>(cos_sim(query_vec, vec))</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Query与Documents的欧氏距离:&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> vec <span class="keyword">in</span> doc_vecs:</span><br><span class="line">    <span class="built_in">print</span>(l2(query_vec, vec))</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>向量维度: 128</p>
+<p>Query与Documents的余弦距离:</p>
+<p>0.2865366548431519</p>
+<p>0.4191567881389735</p>
+<p>0.2148804989271263</p>
+<p>0.13958670470817242</p>
+<p>0.17068439927518234</p>
+<p>Query与Documents的欧氏距离:</p>
+<p>1.19454037868263</p>
+<p>1.0778156629853461</p>
+<p>1.2530918621291471</p>
+<p>1.3118028480848734</p>
+<p>1.2878786199234715</p>
+</blockquote>
+<p><strong>扩展阅读：这种可变长度的 Embedding 技术背后的原理叫做</strong> <strong><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2205.13147">Matryoshka Representation Learning</a></strong></p>
+<h2 id="4-实战-RAG-系统的进阶知识"><a href="#4-实战-RAG-系统的进阶知识" class="headerlink" title="4 实战 RAG 系统的进阶知识"></a>4 实战 RAG 系统的进阶知识</h2><h3 id="4-1-文本分割的粒度"><a href="#4-1-文本分割的粒度" class="headerlink" title="4.1 文本分割的粒度"></a>4.1 文本分割的粒度</h3><p><strong>缺陷</strong></p>
+<ol>
+<li>粒度太大可能导致检索不精准，粒度太小可能导致信息不全面</li>
+<li>问题的答案可能跨越两个片段</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建一个向量数据库对象</span></span><br><span class="line">vector_db = MyVectorDBConnector(<span class="string">&quot;demo_text_split&quot;</span>, get_embeddings)</span><br><span class="line"><span class="comment"># 向向量数据库中添加文档</span></span><br><span class="line">vector_db.add_documents(paragraphs)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个RAG机器人</span></span><br><span class="line">bot = RAG_Bot(</span><br><span class="line">    vector_db,</span><br><span class="line">    llm_api=get_completion</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># user_query = &quot;llama 2有商用许可协议吗&quot;</span></span><br><span class="line">user_query=<span class="string">&quot;llama 2 chat有多少参数&quot;</span></span><br><span class="line">search_results = vector_db.search(user_query, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> doc <span class="keyword">in</span> search_results[<span class="string">&#x27;documents&#x27;</span>][<span class="number">0</span>]:</span><br><span class="line">    <span class="built_in">print</span>(doc+<span class="string">&quot;\n&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;====回复====&quot;</span>)</span><br><span class="line">bot.chat(user_query)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p> In this work, we develop and release Llama 2, a family of pretrained and ﬁne-tuned LLMs, Llama 2 and Llama 2-Chat, at scales up to 70B parameters. On the series of helpfulness and safety benchmarks we tested, Llama 2-Chat models generally perform better than existing open-source models. They also appear to be on par with some of the closed-source models, at least on the human evaluations we performed (see Figures 1 and 3). We have taken measures to increase the safety of these models, using safety-speciﬁc data annotation and tuning, as well as conducting red-teaming and employing iterative evaluations. Additionally, this paper contributes a thorough description of our ﬁne-tuning methodology and approach to improving LLM safety. We hope that this openness will enable the community to reproduce ﬁne-tuned LLMs and continue to improve the safety of those models, paving the way for more responsible development of LLMs. We also share novel observations we made during the development of Llama 2 and Llama 2-Chat, such as the emergence of tool usage and temporal organization of knowledge.</p>
+<ol start="2">
+<li>Llama 2-Chat, a ﬁne-tuned version of Llama 2 that is optimized for dialogue use cases. We release</li>
+</ol>
+<p>&#x3D;&#x3D;&#x3D;&#x3D;回复&#x3D;&#x3D;&#x3D;&#x3D;</p>
+<p>[38]:</p>
+<p>‘llama 2 chat有70B个参数。’</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> p <span class="keyword">in</span> paragraphs:</span><br><span class="line">    <span class="built_in">print</span>(p+<span class="string">&quot;\n&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p> Figure 1: Helpfulness human evaluation results for Llama 2-Chat compared to other open-source and closed-source models. Human raters compared model generations on ~4k prompts consisting of both single and multi-turn prompts. The 95% conﬁdence intervals for this evaluation are between 1% and 2%. More details in Section 3.4.2. While reviewing these results, it is important to note that human evaluations can be noisy due to limitations of the prompt set, subjectivity of the review guidelines, subjectivity of individual raters, and the inherent diﬃculty of comparing generations. Figure 2: Win-rate % for helpfulness andsafety between commercial-licensed baselines and Llama 2-Chat, according to GPT 4. To complement the human evaluation, we used a more capable model, not subject to our own guidance. Green area indicates our model is better according to GPT-4. To remove ties, we used win&#x2F;(win + loss). The orders in which the model responses are presented to GPT-4 are randomly swapped to alleviate bias. 1 Introduction Large Language Models (LLMs) have shown great promise as highly capable AI assistants that excel in complex reasoning tasks requiring expert knowledge across a wide range of ﬁelds, including in specialized domains such as programming and creative writing. They enable interaction with humans through intuitive chat interfaces, which has led to rapid and widespread adoption among the general public. The capabilities of LLMs are remarkable considering the seemingly straightforward nature of the training methodology. Auto-regressive transformers are pretrained on an extensive corpus of self-supervised data, followed by alignment with human preferences via techniques such as Reinforcement Learning with Human Feedback (RLHF). Although the training methodology is simple, high computational requirements have limited the development of LLMs to a few players. There have been public releases of pretrained LLMs (such as BLOOM (Scao et al., 2022), LLaMa-1 (Touvron et al., 2023), and Falcon (Penedo et al., 2023)) that match the performance of closed pretrained competitors like GPT-3 (Brown et al., 2020) and Chinchilla (Hoﬀmann et al., 2022), but none of these models are suitable substitutes for closed “product” LLMs, such as ChatGPT, BARD, and Claude. These closed product LLMs are heavily ﬁne-tuned to align with human preferences, which greatly enhances their usability and safety. This step can require signiﬁcant costs in compute and human annotation, and is often not transparent or easily reproducible, limiting progress within the community to advance AI alignment research. In this work, we develop and release Llama 2, a family of pretrained and ﬁne-tuned LLMs, Llama 2 and Llama 2-Chat, at scales up to 70B parameters. On the series of helpfulness and safety benchmarks we tested, Llama 2-Chat models generally perform better than existing open-source models. They also appear to be on par with some of the closed-source models, at least on the human evaluations we performed (see Figures 1 and 3). We have taken measures to increase the safety of these models, using safety-speciﬁc data annotation and tuning, as well as conducting red-teaming and employing iterative evaluations. Additionally, this paper contributes a thorough description of our ﬁne-tuning methodology and approach to improving LLM safety. We hope that this openness will enable the community to reproduce ﬁne-tuned LLMs and continue to improve the safety of those models, paving the way for more responsible development of LLMs. We also share novel observations we made during the development of Llama 2 and Llama 2-Chat, such as the emergence of tool usage and temporal organization of knowledge. Figure 3: Safety human evaluation results for Llama 2-Chat compared to other open-source and closed source models. Human raters judged model generations for safety violations across ~2,000 adversarial prompts consisting of both single and multi-turn prompts. More details can be found in Section 4.4. It is important to caveat these safety results with the inherent bias of LLM evaluations due to limitations of the prompt set, subjectivity of the review guidelines, and subjectivity of individual raters. Additionally, these safety evaluations are performed using content standards that are likely to be biased towards the Llama 2-Chat models. We are releasing the following models to the general public for research and commercial use‡: 1. Llama 2, an updated version of Llama 1, trained on a new mix of publicly available data. We also increased the size of the pretraining corpus by 40%, doubled the context length of the model, and adopted grouped-query attention (Ainslie et al., 2023). We are releasing variants of Llama 2 with 7B, 13B, and 70B parameters. We have also trained 34B variants, which we report on in this paper but are not releasing.§ 2. Llama 2-Chat, a ﬁne-tuned version of Llama 2 that is optimized for dialogue use cases. We release variants of this model with 7B, 13B, and 70B parameters as well. We believe that the open release of LLMs, when done safely, will be a net beneﬁt to society. Like all LLMs, Llama 2 is a new technology that carries potential risks with use (Bender et al., 2021b; Weidinger et al., 2021; Solaiman et al., 2023). Testing conducted to date has been in English and has not — and could not — cover all scenarios. Therefore, before deploying any applications of Llama 2-Chat, developers should perform safety testing and tuning tailored to their speciﬁc applications of the model. We provide a responsible use guide¶ and code examples‖ to facilitate the safe deployment of Llama 2 and Llama 2-Chat. More details of our responsible release strategy can be found in Section 5.3. The remainder of this paper describes our pretraining methodology (Section 2), ﬁne-tuning methodology (Section 3), approach to model safety (Section 4), key observations and insights (Section 5), relevant related work (Section 6), and conclusions (Section 7). ‡<a target="_blank" rel="noopener" href="https://ai.meta.com/resources/models-and-libraries/llama/">https://ai.meta.com/resources/models-and-libraries/llama/</a> §We are delaying the release of the 34B model due to a lack of time to suﬃciently red team. ¶<a target="_blank" rel="noopener" href="https://ai.meta.com/llama">https://ai.meta.com/llama</a> ‖<a target="_blank" rel="noopener" href="https://github.com/facebookresearch/llama">https://github.com/facebookresearch/llama</a></p>
+</blockquote>
+<p><strong>改进</strong>: 按一定粒度，部分重叠式的切割文本，使上下文更完整</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> nltk.tokenize <span class="keyword">import</span> sent_tokenize</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">split_text</span>(<span class="params">paragraphs, chunk_size=<span class="number">300</span>, overlap_size=<span class="number">100</span></span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;按指定 chunk_size 和 overlap_size 交叠割文本&#x27;&#x27;&#x27;</span></span><br><span class="line">    sentences = [s.strip() <span class="keyword">for</span> p <span class="keyword">in</span> paragraphs <span class="keyword">for</span> s <span class="keyword">in</span> sent_tokenize(p)]</span><br><span class="line">    chunks = []</span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> i &lt; <span class="built_in">len</span>(sentences):</span><br><span class="line">        chunk = sentences[i]</span><br><span class="line">        overlap = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        prev_len = <span class="number">0</span></span><br><span class="line">        prev = i - <span class="number">1</span></span><br><span class="line">        <span class="comment"># 向前计算重叠部分</span></span><br><span class="line">        <span class="keyword">while</span> prev &gt;= <span class="number">0</span> <span class="keyword">and</span> <span class="built_in">len</span>(sentences[prev])+<span class="built_in">len</span>(overlap) &lt;= overlap_size:</span><br><span class="line">            overlap = sentences[prev] + <span class="string">&#x27; &#x27;</span> + overlap</span><br><span class="line">            prev -= <span class="number">1</span></span><br><span class="line">        chunk = overlap+chunk</span><br><span class="line">        <span class="built_in">next</span> = i + <span class="number">1</span></span><br><span class="line">        <span class="comment"># 向后计算当前chunk</span></span><br><span class="line">        <span class="keyword">while</span> <span class="built_in">next</span> &lt; <span class="built_in">len</span>(sentences) <span class="keyword">and</span> <span class="built_in">len</span>(sentences[<span class="built_in">next</span>])+<span class="built_in">len</span>(chunk) &lt;= chunk_size:</span><br><span class="line">            chunk = chunk + <span class="string">&#x27; &#x27;</span> + sentences[<span class="built_in">next</span>]</span><br><span class="line">            <span class="built_in">next</span> += <span class="number">1</span></span><br><span class="line">        chunks.append(chunk)</span><br><span class="line">        i = <span class="built_in">next</span></span><br><span class="line">    <span class="keyword">return</span> chunks</span><br></pre></td></tr></table></figure>
+
+<p>此处 sent_tokenize 为针对英文的实现，针对中文的实现请参考 chinese_utils.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">chunks = split_text(paragraphs, <span class="number">300</span>, <span class="number">100</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个向量数据库对象</span></span><br><span class="line">vector_db = MyVectorDBConnector(<span class="string">&quot;demo_text_split&quot;</span>, get_embeddings)</span><br><span class="line"><span class="comment"># 向向量数据库中添加文档</span></span><br><span class="line">vector_db.add_documents(chunks)</span><br><span class="line"><span class="comment"># 创建一个RAG机器人</span></span><br><span class="line">bot = RAG_Bot(</span><br><span class="line">    vector_db,</span><br><span class="line">    llm_api=get_completion</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># user_query = &quot;llama 2有商用许可协议吗&quot;</span></span><br><span class="line">user_query=<span class="string">&quot;llama 2 chat有多少参数&quot;</span></span><br><span class="line"></span><br><span class="line">search_results = vector_db.search(user_query, <span class="number">2</span>)</span><br><span class="line"><span class="keyword">for</span> doc <span class="keyword">in</span> search_results[<span class="string">&#x27;documents&#x27;</span>][<span class="number">0</span>]:</span><br><span class="line">    <span class="built_in">print</span>(doc+<span class="string">&quot;\n&quot;</span>)</span><br><span class="line"></span><br><span class="line">response = bot.chat(user_query)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;====回复====&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol>
+<li>Llama 2-Chat, a ﬁne-tuned version of Llama 2 that is optimized for dialogue use cases. We release variants of this model with 7B, 13B, and 70B parameters as well. We believe that the open release of LLMs, when done safely, will be a net beneﬁt to society.</li>
+</ol>
+<p>In this work, we develop and release Llama 2, a family of pretrained and ﬁne-tuned LLMs, Llama 2 and Llama 2-Chat, at scales up to 70B parameters. On the series of helpfulness and safety benchmarks we tested, Llama 2-Chat models generally perform better than existing open-source models.</p>
+<p>&#x3D;&#x3D;&#x3D;&#x3D;回复&#x3D;&#x3D;&#x3D;&#x3D;</p>
+<p>llama 2 chat有7B、13B和70B参数。</p>
+</blockquote>
+<h3 id="4-2-检索后排序"><a href="#4-2-检索后排序" class="headerlink" title="4.2 检索后排序"></a>4.2 检索后排序</h3><p><strong>问题</strong>: 有时，最合适的答案不一定排在检索的最前面</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">user_query = <span class="string">&quot;how safe is llama 2&quot;</span></span><br><span class="line">search_results = vector_db.search(user_query, <span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> doc <span class="keyword">in</span> search_results[<span class="string">&#x27;documents&#x27;</span>][<span class="number">0</span>]:</span><br><span class="line">    <span class="built_in">print</span>(doc+<span class="string">&quot;\n&quot;</span>)</span><br><span class="line"></span><br><span class="line">response = bot.chat(user_query)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;====回复====&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>We believe that the open release of LLMs, when done safely, will be a net beneﬁt to society. Like all LLMs, Llama 2 is a new technology that carries potential risks with use (Bender et al., 2021b; Weidinger et al., 2021; Solaiman et al., 2023).</p>
+<p>We also share novel observations we made during the development of Llama 2 and Llama 2-Chat, such as the emergence of tool usage and temporal organization of knowledge. Figure 3: Safety human evaluation results for Llama 2-Chat compared to other open-source and closed source models.</p>
+<p>In this work, we develop and release Llama 2, a family of pretrained and ﬁne-tuned LLMs, Llama 2 and Llama 2-Chat, at scales up to 70B parameters. On the series of helpfulness and safety benchmarks we tested, Llama 2-Chat models generally perform better than existing open-source models.</p>
+<p>Additionally, these safety evaluations are performed using content standards that are likely to be biased towards the Llama 2-Chat models. We are releasing the following models to the general public for research and commercial use‡: 1.</p>
+<p>We provide a responsible use guide¶ and code examples‖ to facilitate the safe deployment of Llama 2 and Llama 2-Chat. More details of our responsible release strategy can be found in Section 5.3.</p>
+<p>&#x3D;&#x3D;&#x3D;&#x3D;回复&#x3D;&#x3D;&#x3D;&#x3D;</p>
+<p>根据已知信息中提到的安全人类评估结果，Llama 2-Chat在安全性方面相对于其他开源和闭源模型表现良好。</p>
+</blockquote>
+<p><strong>方案</strong>:</p>
+<ol>
+<li>检索时过招回一部分文本</li>
+<li>通过一个排序模型对 query 和 document 重新打分排序</li>
+</ol>
+<img src="/2025/03/25/04-RAG-Embedding/1742878293245-6.png" class="">
+
+<p>以下代码不要在服务器上运行，会死机！可下载左侧 rank.py 在自己本地运行。</p>
+<p><strong>备注：</strong></p>
+<p>由于 huggingface 被墙，我们已经为您准备好了本章相关模型。请点击以下网盘链接进行下载：</p>
+<p>链接: <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1X0kfNKasvWqCLUEEyAvO-Q?pwd=3v6y">https://pan.baidu.com/s/1X0kfNKasvWqCLUEEyAvO-Q?pwd=3v6y</a> 提取码: 3v6y</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># !pip install sentence_transformers</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> CrossEncoder</span><br><span class="line"></span><br><span class="line"><span class="comment"># model = CrossEncoder(&#x27;cross-encoder/ms-marco-MiniLM-L-6-v2&#x27;, max_length=512) # 英文，模型较小</span></span><br><span class="line">model = CrossEncoder(<span class="string">&#x27;BAAI/bge-reranker-large&#x27;</span>, max_length=<span class="number">512</span>) <span class="comment"># 多语言，国产，模型较大</span></span><br><span class="line"></span><br><span class="line">user_query = <span class="string">&quot;how safe is llama 2&quot;</span></span><br><span class="line"><span class="comment"># user_query = &quot;llama 2安全性如何&quot;</span></span><br><span class="line">scores = model.predict([(user_query, doc)</span><br><span class="line">                       <span class="keyword">for</span> doc <span class="keyword">in</span> search_results[<span class="string">&#x27;documents&#x27;</span>][<span class="number">0</span>]])</span><br><span class="line"><span class="comment"># 按得分排序</span></span><br><span class="line">sorted_list = <span class="built_in">sorted</span>(</span><br><span class="line">    <span class="built_in">zip</span>(scores, search_results[<span class="string">&#x27;documents&#x27;</span>][<span class="number">0</span>]), key=<span class="keyword">lambda</span> x: x[<span class="number">0</span>], reverse=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">for</span> score, doc <span class="keyword">in</span> sorted_list:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;score&#125;</span>\t<span class="subst">&#123;doc&#125;</span>\n&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>0.918857753276825        In this work, we develop and release Llama 2, a family of pretrained and ﬁne-tuned LLMs, Llama 2 and Llama 2-Chat, at scales up to 70B parameters. On the series of helpfulness and safety benchmarks we tested, Llama 2-Chat models generally perform better than existing open-source models.</p>
+<p>0.7791304588317871        We believe that the open release of LLMs, when done safely, will be a net beneﬁt to society. Like all LLMs, Llama 2 is a new technology that carries potential risks with use (Bender et al., 2021b; Weidinger et al., 2021; Solaiman et al., 2023).</p>
+<p>0.47571462392807007        We provide a responsible use guide¶ and code examples‖ to facilitate the safe deployment of Llama 2 and Llama 2-Chat. More details of our responsible release strategy can be found in Section 5.3.</p>
+<p>0.47421783208847046        We also share novel observations we made during the development of Llama 2 and Llama 2-Chat, such as the emergence of tool usage and temporal organization of knowledge. Figure 3: Safety human evaluation results for Llama 2-Chat compared to other open-source and closed source models.</p>
+<p>0.16011707484722137        Additionally, these safety evaluations are performed using content standards that are likely to be biased towards the Llama 2-Chat models. We are releasing the following models to the general public for research and commercial use‡: 1.</p>
+</blockquote>
+<p><strong>一些 Rerank 的</strong> <strong>API</strong> <strong>服务</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://cohere.com/rerank">Cohere Rerank</a>：支持多语言</li>
+<li><a target="_blank" rel="noopener" href="https://jina.ai/reranker/">Jina Rerank</a>：目前只支持英文</li>
+</ul>
+<h3 id="4-3-混合检索（Hybrid-Search）"><a href="#4-3-混合检索（Hybrid-Search）" class="headerlink" title="4.3 混合检索（Hybrid Search）"></a>4.3 混合检索（Hybrid Search）</h3><p>在<strong>实际生产</strong>中，传统的关键字检索（稀疏表示）与向量检索（稠密表示）各有优劣。</p>
+<p>举个具体例子，比如文档中包含很长的专有名词，关键字检索往往更精准而向量检索容易引入概念混淆。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 背景说明：在医学中“小细胞肺癌”和“非小细胞肺癌”是两种不同的癌症</span></span><br><span class="line"></span><br><span class="line">query = <span class="string">&quot;非小细胞肺癌的患者&quot;</span></span><br><span class="line"></span><br><span class="line">documents = [</span><br><span class="line">    <span class="string">&quot;玛丽患有肺癌，癌细胞已转移&quot;</span>,</span><br><span class="line">    <span class="string">&quot;刘某肺癌I期&quot;</span>,</span><br><span class="line">    <span class="string">&quot;张某经诊断为非小细胞肺癌III期&quot;</span>,</span><br><span class="line">    <span class="string">&quot;小细胞肺癌是肺癌的一种&quot;</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">query_vec = get_embeddings([query])[<span class="number">0</span>]</span><br><span class="line">doc_vecs = get_embeddings(documents)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Cosine distance:&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> vec <span class="keyword">in</span> doc_vecs:</span><br><span class="line">    <span class="built_in">print</span>(cos_sim(query_vec, vec))</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Cosine distance:</p>
+<p>0.8915268056308027</p>
+<p>0.8895478505819983</p>
+<p>0.9039165614288258</p>
+<p>0.9131441645902685</p>
+</blockquote>
+<p>所以，有时候我们需要结合不同的检索算法，来达到比单一检索算法更优的效果。这就是<strong>混合检索</strong>。</p>
+<p>混合检索的核心是，综合文档 $$d$$在不同检索算法下的排序名次（rank），为其生成最终排序。</p>
+<p>一个最常用的算法叫 <strong>Reciprocal Rank Fusion（RRF）</strong></p>
+<p>$$rrf(d)&#x3D;\sum_{a\in A}\frac{1}{k+rank_a(d)}$$</p>
+<p>其中 A 表示所有使用的检索算法的集合，$$rank_a(d)$$ 表示使用算法$$ a$$检索时，文档$$d$$的排序，$$k$$是个常数。</p>
+<p>很多向量数据库都支持混合检索，比如 <a target="_blank" rel="noopener" href="https://weaviate.io/blog/hybrid-search-explained">Weaviate</a>、<a target="_blank" rel="noopener" href="https://www.pinecone.io/learn/hybrid-search-intro/">Pinecone</a> 等。也可以根据上述原理自己实现。</p>
+<h4 id="4-3-1-例子"><a href="#4-3-1-例子" class="headerlink" title="4.3.1 例子"></a>4.3.1 例子</h4><ol>
+<li>基于关键字检索的排序</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyEsConnector</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, es_client, index_name, keyword_fn</span>):</span><br><span class="line">        <span class="variable language_">self</span>.es_client = es_client</span><br><span class="line">        <span class="variable language_">self</span>.index_name = index_name</span><br><span class="line">        <span class="variable language_">self</span>.keyword_fn = keyword_fn</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add_documents</span>(<span class="params">self, documents</span>):</span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;文档灌库&#x27;&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.es_client.indices.exists(index=<span class="variable language_">self</span>.index_name):</span><br><span class="line">            <span class="variable language_">self</span>.es_client.indices.delete(index=<span class="variable language_">self</span>.index_name)</span><br><span class="line">        <span class="variable language_">self</span>.es_client.indices.create(index=<span class="variable language_">self</span>.index_name)</span><br><span class="line">        actions = [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">&quot;_index&quot;</span>: <span class="variable language_">self</span>.index_name,</span><br><span class="line">                <span class="string">&quot;_source&quot;</span>: &#123;</span><br><span class="line">                    <span class="string">&quot;keywords&quot;</span>: <span class="variable language_">self</span>.keyword_fn(doc),</span><br><span class="line">                    <span class="string">&quot;text&quot;</span>: doc,</span><br><span class="line">                    <span class="string">&quot;id&quot;</span>: <span class="string">f&quot;doc_<span class="subst">&#123;i&#125;</span>&quot;</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span> i, doc <span class="keyword">in</span> <span class="built_in">enumerate</span>(documents)</span><br><span class="line">        ]</span><br><span class="line">        helpers.bulk(<span class="variable language_">self</span>.es_client, actions)</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">search</span>(<span class="params">self, query_string, top_n=<span class="number">3</span></span>):</span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;检索&#x27;&#x27;&#x27;</span></span><br><span class="line">        search_query = &#123;</span><br><span class="line">            <span class="string">&quot;match&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;keywords&quot;</span>: <span class="variable language_">self</span>.keyword_fn(query_string)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        res = <span class="variable language_">self</span>.es_client.search(</span><br><span class="line">            index=<span class="variable language_">self</span>.index_name, query=search_query, size=top_n)</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            hit[<span class="string">&quot;_source&quot;</span>][<span class="string">&quot;id&quot;</span>]: &#123;</span><br><span class="line">                <span class="string">&quot;text&quot;</span>: hit[<span class="string">&quot;_source&quot;</span>][<span class="string">&quot;text&quot;</span>],</span><br><span class="line">                <span class="string">&quot;rank&quot;</span>: i,</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span> i, hit <span class="keyword">in</span> <span class="built_in">enumerate</span>(res[<span class="string">&quot;hits&quot;</span>][<span class="string">&quot;hits&quot;</span>])</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line"><span class="keyword">from</span> chinese_utils <span class="keyword">import</span> to_keywords  <span class="comment"># 使用中文的关键字提取函数</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 引入配置文件</span></span><br><span class="line">ELASTICSEARCH_BASE_URL = os.getenv(<span class="string">&#x27;ELASTICSEARCH_BASE_URL&#x27;</span>)</span><br><span class="line">ELASTICSEARCH_PASSWORD = os.getenv(<span class="string">&#x27;ELASTICSEARCH_PASSWORD&#x27;</span>)</span><br><span class="line">ELASTICSEARCH_NAME= os.getenv(<span class="string">&#x27;ELASTICSEARCH_NAME&#x27;</span>)</span><br><span class="line"></span><br><span class="line">es = Elasticsearch(</span><br><span class="line">    hosts=[ELASTICSEARCH_BASE_URL],  <span class="comment"># 服务地址与端口</span></span><br><span class="line">    http_auth=(ELASTICSEARCH_NAME, ELASTICSEARCH_PASSWORD),  <span class="comment"># 用户名，密码</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 ES 连接器</span></span><br><span class="line">es_connector = MyEsConnector(es, <span class="string">&quot;demo_es_rrf&quot;</span>, to_keywords)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 文档灌库</span></span><br><span class="line">es_connector.add_documents(documents)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关键字检索</span></span><br><span class="line">keyword_search_results = es_connector.search(query, <span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(json.dumps(keyword_search_results, indent=<span class="number">4</span>, ensure_ascii=<span class="literal">False</span>))</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>[nltk_data] Downloading package stopwords to &#x2F;home&#x2F;jovyan&#x2F;nltk_data…</p>
+<p>[nltk_data]   Package stopwords is already up-to-date!</p>
+<p>Building prefix dict from the default dictionary …</p>
+<p>Loading model from cache &#x2F;tmp&#x2F;jieba.cache</p>
+<p>Loading model cost 0.773 seconds.</p>
+<p>Prefix dict has been built successfully.</p>
+<p>{</p>
+<p>​    “doc_2”: {</p>
+<p>​        “text”: “张某经诊断为非小细胞肺癌III期”,</p>
+<p>​        “rank”: 0</p>
+<p>​    },</p>
+<p>​    “doc_0”: {</p>
+<p>​        “text”: “玛丽患有肺癌，癌细胞已转移”,</p>
+<p>​        “rank”: 1</p>
+<p>​    },</p>
+<p>​    “doc_3”: {</p>
+<p>​        “text”: “小细胞肺癌是肺癌的一种”,</p>
+<p>​        “rank”: 2</p>
+<p>​    }</p>
+<p>}</p>
+</blockquote>
+<ol>
+<li>基于向量检索的排序</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建向量数据库连接器</span></span><br><span class="line">vecdb_connector = MyVectorDBConnector(<span class="string">&quot;demo_vec_rrf&quot;</span>, get_embeddings)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 文档灌库</span></span><br><span class="line">vecdb_connector.add_documents(documents)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 向量检索</span></span><br><span class="line">vector_search_results = &#123;</span><br><span class="line">    <span class="string">&quot;doc_&quot;</span>+<span class="built_in">str</span>(documents.index(doc)): &#123;</span><br><span class="line">        <span class="string">&quot;text&quot;</span>: doc,</span><br><span class="line">        <span class="string">&quot;rank&quot;</span>: i</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> i, doc <span class="keyword">in</span> <span class="built_in">enumerate</span>(</span><br><span class="line">        vecdb_connector.search(query, <span class="number">3</span>)[<span class="string">&quot;documents&quot;</span>][<span class="number">0</span>]</span><br><span class="line">    )</span><br><span class="line">&#125;  <span class="comment"># 把结果转成跟上面关键字检索结果一样的格式</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(json.dumps(vector_search_results, indent=<span class="number">4</span>, ensure_ascii=<span class="literal">False</span>))</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>{</p>
+<p>​    “doc_3”: {</p>
+<p>​        “text”: “小细胞肺癌是肺癌的一种”,</p>
+<p>​        “rank”: 0</p>
+<p>​    },</p>
+<p>​    “doc_2”: {</p>
+<p>​        “text”: “张某经诊断为非小细胞肺癌III期”,</p>
+<p>​        “rank”: 1</p>
+<p>​    },</p>
+<p>​    “doc_0”: {</p>
+<p>​        “text”: “玛丽患有肺癌，癌细胞已转移”,</p>
+<p>​        “rank”: 2</p>
+<p>​    }</p>
+<p>}</p>
+</blockquote>
+<ol>
+<li>基于 RRF 的融合排序</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">rrf</span>(<span class="params">ranks, k=<span class="number">1</span></span>):</span><br><span class="line">    ret = &#123;&#125;</span><br><span class="line">    <span class="comment"># 遍历每次的排序结果</span></span><br><span class="line">    <span class="keyword">for</span> rank <span class="keyword">in</span> ranks:</span><br><span class="line">        <span class="comment"># 遍历排序中每个元素</span></span><br><span class="line">        <span class="keyword">for</span> <span class="built_in">id</span>, val <span class="keyword">in</span> rank.items():</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">id</span> <span class="keyword">not</span> <span class="keyword">in</span> ret:</span><br><span class="line">                ret[<span class="built_in">id</span>] = &#123;<span class="string">&quot;score&quot;</span>: <span class="number">0</span>, <span class="string">&quot;text&quot;</span>: val[<span class="string">&quot;text&quot;</span>]&#125;</span><br><span class="line">            <span class="comment"># 计算 RRF 得分</span></span><br><span class="line">            ret[<span class="built_in">id</span>][<span class="string">&quot;score&quot;</span>] += <span class="number">1.0</span>/(k+val[<span class="string">&quot;rank&quot;</span>])</span><br><span class="line">    <span class="comment"># 按 RRF 得分排序，并返回</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">dict</span>(<span class="built_in">sorted</span>(ret.items(), key=<span class="keyword">lambda</span> item: item[<span class="number">1</span>][<span class="string">&quot;score&quot;</span>], reverse=<span class="literal">True</span>))</span><br><span class="line">    </span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="comment"># 融合两次检索的排序结果</span></span><br><span class="line">reranked = rrf([keyword_search_results, vector_search_results])</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(json.dumps(reranked, indent=<span class="number">4</span>, ensure_ascii=<span class="literal">False</span>))</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>{</p>
+<p>​    “doc_2”: {</p>
+<p>​        “score”: 1.5,</p>
+<p>​        “text”: “张某经诊断为非小细胞肺癌III期”</p>
+<p>​    },</p>
+<p>​    “doc_3”: {</p>
+<p>​        “score”: 1.3333333333333333,</p>
+<p>​        “text”: “小细胞肺癌是肺癌的一种”</p>
+<p>​    },</p>
+<p>​    “doc_0”: {</p>
+<p>​        “score”: 0.8333333333333333,</p>
+<p>​        “text”: “玛丽患有肺癌，癌细胞已转移”</p>
+<p>​    }</p>
+<p>}</p>
+</blockquote>
+<h3 id="4-4-RAG-Fusion"><a href="#4-4-RAG-Fusion" class="headerlink" title="4.4 RAG-Fusion"></a>4.4 RAG-Fusion</h3><p>RAG-Fusion 就是利用了 RRF 的原理来提升检索的准确性。</p>
+<img src="/2025/03/25/04-RAG-Embedding/1742878293245-7.jpeg" class="">
+
+<p>原始项目（一段非常简短的演示代码）：<a target="_blank" rel="noopener" href="https://github.com/Raudaschl/rag-fusion">https://github.com/Raudaschl/rag-fusion</a></p>
+<h2 id="5-向量模型的本地加载与运行"><a href="#5-向量模型的本地加载与运行" class="headerlink" title="5 向量模型的本地加载与运行"></a>5 向量模型的本地加载与运行</h2><p>以下代码不要在服务器上运行，会死机！可下载左侧 bge.py 在自己本地运行。</p>
+<p><strong>备注：</strong></p>
+<p>由于 huggingface 被墙，我们已经为您准备好了本章相关模型。请点击以下网盘链接进行下载：</p>
+<p>链接: <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1X0kfNKasvWqCLUEEyAvO-Q?pwd=3v6y">https://pan.baidu.com/s/1X0kfNKasvWqCLUEEyAvO-Q?pwd=3v6y</a> 提取码: 3v6y</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer</span><br><span class="line"></span><br><span class="line">model_name = <span class="string">&#x27;BAAI/bge-large-zh-v1.5&#x27;</span> <span class="comment">#中文</span></span><br><span class="line"><span class="comment"># model_name = &#x27;moka-ai/m3e-base&#x27;  # 中英双语，但效果一般</span></span><br><span class="line"><span class="comment"># model_name = &#x27;BAAI/bge-m3&#x27; # 多语言，但效果一般</span></span><br><span class="line"></span><br><span class="line">model = SentenceTransformer(model_name)</span><br><span class="line"></span><br><span class="line">query = <span class="string">&quot;国际争端&quot;</span></span><br><span class="line"><span class="comment"># query = &quot;global conflicts&quot;</span></span><br><span class="line"></span><br><span class="line">documents = [</span><br><span class="line">    <span class="string">&quot;联合国就苏丹达尔富尔地区大规模暴力事件发出警告&quot;</span>,</span><br><span class="line">    <span class="string">&quot;土耳其、芬兰、瑞典与北约代表将继续就瑞典“入约”问题进行谈判&quot;</span>,</span><br><span class="line">    <span class="string">&quot;日本岐阜市陆上自卫队射击场内发生枪击事件 3人受伤&quot;</span>,</span><br><span class="line">    <span class="string">&quot;国家游泳中心（水立方）：恢复游泳、嬉水乐园等水上项目运营&quot;</span>,</span><br><span class="line">    <span class="string">&quot;我国首次在空间站开展舱外辐射生物学暴露实验&quot;</span>,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">query_vec = model.encode(query)</span><br><span class="line"></span><br><span class="line">doc_vecs = [</span><br><span class="line">    model.encode(doc)</span><br><span class="line">    <span class="keyword">for</span> doc <span class="keyword">in</span> documents</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Cosine distance:&quot;</span>)  <span class="comment"># 越大越相似</span></span><br><span class="line"><span class="comment"># print(cos_sim(query_vec, query_vec))</span></span><br><span class="line"><span class="keyword">for</span> vec <span class="keyword">in</span> doc_vecs:</span><br><span class="line">    <span class="built_in">print</span>(cos_sim(query_vec, vec))</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Cosine distance:</p>
+<p>0.4727645</p>
+<p>0.38867012</p>
+<p>0.3285629</p>
+<p>0.316192</p>
+<p>0.30938625</p>
+</blockquote>
+<p><strong>扩展阅读：****<a target="_blank" rel="noopener" href="https://github.com/FlagOpen/FlagEmbedding">https://github.com/FlagOpen/FlagEmbedding</a></strong></p>
+<p><strong>划重点：</strong></p>
+<ol>
+<li>不是每个 Embedding 模型都对余弦距离和欧氏距离同时有效</li>
+<li>哪种相似度计算有效要阅读模型的说明（通常都支持余弦距离计算）</li>
+</ol>
+<p><strong>注意：</strong></p>
+<ul>
+<li>本节只介绍了模型在本地如何加载与运行。</li>
+<li>关于如何将模型部署成支持并发请求的 HTTP 服务，将在第15课中讲解。</li>
+</ul>
+<h2 id="6-PDF-文档中的表格处理"><a href="#6-PDF-文档中的表格处理" class="headerlink" title="6 PDF 文档中的表格处理"></a>6 PDF 文档中的表格处理</h2><img src="/2025/03/25/04-RAG-Embedding/1742878293245-8.png" class="">
+
+<ol>
+<li>将每页 PDF 转成图片</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># !pip install PyMuPDF</span></span><br><span class="line"><span class="comment"># !pip install matplotlib</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> fitz</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pdf2images</span>(<span class="params">pdf_file</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;将 PDF 每页转成一个 PNG 图像&#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="comment"># 保存路径为原 PDF 文件名（不含扩展名）</span></span><br><span class="line">    output_directory_path, _ = os.path.splitext(pdf_file)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(output_directory_path):</span><br><span class="line">        os.makedirs(output_directory_path)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 加载 PDF 文件</span></span><br><span class="line">    pdf_document = fitz.<span class="built_in">open</span>(pdf_file)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 每页转一张图</span></span><br><span class="line">    <span class="keyword">for</span> page_number <span class="keyword">in</span> <span class="built_in">range</span>(pdf_document.page_count):</span><br><span class="line">        <span class="comment"># 取一页</span></span><br><span class="line">        page = pdf_document[page_number]</span><br><span class="line">    </span><br><span class="line">        <span class="comment"># 转图像</span></span><br><span class="line">        pix = page.get_pixmap()</span><br><span class="line">    </span><br><span class="line">        <span class="comment"># 从位图创建 PNG 对象</span></span><br><span class="line">        image = Image.frombytes(<span class="string">&quot;RGB&quot;</span>, [pix.width, pix.height], pix.samples)</span><br><span class="line">    </span><br><span class="line">        <span class="comment"># 保存 PNG 文件</span></span><br><span class="line">        image.save(<span class="string">f&quot;./<span class="subst">&#123;output_directory_path&#125;</span>/page_<span class="subst">&#123;page_number + <span class="number">1</span>&#125;</span>.png&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 关闭 PDF 文件</span></span><br><span class="line">    pdf_document.close()</span><br><span class="line">    </span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show_images</span>(<span class="params">dir_path</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;显示目录下的 PNG 图像&#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> file <span class="keyword">in</span> os.listdir(dir_path):</span><br><span class="line">        <span class="keyword">if</span> file.endswith(<span class="string">&#x27;.png&#x27;</span>):</span><br><span class="line">            <span class="comment"># 打开图像</span></span><br><span class="line">            img = Image.<span class="built_in">open</span>(os.path.join(dir_path, file)) </span><br><span class="line"></span><br><span class="line">            <span class="comment"># 显示图像</span></span><br><span class="line">            plt.imshow(img)</span><br><span class="line">            plt.axis(<span class="string">&#x27;off&#x27;</span>)  <span class="comment"># 不显示坐标轴</span></span><br><span class="line">            plt.show()</span><br><span class="line">            </span><br><span class="line">pdf2images(<span class="string">&quot;llama2_page8.pdf&quot;</span>)</span><br><span class="line">show_images(<span class="string">&quot;llama2_page8&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>识别文档（图片）中的表格</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MaxResize</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;缩放图像&#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, max_size=<span class="number">800</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.max_size = max_size</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self, image</span>):</span><br><span class="line">        width, height = image.size</span><br><span class="line">        current_max_size = <span class="built_in">max</span>(width, height)</span><br><span class="line">        scale = <span class="variable language_">self</span>.max_size / current_max_size</span><br><span class="line">        resized_image = image.resize(</span><br><span class="line">            (<span class="built_in">int</span>(<span class="built_in">round</span>(scale * width)), <span class="built_in">int</span>(<span class="built_in">round</span>(scale * height)))</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> resized_image</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> torchvision.transforms <span class="keyword">as</span> transforms</span><br><span class="line"></span><br><span class="line"><span class="comment"># 图像预处理</span></span><br><span class="line">detection_transform = transforms.Compose(</span><br><span class="line">    [</span><br><span class="line">        MaxResize(<span class="number">800</span>),</span><br><span class="line">        transforms.ToTensor(),</span><br><span class="line">        transforms.Normalize([<span class="number">0.485</span>, <span class="number">0.456</span>, <span class="number">0.406</span>], [<span class="number">0.229</span>, <span class="number">0.224</span>, <span class="number">0.225</span>]),</span><br><span class="line">    ]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>以下代码不要在服务器上运行，会死机！可下载左侧 table_detection.py 在自己本地运行。</p>
+<p><strong>备注：</strong></p>
+<p>由于 huggingface 被墙，我们已经为您准备好了本章相关模型。请点击以下网盘链接进行下载：</p>
+<p>链接: <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1X0kfNKasvWqCLUEEyAvO-Q?pwd=3v6y">https://pan.baidu.com/s/1X0kfNKasvWqCLUEEyAvO-Q?pwd=3v6y</a> 提取码: 3v6y</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForObjectDetection</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载 TableTransformer 模型</span></span><br><span class="line">model = AutoModelForObjectDetection.from_pretrained(</span><br><span class="line">    <span class="string">&quot;microsoft/table-transformer-detection&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 识别后的坐标换算与后处理</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">box_cxcywh_to_xyxy</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;坐标转换&#x27;&#x27;&#x27;</span></span><br><span class="line">    x_c, y_c, w, h = x.unbind(-<span class="number">1</span>)</span><br><span class="line">    b = [(x_c - <span class="number">0.5</span> * w), (y_c - <span class="number">0.5</span> * h), (x_c + <span class="number">0.5</span> * w), (y_c + <span class="number">0.5</span> * h)]</span><br><span class="line">    <span class="keyword">return</span> torch.stack(b, dim=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rescale_bboxes</span>(<span class="params">out_bbox, size</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;区域缩放&#x27;&#x27;&#x27;</span></span><br><span class="line">    width, height = size</span><br><span class="line">    boxes = box_cxcywh_to_xyxy(out_bbox)</span><br><span class="line">    boxes = boxes * torch.tensor(</span><br><span class="line">        [width, height, width, height], dtype=torch.float32</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> boxes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">outputs_to_objects</span>(<span class="params">outputs, img_size, id2label</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;从模型输出中取定位框坐标&#x27;&#x27;&#x27;</span></span><br><span class="line">    m = outputs.logits.softmax(-<span class="number">1</span>).<span class="built_in">max</span>(-<span class="number">1</span>)</span><br><span class="line">    pred_labels = <span class="built_in">list</span>(m.indices.detach().cpu().numpy())[<span class="number">0</span>]</span><br><span class="line">    pred_scores = <span class="built_in">list</span>(m.values.detach().cpu().numpy())[<span class="number">0</span>]</span><br><span class="line">    pred_bboxes = outputs[<span class="string">&quot;pred_boxes&quot;</span>].detach().cpu()[<span class="number">0</span>]</span><br><span class="line">    pred_bboxes = [</span><br><span class="line">        elem.tolist() <span class="keyword">for</span> elem <span class="keyword">in</span> rescale_bboxes(pred_bboxes, img_size)</span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    objects = []</span><br><span class="line">    <span class="keyword">for</span> label, score, bbox <span class="keyword">in</span> <span class="built_in">zip</span>(pred_labels, pred_scores, pred_bboxes):</span><br><span class="line">        class_label = id2label[<span class="built_in">int</span>(label)]</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> class_label == <span class="string">&quot;no object&quot;</span>:</span><br><span class="line">            objects.append(</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="string">&quot;label&quot;</span>: class_label,</span><br><span class="line">                    <span class="string">&quot;score&quot;</span>: <span class="built_in">float</span>(score),</span><br><span class="line">                    <span class="string">&quot;bbox&quot;</span>: [<span class="built_in">float</span>(elem) <span class="keyword">for</span> elem <span class="keyword">in</span> bbox],</span><br><span class="line">                &#125;</span><br><span class="line">            )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> objects</span><br><span class="line">    </span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="comment"># 识别表格，并将表格部分单独存为图像文件</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">detect_and_crop_save_table</span>(<span class="params">file_path</span>):</span><br><span class="line">    <span class="comment"># 加载图像（PDF页）    </span></span><br><span class="line">    image = Image.<span class="built_in">open</span>(file_path)</span><br><span class="line"></span><br><span class="line">    filename, _ = os.path.splitext(os.path.basename(file_path))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 输出路径</span></span><br><span class="line">    cropped_table_directory = os.path.join(os.path.dirname(file_path), <span class="string">&quot;table_images&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(cropped_table_directory):</span><br><span class="line">        os.makedirs(cropped_table_directory)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 预处理</span></span><br><span class="line">    pixel_values = detection_transform(image).unsqueeze(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 识别表格</span></span><br><span class="line">    <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">        outputs = model(pixel_values)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 后处理，得到表格子区域</span></span><br><span class="line">    id2label = model.config.id2label</span><br><span class="line">    id2label[<span class="built_in">len</span>(model.config.id2label)] = <span class="string">&quot;no object&quot;</span></span><br><span class="line">    detected_tables = outputs_to_objects(outputs, image.size, id2label)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;number of tables detected <span class="subst">&#123;<span class="built_in">len</span>(detected_tables)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> idx <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(detected_tables)):</span><br><span class="line">        <span class="comment"># 将识别从的表格区域单独存为图像</span></span><br><span class="line">        cropped_table = image.crop(detected_tables[idx][<span class="string">&quot;bbox&quot;</span>])</span><br><span class="line">        cropped_table.save(os.path.join(cropped_table_directory,<span class="string">f&quot;<span class="subst">&#123;filename&#125;</span>_<span class="subst">&#123;idx&#125;</span>.png&quot;</span>))</span><br><span class="line">        </span><br><span class="line">detect_and_crop_save_table(<span class="string">&quot;llama2_page8/page_1.png&quot;</span>)</span><br><span class="line">show_images(<span class="string">&quot;llama2_page8/table_images&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>number of tables detected 2</p>
+<img src="/2025/03/25/04-RAG-Embedding/1742878293245-9.png" class="">
+</blockquote>
+<ol>
+<li>基于 GPT-4 Vision API 做表格问答</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> OpenAI</span><br><span class="line"></span><br><span class="line">client = OpenAI()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">encode_image</span>(<span class="params">image_path</span>):</span><br><span class="line">  <span class="keyword">with</span> <span class="built_in">open</span>(image_path, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> image_file:</span><br><span class="line">    <span class="keyword">return</span> base64.b64encode(image_file.read()).decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">image_qa</span>(<span class="params">query, image_path</span>):</span><br><span class="line">    base64_image = encode_image(image_path)</span><br><span class="line">    response = client.chat.completions.create(</span><br><span class="line">        model=<span class="string">&quot;gpt-4o&quot;</span>,</span><br><span class="line">        temperature=<span class="number">0</span>,</span><br><span class="line">        seed=<span class="number">42</span>,</span><br><span class="line">        messages=[&#123;</span><br><span class="line">            <span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>,</span><br><span class="line">              <span class="string">&quot;content&quot;</span>: [</span><br><span class="line">                  &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;text&quot;</span>, <span class="string">&quot;text&quot;</span>: query&#125;,</span><br><span class="line">                  &#123;</span><br><span class="line">                      <span class="string">&quot;type&quot;</span>: <span class="string">&quot;image_url&quot;</span>,</span><br><span class="line">                      <span class="string">&quot;image_url&quot;</span>: &#123;</span><br><span class="line">                          <span class="string">&quot;url&quot;</span>: <span class="string">f&quot;data:image/jpeg;base64,<span class="subst">&#123;base64_image&#125;</span>&quot;</span>,</span><br><span class="line">                      &#125;,</span><br><span class="line">                  &#125;,</span><br><span class="line">              ],</span><br><span class="line">        &#125;],</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> response.choices[<span class="number">0</span>].message.content</span><br><span class="line">    </span><br><span class="line">response = image_qa(<span class="string">&quot;哪个模型在AGI Eval数据集上表现最好。得分多少&quot;</span>,<span class="string">&quot;llama2_page8/table_images/page_1_0.png&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+
+<p>在AGI Eval数据集上表现最好的模型是LLaMA 2 70B，得分为54.2。</p>
+<ol>
+<li>用 GPT-4 Vision 生成表格（图像）描述，并向量化用于检索</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> chromadb</span><br><span class="line"><span class="keyword">from</span> chromadb.config <span class="keyword">import</span> Settings</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">NewVectorDBConnector</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, collection_name, embedding_fn</span>):</span><br><span class="line">        chroma_client = chromadb.Client(Settings(allow_reset=<span class="literal">True</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 为了演示，实际不需要每次 reset()</span></span><br><span class="line">        chroma_client.reset()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 创建一个 collection</span></span><br><span class="line">        <span class="variable language_">self</span>.collection = chroma_client.get_or_create_collection(</span><br><span class="line">            name=collection_name)</span><br><span class="line">        <span class="variable language_">self</span>.embedding_fn = embedding_fn</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add_documents</span>(<span class="params">self, documents</span>):</span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;向 collection 中添加文档与向量&#x27;&#x27;&#x27;</span></span><br><span class="line">        <span class="variable language_">self</span>.collection.add(</span><br><span class="line">            embeddings=<span class="variable language_">self</span>.embedding_fn(documents),  <span class="comment"># 每个文档的向量</span></span><br><span class="line">            documents=documents,  <span class="comment"># 文档的原文</span></span><br><span class="line">            ids=[<span class="string">f&quot;id<span class="subst">&#123;i&#125;</span>&quot;</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(documents))]  <span class="comment"># 每个文档的 id</span></span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add_images</span>(<span class="params">self, image_paths</span>):</span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;向 collection 中添加图像&#x27;&#x27;&#x27;</span></span><br><span class="line">        documents = [</span><br><span class="line">            image_qa(<span class="string">&quot;请简要描述图片中的信息&quot;</span>,image)</span><br><span class="line">            <span class="keyword">for</span> image <span class="keyword">in</span> image_paths</span><br><span class="line">        ]</span><br><span class="line">        <span class="variable language_">self</span>.collection.add(</span><br><span class="line">            embeddings=<span class="variable language_">self</span>.embedding_fn(documents),  <span class="comment"># 每个文档的向量</span></span><br><span class="line">            documents=documents,  <span class="comment"># 文档的原文</span></span><br><span class="line">            ids=[<span class="string">f&quot;id<span class="subst">&#123;i&#125;</span>&quot;</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(documents))],  <span class="comment"># 每个文档的 id</span></span><br><span class="line">            metadatas=[&#123;<span class="string">&quot;image&quot;</span>: image&#125; <span class="keyword">for</span> image <span class="keyword">in</span> image_paths] <span class="comment"># 用 metadata 标记源图像路径</span></span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">search</span>(<span class="params">self, query, top_n</span>):</span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;检索向量数据库&#x27;&#x27;&#x27;</span></span><br><span class="line">        results = <span class="variable language_">self</span>.collection.query(</span><br><span class="line">            query_embeddings=<span class="variable language_">self</span>.embedding_fn([query]),</span><br><span class="line">            n_results=top_n</span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">return</span> results</span><br><span class="line">        </span><br><span class="line">images = []</span><br><span class="line">dir_path = <span class="string">&quot;llama2_page8/table_images&quot;</span></span><br><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> os.listdir(dir_path):</span><br><span class="line">    <span class="keyword">if</span> file.endswith(<span class="string">&#x27;.png&#x27;</span>):</span><br><span class="line">        <span class="comment"># 打开图像</span></span><br><span class="line">        images.append(os.path.join(dir_path, file))</span><br><span class="line"></span><br><span class="line">new_db_connector = NewVectorDBConnector(<span class="string">&quot;table_demo&quot;</span>,get_embeddings)</span><br><span class="line">new_db_connector.add_images(images)</span><br><span class="line"></span><br><span class="line">query  = <span class="string">&quot;哪个模型在AGI Eval数据集上表现最好。得分多少&quot;</span></span><br><span class="line"></span><br><span class="line">results = new_db_connector.search(query, <span class="number">1</span>)</span><br><span class="line">metadata = results[<span class="string">&quot;metadatas&quot;</span>][<span class="number">0</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;====检索结果====&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(metadata)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;====回复====&quot;</span>)</span><br><span class="line">response = image_qa(query,metadata[<span class="number">0</span>][<span class="string">&quot;image&quot;</span>])</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>&#x3D;&#x3D;&#x3D;&#x3D;检索结果&#x3D;&#x3D;&#x3D;&#x3D;</p>
+<p>[{‘image’: ‘llama2_page8&#x2F;table_images&#x2F;page_1_0.png’}]</p>
+<p>&#x3D;&#x3D;&#x3D;&#x3D;回复&#x3D;&#x3D;&#x3D;&#x3D;</p>
+<p>在AGI Eval数据集上表现最好的模型是LLaMA 2 70B，得分为54.2。</p>
+</blockquote>
+<p><strong>一些面向 RAG 的文档解析辅助工具</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://pymupdf.readthedocs.io/en/latest/">PyMuPDF</a>: PDF 文件处理基础库，带有基于规则的表格与图像抽取（不准）</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/infiniflow/ragflow">RAGFlow</a>: 一款基于深度文档理解构建的开源 RAG 引擎，支持多种文档格式</li>
+<li><a target="_blank" rel="noopener" href="https://unstructured.io/">Unstructured.io</a>: 一个开源+SaaS形式的文档解析库，支持多种文档格式</li>
+<li><a target="_blank" rel="noopener" href="https://docs.llamaindex.ai/en/stable/llama_cloud/llama_parse/">LlamaParse</a>：付费 API 服务，由 LlamaIndex 官方提供，解析不保证100%准确，实测偶有文字丢失或错位发生</li>
+<li><a target="_blank" rel="noopener" href="https://mathpix.com/">Mathpix</a>：付费 API 服务，效果较好，可解析段落结构、表格、公式等，贵！</li>
+</ul>
+<p>在工程上，PDF 解析本身是个复杂且琐碎的工作。以上工具都不完美，建议在自己实际场景测试后选择使用。</p>
+<h2 id="7-GraphRAG"><a href="#7-GraphRAG" class="headerlink" title="7 GraphRAG"></a>7 GraphRAG</h2><img src="/2025/03/25/04-RAG-Embedding/GraphRAG.png" class="">
+
+<ol>
+<li><strong>什么是 GraphRAG</strong>：核心思想是将知识预先处理成知识图谱</li>
+<li><strong>优点</strong>：适合复杂问题，尤其是以查询为中心的总结，例如：“XXX团队去年有哪些贡献”</li>
+<li><strong>缺点</strong>：知识图谱的构建、清洗、维护更新等都有可观的成本</li>
+<li><strong>建议</strong>：<ol>
+<li>GraphRAG 不是万能良药</li>
+<li>领会其核心思想</li>
+<li>遇到传统 RAG 无论如何优化都不好解决的问题时，酌情使用</li>
+</ol>
+</li>
+</ol>
+<h2 id="8-总结"><a href="#8-总结" class="headerlink" title="8 总结"></a>8 总结</h2><h3 id="8-1-RAG-的流程"><a href="#8-1-RAG-的流程" class="headerlink" title="8.1 RAG 的流程"></a>8.1 RAG 的流程</h3><ul>
+<li>离线步骤：<ul>
+<li>文档加载</li>
+<li>文档切分</li>
+<li>向量化</li>
+<li>灌入向量数据库</li>
+</ul>
+</li>
+<li>在线步骤：<ul>
+<li>获得用户问题</li>
+<li>用户问题向量化</li>
+<li>检索向量数据库</li>
+<li>将检索结果和用户问题填入 Prompt 模版</li>
+<li>用最终获得的 Prompt 调用 LLM</li>
+<li>由 LLM 生成回复</li>
+</ul>
+</li>
+</ul>
+<h3 id="8-2-开源-RAG-使用tips"><a href="#8-2-开源-RAG-使用tips" class="headerlink" title="8.2 开源 RAG 使用tips"></a>8.2 开源 RAG 使用tips</h3><ol>
+<li>检查预处理效果：文档加载是否正确，切割的是否合理</li>
+<li>测试检索效果：问题检索回来的文本片段是否包含答案</li>
+<li>测试大模型能力：给定问题和包含答案文本片段的前提下，大模型能不能正确回答问题</li>
+</ol>
+
+                
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/LLM/">
+                                    <span class="chip bg-color">LLM</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
+            <div class="card">
+                <a href="/2025/03/25/04-RAG-Embedding/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="04-RAG Embedding">
+                        
+                        <span class="card-title">04-RAG Embedding</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-03-25
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Zhangyan
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/LLM/">
+                        <span class="chip bg-color">LLM</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2025/02/10/03-Function-Calling/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="03-Function Calling">
+                        
+                        <span class="card-title">03-Function Calling</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-02-10
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Zhangyan
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/LLM/">
+                        <span class="chip bg-color">LLM</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('4'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2024-2025</span>
+            
+            <a href="/about" target="_blank">Zhangyan</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;Total visits:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;Total visitors:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/TangCharlotte/AI-Classes" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:485480375@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=485480375" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 485480375" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+    <a href="https://www.zhihu.com/people/bu-yan-92-91" class="tooltipped" target="_blank" data-tooltip="关注我的知乎: https://www.zhihu.com/people/bu-yan-92-91" data-position="top" data-delay="50">
+        <i class="fab fa-zhihu1">知</i>
+    </a>
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+    
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
