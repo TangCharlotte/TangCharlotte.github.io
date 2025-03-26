@@ -1,0 +1,1806 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="05-Assistant API, Blog">
+    <meta name="description" content="1 前言1.1 GPTs 和 Assistants API 本质是降低开发门槛可操控性和易用性之间的权衡与折中：
+
+更多技术路线选择：原生 API、GPTs 和 Assistants API
+GPTs 的示范，起到教育客户的作用，有助于打开">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>05-Assistant API | Blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/reward.css">
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Index</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>Contact</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Blog</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Index
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			Contact
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/TangCharlotte/AI-Classes" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/TangCharlotte/AI-Classes" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">05-Assistant API</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/LLM/">
+                                <span class="chip bg-color">LLM</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2025-03-26
+                </div>
+                
+
+                
+
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+        <!-- 代码块折行 -->
+        <style type="text/css">
+            code[class*="language-"], pre[class*="language-"] { white-space: pre-wrap !important; }
+        </style>
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h2><h3 id="1-1-GPTs-和-Assistants-API-本质是降低开发门槛"><a href="#1-1-GPTs-和-Assistants-API-本质是降低开发门槛" class="headerlink" title="1.1 GPTs 和 Assistants API 本质是降低开发门槛"></a>1.1 GPTs 和 Assistants API 本质是降低开发门槛</h3><p>可操控性和易用性之间的权衡与折中：</p>
+<ol>
+<li>更多技术路线选择：原生 API、GPTs 和 Assistants API</li>
+<li>GPTs 的示范，起到教育客户的作用，有助于打开市场</li>
+<li>要更大自由度，需要用 Assistants API 开发</li>
+<li>想极致调优，还得原生 API + RAG</li>
+</ol>
+<h3 id="1-2-Assistants-API-的主要能力"><a href="#1-2-Assistants-API-的主要能力" class="headerlink" title="1.2 Assistants API 的主要能力"></a>1.2 Assistants API 的主要能力</h3><ol>
+<li>创建和管理 assistant，每个 assistant 有独立的配置</li>
+<li>支持无限长的多轮对话，对话历史保存在 OpenAI 的服务器上</li>
+<li>通过自有向量数据库支持基于文件的 RAG</li>
+<li>支持 Code Interpreter<ol>
+<li>在沙箱里编写并运行 Python 代码</li>
+<li>自我修正代码</li>
+<li>可传文件给 Code Interpreter</li>
+</ol>
+</li>
+<li>支持 Function Calling</li>
+<li>支持在线调试的 Playground</li>
+</ol>
+<p><strong>收费：</strong></p>
+<ol>
+<li>按 token 收费。无论多轮对话，还是 RAG，所有都按实际消耗的 token 收费</li>
+<li>如果对话历史过多超过大模型上下文窗口，会自动放弃最老的对话消息</li>
+<li>文件按数据大小和存放时长收费。1 GB <strong>向量存储</strong> 一天收费 0.10 美元</li>
+<li>Code interpreter 跑一次 $0.03</li>
+</ol>
+<p><strong>GPT</strong> <strong>Store：创建自己的 GPT</strong></p>
+<p>发布链接：<a target="_blank" rel="noopener" href="https://chat.openai.com/g/g-iU8hVr4jR-wo-de-demogpt">https://chat.openai.com/g/g-iU8hVr4jR-wo-de-demogpt</a></p>
+<h2 id="2-Assistants-API"><a href="#2-Assistants-API" class="headerlink" title="2 Assistants API"></a>2 Assistants API</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">!pip install --upgrade openai</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> OpenAI</span><br><span class="line">client = OpenAI()</span><br><span class="line"></span><br><span class="line">ids = []</span><br><span class="line">assistants = client.beta.assistants.<span class="built_in">list</span>()</span><br><span class="line"><span class="keyword">for</span> assistant <span class="keyword">in</span> assistants:</span><br><span class="line">    ids.append(assistant.<span class="built_in">id</span>)</span><br><span class="line"><span class="comment"># 清理一下教学环境</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">id</span> <span class="keyword">in</span> ids:</span><br><span class="line">    client.beta.assistants.delete(<span class="built_in">id</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-1-创建一个-Assistant"><a href="#2-1-创建一个-Assistant" class="headerlink" title="2.1 创建一个 Assistant"></a>2.1 创建一个 Assistant</h3><p>可以为每个应用，甚至应用中的每个有对话历史的使用场景，创建一个 assistant。</p>
+<p>虽然可以用代码创建，也不复杂，例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> OpenAI</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化 OpenAI 服务</span></span><br><span class="line">client = OpenAI()<span class="comment"># 创建助手</span></span><br><span class="line">assistant = client.beta.assistants.create(</span><br><span class="line">    name=<span class="string">&quot;AGIClass Demo&quot;</span>,</span><br><span class="line">    instructions=<span class="string">&quot;你叫瓜瓜，你是AGI课堂的智能助理。你负责回答与AGI课堂有关的问题。&quot;</span>,</span><br><span class="line">    model=<span class="string">&quot;gpt-4o&quot;</span>,)</span><br></pre></td></tr></table></figure>
+
+<p>但是，更佳做法是，到 <a target="_blank" rel="noopener" href="https://platform.openai.com/playground?mode=assistant">Playground</a> 在线创建，因为：</p>
+<ol>
+<li>更方便调整</li>
+<li>更方便测试</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> OpenAI</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化 OpenAI 服务</span></span><br><span class="line">client = OpenAI()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建助手</span></span><br><span class="line">assistant = client.beta.assistants.create(</span><br><span class="line">    name=<span class="string">&quot;AGIClass Demo TempLive&quot;</span>,</span><br><span class="line">    instructions=<span class="string">&quot;你叫瓜瓜，你是AGI课堂的智能助理。你负责回答与AGI课堂有关的问题。&quot;</span>,</span><br><span class="line">    model=<span class="string">&quot;gpt-4o&quot;</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(assistant.<span class="built_in">id</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>asst_xi4KvqarumvNarFA2jdwmzkb</p>
+</blockquote>
+<h3 id="2-2-样例-Assistant-的配置"><a href="#2-2-样例-Assistant-的配置" class="headerlink" title="2.2 样例 Assistant 的配置"></a>2.2 样例 Assistant 的配置</h3><p>Instructions:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">你叫瓜瓜。你是AGI课堂的助手。你只回答跟AI大模型有关的问题。不要跟学生闲聊。每次回答问题前，你要拆解问题并输出一步一步的思考过程。</span><br></pre></td></tr></table></figure>
+
+<p>Functions:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ask_database&quot;</span><span class="punctuation">,</span><span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Use this function to answer user questions about course schedule. Output should be a fully formed SQL query.&quot;</span><span class="punctuation">,</span><span class="attr">&quot;parameters&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;object&quot;</span><span class="punctuation">,</span><span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span><span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;SQL query extracting info to answer the user&#x27;s question.\nSQL should be written using this database schema:\n\nCREATE TABLE Courses (\n\tid INT AUTO_INCREMENT PRIMARY KEY,\n\tcourse_date DATE NOT NULL,\n\tstart_time TIME NOT NULL,\n\tend_time TIME NOT NULL,\n\tcourse_name VARCHAR(255) NOT NULL,\n\tinstructor VARCHAR(255) NOT NULL\n);\n\nThe query should be returned in plain text, not in JSON.\nThe query should only contain grammars supported by SQLite.&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span><span class="attr">&quot;required&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;query&quot;</span><span class="punctuation">]</span><span class="punctuation">&#125;</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-代码访问-Assistant"><a href="#3-代码访问-Assistant" class="headerlink" title="3 代码访问 Assistant"></a>3 代码访问 Assistant</h2><h3 id="3-1-管理-thread"><a href="#3-1-管理-thread" class="headerlink" title="3.1 管理 thread"></a>3.1 管理 thread</h3><p>Threads：</p>
+<ol>
+<li>Threads 里保存的是对话历史，即 messages</li>
+<li>一个 assistant 可以有多个 thread</li>
+<li>一个 thread 可以有无限条 message</li>
+<li>一个用户与 assistant 的多轮对话历史可以维护在一个 thread 里</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show_json</span>(<span class="params">obj</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;把任意对象用排版美观的 JSON 格式打印出来&quot;&quot;&quot;</span></span><br><span class="line">    <span class="built_in">print</span>(json.dumps(</span><br><span class="line">        json.loads(obj.model_dump_json()),</span><br><span class="line">        indent=<span class="number">4</span>,</span><br><span class="line">        ensure_ascii=<span class="literal">False</span></span><br><span class="line">    ))</span><br><span class="line">    </span><br><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> OpenAI</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv, find_dotenv</span><br><span class="line">_ = load_dotenv(find_dotenv())</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化 OpenAI 服务</span></span><br><span class="line">client = OpenAI()   <span class="comment"># openai &gt;= 1.3.0 起，OPENAI_API_KEY 和 OPENAI_BASE_URL 会被默认使用</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 thread</span></span><br><span class="line">thread = client.beta.threads.create()</span><br><span class="line">show_json(thread)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>{</p>
+<p>​    “id”: “thread_5EP077dOgvXyJQkbCnbn249q”,</p>
+<p>​    “created_at”: 1727162907,</p>
+<p>​    “metadata”: {},</p>
+<p>​    “object”: “thread”,</p>
+<p>​    “tool_resources”: {</p>
+<p>​        “code_interpreter”: null,</p>
+<p>​        “file_search”: null</p>
+<p>​    }</p>
+<p>}</p>
+</blockquote>
+<p>可以根据需要，自定义 <code>metadata</code>，比如创建 thread 时，把 thread 归属的用户信息存入。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">thread = client.beta.threads.create(</span><br><span class="line">    metadata=&#123;<span class="string">&quot;fullname&quot;</span>: <span class="string">&quot;王卓然&quot;</span>, <span class="string">&quot;username&quot;</span>: <span class="string">&quot;wzr&quot;</span>&#125;</span><br><span class="line">)</span><br><span class="line">show_json(thread)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>{</p>
+<p>​    “id”: “thread_RWfx9UJ02xTLIfcLQjaxKGeq”,</p>
+<p>​    “created_at”: 1727162914,</p>
+<p>​    “metadata”: {</p>
+<p>​        “fullname”: “王卓然”,</p>
+<p>​        “username”: “wzr”</p>
+<p>​    },</p>
+<p>​    “object”: “thread”,</p>
+<p>​    “tool_resources”: {</p>
+<p>​        “code_interpreter”: null,</p>
+<p>​        “file_search”: null</p>
+<p>​    }</p>
+<p>}</p>
+</blockquote>
+<p>Thread ID 如果保存下来，是可以在下次运行时继续对话的。</p>
+<p>从 thread ID 获取 thread 对象的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">thread = client.beta.threads.retrieve(thread.<span class="built_in">id</span>)</span><br><span class="line">show_json(thread)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>{</p>
+<p>​    “id”: “thread_RWfx9UJ02xTLIfcLQjaxKGeq”,</p>
+<p>​    “created_at”: 1727162914,</p>
+<p>​    “metadata”: {</p>
+<p>​        “fullname”: “王卓然”,</p>
+<p>​        “username”: “wzr”</p>
+<p>​    },</p>
+<p>​    “object”: “thread”,</p>
+<p>​    “tool_resources”: {</p>
+<p>​        “code_interpreter”: {</p>
+<p>​            “file_ids”: []</p>
+<p>​        },</p>
+<p>​        “file_search”: null</p>
+<p>​    }</p>
+<p>}</p>
+</blockquote>
+<p>此外，还有：</p>
+<ol>
+<li><code>threads.modify()</code> 修改 thread 的 <code>metadata</code> 和 <code>tool_resources</code></li>
+<li><code>threads.retrieve()</code> 获取 thread</li>
+<li><code>threads.delete()</code> 删除 thread。</li>
+</ol>
+<p>具体文档参考：<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/threads">https://platform.openai.com/docs/api-reference/threads</a></p>
+<h3 id="3-2-给-Threads-添加-Messages"><a href="#3-2-给-Threads-添加-Messages" class="headerlink" title="3.2 给 Threads 添加 Messages"></a>3.2 给 Threads 添加 Messages</h3><p>这里的 messages 结构要复杂一些：</p>
+<ol>
+<li>不仅有文本，还可以有图片和文件</li>
+<li>也有 <code>metadata</code></li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">message = client.beta.threads.messages.create(</span><br><span class="line">    thread_id=thread.<span class="built_in">id</span>,  <span class="comment"># message 必须归属于一个 thread</span></span><br><span class="line">    role=<span class="string">&quot;user&quot;</span>,          <span class="comment"># 取值是 user 或者 assistant。但 assistant 消息会被自动加入，我们一般不需要自己构造</span></span><br><span class="line">    content=<span class="string">&quot;你都能做什么？&quot;</span>,</span><br><span class="line">)</span><br><span class="line">show_json(message)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>{</p>
+<p>​    “id”: “msg_tAwvyU6eCPuQGDZRYyyARTMK”,</p>
+<p>​    “assistant_id”: null,</p>
+<p>​    “attachments”: [],</p>
+<p>​    “completed_at”: null,</p>
+<p>​    “content”: [</p>
+<p>​        {</p>
+<p>​            “text”: {</p>
+<p>​                “annotations”: [],</p>
+<p>​                “value”: “你都能做什么？”</p>
+<p>​            },</p>
+<p>​            “type”: “text”</p>
+<p>​        }</p>
+<p>​    ],</p>
+<p>​    “created_at”: 1727162927,</p>
+<p>​    “incomplete_at”: null,</p>
+<p>​    “incomplete_details”: null,</p>
+<p>​    “metadata”: {},</p>
+<p>​    “object”: “thread.message”,</p>
+<p>​    “role”: “user”,</p>
+<p>​    “run_id”: null,</p>
+<p>​    “status”: null,</p>
+<p>​    “thread_id”: “thread_RWfx9UJ02xTLIfcLQjaxKGeq”</p>
+<p>}</p>
+</blockquote>
+<p>还有如下函数：</p>
+<ol>
+<li><code>threads.messages.retrieve()</code> 获取 message</li>
+<li><code>threads.messages.update()</code> 更新 message 的 <code>metadata</code></li>
+<li><code>threads.messages.list()</code> 列出给定 thread 下的所有 messages</li>
+</ol>
+<p>具体文档参考：<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/messages">https://platform.openai.com/docs/api-reference/messages</a></p>
+<p>也可以在创建 thread 同时初始化一个 message 列表</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">thread = client.beta.threads.<span class="built_in">create</span>(</span><br><span class="line">    messages=[</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>,</span><br><span class="line">            <span class="string">&quot;content&quot;</span>: <span class="string">&quot;你好&quot;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&quot;role&quot;</span>: <span class="string">&quot;assistant&quot;</span>,</span><br><span class="line">            <span class="string">&quot;content&quot;</span>: <span class="string">&quot;有什么可以帮您？&quot;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>,</span><br><span class="line">            <span class="string">&quot;content&quot;</span>: <span class="string">&quot;你是谁？&quot;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    ]</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">show_json</span>(thread)  # 显示 thread</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;-----&quot;</span>)</span><br><span class="line"><span class="built_in">show_json</span>(client.beta.threads.messages.<span class="built_in">list</span>(</span><br><span class="line">    thread.id))  # 显示指定 thread 中的 message 列表</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>{</p>
+<p>​    “id”: “thread_zMhTH0RtT7QFkHXQZeEMUMOh”,</p>
+<p>​    “created_at”: 1727162936,</p>
+<p>​    “metadata”: {},</p>
+<p>​    “object”: “thread”,</p>
+<p>​    “tool_resources”: {</p>
+<p>​        “code_interpreter”: null,</p>
+<p>​        “file_search”: null</p>
+<p>​    }</p>
+<p>}</p>
+<hr>
+<p>{</p>
+<p>​    “data”: [</p>
+<p>​        {</p>
+<p>​            “id”: “msg_bcCprHQl7OGxgZudyc5F9how”,</p>
+<p>​            “assistant_id”: null,</p>
+<p>​            “attachments”: [],</p>
+<p>​            “completed_at”: null,</p>
+<p>​            “content”: [</p>
+<p>​                {</p>
+<p>​                    “text”: {</p>
+<p>​                        “annotations”: [],</p>
+<p>​                        “value”: “你是谁？”</p>
+<p>​                    },</p>
+<p>​                    “type”: “text”</p>
+<p>​                }</p>
+<p>​            ],</p>
+<p>​            “created_at”: 1727162936,</p>
+<p>​            “incomplete_at”: null,</p>
+<p>​            “incomplete_details”: null,</p>
+<p>​            “metadata”: {},</p>
+<p>​            “object”: “thread.message”,</p>
+<p>​            “role”: “user”,</p>
+<p>​            “run_id”: null,</p>
+<p>​            “status”: null,</p>
+<p>​            “thread_id”: “thread_zMhTH0RtT7QFkHXQZeEMUMOh”</p>
+<p>​        },</p>
+<p>​        {</p>
+<p>​            “id”: “msg_JQjoOfqKDYl4RKWNjeQvaCVu”,</p>
+<p>​            “assistant_id”: null,</p>
+<p>​            “attachments”: [],</p>
+<p>​            “completed_at”: null,</p>
+<p>​            “content”: [</p>
+<p>​                {</p>
+<p>​                    “text”: {</p>
+<p>​                        “annotations”: [],</p>
+<p>​                        “value”: “有什么可以帮您？”</p>
+<p>​                    },</p>
+<p>​                    “type”: “text”</p>
+<p>​                }</p>
+<p>​            ],</p>
+<p>​            “created_at”: 1727162936,</p>
+<p>​            “incomplete_at”: null,</p>
+<p>​            “incomplete_details”: null,</p>
+<p>​            “metadata”: {},</p>
+<p>​            “object”: “thread.message”,</p>
+<p>​            “role”: “assistant”,</p>
+<p>​            “run_id”: null,</p>
+<p>​            “status”: null,</p>
+<p>​            “thread_id”: “thread_zMhTH0RtT7QFkHXQZeEMUMOh”</p>
+<p>​        },</p>
+<p>​        {</p>
+<p>​            “id”: “msg_5GfK3Ys1bvyVfkUOoVMSv1ra”,</p>
+<p>​            “assistant_id”: null,</p>
+<p>​            “attachments”: [],</p>
+<p>​            “completed_at”: null,</p>
+<p>​            “content”: [</p>
+<p>​                {</p>
+<p>​                    “text”: {</p>
+<p>​                        “annotations”: [],</p>
+<p>​                        “value”: “你好”</p>
+<p>​                    },</p>
+<p>​                    “type”: “text”</p>
+<p>​                }</p>
+<p>​            ],</p>
+<p>​            “created_at”: 1727162936,</p>
+<p>​            “incomplete_at”: null,</p>
+<p>​            “incomplete_details”: null,</p>
+<p>​            “metadata”: {},</p>
+<p>​            “object”: “thread.message”,</p>
+<p>​            “role”: “user”,</p>
+<p>​            “run_id”: null,</p>
+<p>​            “status”: null,</p>
+<p>​            “thread_id”: “thread_zMhTH0RtT7QFkHXQZeEMUMOh”</p>
+<p>​        }</p>
+<p>​    ],</p>
+<p>​    “object”: “list”,</p>
+<p>​    “first_id”: “msg_bcCprHQl7OGxgZudyc5F9how”,</p>
+<p>​    “last_id”: “msg_5GfK3Ys1bvyVfkUOoVMSv1ra”,</p>
+<p>​    “has_more”: false</p>
+<p>}</p>
+</blockquote>
+<h3 id="3-3-开始-Run"><a href="#3-3-开始-Run" class="headerlink" title="3.3 开始 Run"></a>3.3 开始 Run</h3><ul>
+<li>用 run 把 assistant 和 thread 关联，进行对话</li>
+<li>一个 prompt 就是一次 run</li>
+</ul>
+<h4 id="3-3-1-直接运行"><a href="#3-3-1-直接运行" class="headerlink" title="3.3.1 直接运行"></a>3.3.1 直接运行</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">assistant_id = <span class="string">&quot;asst_psmawyqIV5HrDiwxYAesO4ia&quot;</span>  # 从 Playground 中拷贝</span><br><span class="line"></span><br><span class="line">run = client.beta.threads.runs.<span class="built_in">create_and_poll</span>(</span><br><span class="line">    thread_id=thread.id,</span><br><span class="line">    assistant_id=assistant_id,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> run.status == <span class="string">&#x27;completed&#x27;</span>:</span><br><span class="line">    messages = client.beta.threads.messages.<span class="built_in">list</span>(</span><br><span class="line">        thread_id=thread.id</span><br><span class="line">    )</span><br><span class="line">    <span class="built_in">show_json</span>(messages)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(run.status)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>{</p>
+<p>​    “data”: [</p>
+<p>​        {</p>
+<p>​            “id”: “msg_NpWGvI1fbVtUtrRxtTQqecNE”,</p>
+<p>​            “assistant_id”: “asst_psmawyqIV5HrDiwxYAesO4ia”,</p>
+<p>​            “attachments”: [],</p>
+<p>​            “completed_at”: null,</p>
+<p>​            “content”: [</p>
+<p>​                {</p>
+<p>​                    “text”: {</p>
+<p>​                        “annotations”: [],</p>
+<p>​                        “value”: “我是瓜瓜，AGI课堂的智能助理。我可以帮助您解答与AGI课堂相关的问题，包括课程安排、内容查询等。如果您有任何问题，请随时告诉我！”</p>
+<p>​                    },</p>
+<p>​                    “type”: “text”</p>
+<p>​                }</p>
+<p>​            ],</p>
+<p>​            “created_at”: 1727162963,</p>
+<p>​            “incomplete_at”: null,</p>
+<p>​            “incomplete_details”: null,</p>
+<p>​            “metadata”: {},</p>
+<p>​            “object”: “thread.message”,</p>
+<p>​            “role”: “assistant”,</p>
+<p>​            “run_id”: “run_pKbeI1F2KDaLVCpwRRBR8PXt”,</p>
+<p>​            “status”: null,</p>
+<p>​            “thread_id”: “thread_zMhTH0RtT7QFkHXQZeEMUMOh”</p>
+<p>​        },</p>
+<p>​        {</p>
+<p>​            “id”: “msg_bcCprHQl7OGxgZudyc5F9how”,</p>
+<p>​            “assistant_id”: null,</p>
+<p>​            “attachments”: [],</p>
+<p>​            “completed_at”: null,</p>
+<p>​            “content”: [</p>
+<p>​                {</p>
+<p>​                    “text”: {</p>
+<p>​                        “annotations”: [],</p>
+<p>​                        “value”: “你是谁？”</p>
+<p>​                    },</p>
+<p>​                    “type”: “text”</p>
+<p>​                }</p>
+<p>​            ],</p>
+<p>​            “created_at”: 1727162936,</p>
+<p>​            “incomplete_at”: null,</p>
+<p>​            “incomplete_details”: null,</p>
+<p>​            “metadata”: {},</p>
+<p>​            “object”: “thread.message”,</p>
+<p>​            “role”: “user”,</p>
+<p>​            “run_id”: null,</p>
+<p>​            “status”: null,</p>
+<p>​            “thread_id”: “thread_zMhTH0RtT7QFkHXQZeEMUMOh”</p>
+<p>​        },</p>
+<p>​        {</p>
+<p>​            “id”: “msg_JQjoOfqKDYl4RKWNjeQvaCVu”,</p>
+<p>​            “assistant_id”: null,</p>
+<p>​            “attachments”: [],</p>
+<p>​            “completed_at”: null,</p>
+<p>​            “content”: [</p>
+<p>​                {</p>
+<p>​                    “text”: {</p>
+<p>​                        “annotations”: [],</p>
+<p>​                        “value”: “有什么可以帮您？”</p>
+<p>​                    },</p>
+<p>​                    “type”: “text”</p>
+<p>​                }</p>
+<p>​            ],</p>
+<p>​            “created_at”: 1727162936,</p>
+<p>​            “incomplete_at”: null,</p>
+<p>​            “incomplete_details”: null,</p>
+<p>​            “metadata”: {},</p>
+<p>​            “object”: “thread.message”,</p>
+<p>​            “role”: “assistant”,</p>
+<p>​            “run_id”: null,</p>
+<p>​            “status”: null,</p>
+<p>​            “thread_id”: “thread_zMhTH0RtT7QFkHXQZeEMUMOh”</p>
+<p>​        },</p>
+<p>​        {</p>
+<p>​            “id”: “msg_5GfK3Ys1bvyVfkUOoVMSv1ra”,</p>
+<p>​            “assistant_id”: null,</p>
+<p>​            “attachments”: [],</p>
+<p>​            “completed_at”: null,</p>
+<p>​            “content”: [</p>
+<p>​                {</p>
+<p>​                    “text”: {</p>
+<p>​                        “annotations”: [],</p>
+<p>​                        “value”: “你好”</p>
+<p>​                    },</p>
+<p>​                    “type”: “text”</p>
+<p>​                }</p>
+<p>​            ],</p>
+<p>​            “created_at”: 1727162936,</p>
+<p>​            “incomplete_at”: null,</p>
+<p>​            “incomplete_details”: null,</p>
+<p>​            “metadata”: {},</p>
+<p>​            “object”: “thread.message”,</p>
+<p>​            “role”: “user”,</p>
+<p>​            “run_id”: null,</p>
+<p>​            “status”: null,</p>
+<p>​            “thread_id”: “thread_zMhTH0RtT7QFkHXQZeEMUMOh”</p>
+<p>​        }</p>
+<p>​    ],</p>
+<p>​    “object”: “list”,</p>
+<p>​    “first_id”: “msg_NpWGvI1fbVtUtrRxtTQqecNE”,</p>
+<p>​    “last_id”: “msg_5GfK3Ys1bvyVfkUOoVMSv1ra”,</p>
+<p>​    “has_more”: false</p>
+<p>}</p>
+</blockquote>
+<p>还有如下函数：</p>
+<ol>
+<li><code>threads.runs.list()</code> 列出 thread 归属的 run</li>
+<li><code>threads.runs.retrieve()</code> 获取 run</li>
+<li><code>threads.runs.update()</code> 修改 run 的 metadata</li>
+<li><code>threads.runs.cancel()</code> 取消 <code>in_progress</code> 状态的 run</li>
+</ol>
+<p>具体文档参考：<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/runs">https://platform.openai.com/docs/api-reference/runs</a></p>
+<h4 id="3-3-2-Run-的状态（选）"><a href="#3-3-2-Run-的状态（选）" class="headerlink" title="3.3.2 Run 的状态（选）"></a>3.3.2 Run 的状态（选）</h4><p>Run 的底层是个异步调用，意味着它不等大模型处理完，就返回。我们通过 <code>run.status</code> 了解大模型的工作进展情况，来判断下一步该干什么。</p>
+<p><code>run.status</code> 有的状态，和状态之间的转移关系如图。</p>
+<img src="/2025/03/26/05-Assistant-API/1742963388229-3.png" class="">
+
+<h4 id="3-3-3-流式运行"><a href="#3-3-3-流式运行" class="headerlink" title="3.3.3 流式运行"></a>3.3.3 流式运行</h4><ol>
+<li>创建回调函数</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing_extensions <span class="keyword">import</span> override</span><br><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> AssistantEventHandler</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">EventHandler</span>(<span class="title class_ inherited__">AssistantEventHandler</span>):</span><br><span class="line"><span class="meta">    @override</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_text_created</span>(<span class="params">self, text</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;响应输出创建事件&quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;\nassistant &gt; &quot;</span>, end=<span class="string">&quot;&quot;</span>, flush=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @override</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_text_delta</span>(<span class="params">self, delta, snapshot</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;响应输出生成的流片段&quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">print</span>(delta.value, end=<span class="string">&quot;&quot;</span>, flush=<span class="literal">True</span>)</span><br><span class="line">        </span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>运行 run</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加新一轮的 user message</span></span><br><span class="line">message = client.beta.threads.messages.create(</span><br><span class="line">    thread_id=thread.<span class="built_in">id</span>,</span><br><span class="line">    role=<span class="string">&quot;user&quot;</span>,</span><br><span class="line">    content=<span class="string">&quot;你说什么？&quot;</span>,</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 使用 stream 接口并传入 EventHandler</span></span><br><span class="line"><span class="keyword">with</span> client.beta.threads.runs.stream(</span><br><span class="line">    thread_id=thread.<span class="built_in">id</span>,</span><br><span class="line">    assistant_id=assistant_id,</span><br><span class="line">    event_handler=EventHandler(),</span><br><span class="line">) <span class="keyword">as</span> stream:</span><br><span class="line">    stream.until_done()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>assistant &gt; 我是瓜瓜，AGI课堂的智能助理。我可以帮助您解答与AGI课堂相关的问题，比如课程安排、内容查询等。如果您有任何问题或需要帮助，请告诉我！</p>
+</blockquote>
+<p><strong>思考：</strong> 进一步理解 run 与 thread 的设计</p>
+<ul>
+<li>抛开 Assistants API，假设你要开发任意一个多轮对话的 AI 机器人</li>
+<li>从架构设计的角度，应该怎么维护用户、对话历史、对话引擎、对话服务？</li>
+</ul>
+<h2 id="4-使用-Tools"><a href="#4-使用-Tools" class="headerlink" title="4 使用 Tools"></a>4 使用 Tools</h2><h3 id="4-1-创建-Assistant-时声明-Code-Interpreter"><a href="#4-1-创建-Assistant-时声明-Code-Interpreter" class="headerlink" title="4.1 创建 Assistant 时声明 Code_Interpreter"></a>4.1 创建 Assistant 时声明 Code_Interpreter</h3><p>如果用代码创建：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">assistant = client.beta.assistants.create(</span><br><span class="line">    name=<span class="string">&quot;Demo Assistant&quot;</span>,</span><br><span class="line">    instructions=<span class="string">&quot;你是人工智能助手。你可以通过代码回答很多数学问题。&quot;</span>,</span><br><span class="line">    tools=[&#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;code_interpreter&quot;</span>&#125;],</span><br><span class="line">    model=<span class="string">&quot;gpt-4o&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在回调中加入 code_interpreter 的事件响应</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing_extensions <span class="keyword">import</span> override</span><br><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> AssistantEventHandler</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">EventHandler</span>(<span class="title class_ inherited__">AssistantEventHandler</span>):</span><br><span class="line"><span class="meta">    @override</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_text_created</span>(<span class="params">self, text</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;响应输出创建事件&quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;\nassistant &gt; &quot;</span>, end=<span class="string">&quot;&quot;</span>, flush=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @override</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_text_delta</span>(<span class="params">self, delta, snapshot</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;响应输出生成的流片段&quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">print</span>(delta.value, end=<span class="string">&quot;&quot;</span>, flush=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @override</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_tool_call_created</span>(<span class="params">self, tool_call</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;响应工具调用&quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;\nassistant &gt; <span class="subst">&#123;tool_call.<span class="built_in">type</span>&#125;</span>\n&quot;</span>, flush=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @override</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_tool_call_delta</span>(<span class="params">self, delta, snapshot</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;响应工具调用的流片段&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> delta.<span class="built_in">type</span> == <span class="string">&#x27;code_interpreter&#x27;</span>:</span><br><span class="line">            <span class="keyword">if</span> delta.code_interpreter.<span class="built_in">input</span>:</span><br><span class="line">                <span class="built_in">print</span>(delta.code_interpreter.<span class="built_in">input</span>, end=<span class="string">&quot;&quot;</span>, flush=<span class="literal">True</span>)</span><br><span class="line">        <span class="keyword">if</span> delta.code_interpreter.outputs:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;\n\noutput &gt;&quot;</span>, flush=<span class="literal">True</span>)</span><br><span class="line">            <span class="keyword">for</span> output <span class="keyword">in</span> delta.code_interpreter.outputs:</span><br><span class="line">                <span class="keyword">if</span> output.<span class="built_in">type</span> == <span class="string">&quot;logs&quot;</span>:</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">f&quot;\n<span class="subst">&#123;output.logs&#125;</span>&quot;</span>, flush=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p>发个 Code Interpreter 请求</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建 thread</span></span><br><span class="line">thread = client.beta.threads.create()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加新一轮的 user message</span></span><br><span class="line">message = client.beta.threads.messages.create(</span><br><span class="line">    thread_id=thread.<span class="built_in">id</span>,</span><br><span class="line">    role=<span class="string">&quot;user&quot;</span>,</span><br><span class="line">    content=<span class="string">&quot;用代码计算 1234567 的平方根&quot;</span>,</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 使用 stream 接口并传入 EventHandler</span></span><br><span class="line"><span class="keyword">with</span> client.beta.threads.runs.stream(</span><br><span class="line">    thread_id=thread.<span class="built_in">id</span>,</span><br><span class="line">    assistant_id=assistant_id,</span><br><span class="line">    event_handler=EventHandler(),</span><br><span class="line">) <span class="keyword">as</span> stream:</span><br><span class="line">    stream.until_done()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>assistant &gt; code_interpreter</p>
+<p>import math</p>
+<p>#Calculate the square root of 1234567</p>
+<p>sqrt_value &#x3D; math.sqrt(1234567)</p>
+<p>sqrt_value</p>
+<p>assistant &gt; 1234567 的平方根是约 1111.11。</p>
+</blockquote>
+<h4 id="4-1-1-Code-Interpreter-操作文件"><a href="#4-1-1-Code-Interpreter-操作文件" class="headerlink" title="4.1.1 Code_Interpreter 操作文件"></a>4.1.1 Code_Interpreter 操作文件</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 上传文件到 OpenAI</span></span><br><span class="line">file = client.files.create(</span><br><span class="line">    file=<span class="built_in">open</span>(<span class="string">&quot;mydata.csv&quot;</span>, <span class="string">&quot;rb&quot;</span>),</span><br><span class="line">    purpose=<span class="string">&#x27;assistants&#x27;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 assistant</span></span><br><span class="line">my_assistant = client.beta.assistants.create(</span><br><span class="line">    name=<span class="string">&quot;CodeInterpreterWithFileDemo&quot;</span>,</span><br><span class="line">    instructions=<span class="string">&quot;你是数据分析师，按要求分析数据。&quot;</span>,</span><br><span class="line">    model=<span class="string">&quot;gpt-4o&quot;</span>,</span><br><span class="line">    tools=[&#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;code_interpreter&quot;</span>&#125;],</span><br><span class="line">    tool_resources=&#123;</span><br><span class="line">        <span class="string">&quot;code_interpreter&quot;</span>: &#123;</span><br><span class="line">          <span class="string">&quot;file_ids&quot;</span>: [file.<span class="built_in">id</span>]  <span class="comment"># 为 code_interpreter 关联文件</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 thread</span></span><br><span class="line">thread = client.beta.threads.create()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加新一轮的 user message</span></span><br><span class="line">message = client.beta.threads.messages.create(</span><br><span class="line">    thread_id=thread.<span class="built_in">id</span>,</span><br><span class="line">    role=<span class="string">&quot;user&quot;</span>,</span><br><span class="line">    content=<span class="string">&quot;统计csv文件中的总销售额&quot;</span>,</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 使用 stream 接口并传入 EventHandler</span></span><br><span class="line"><span class="keyword">with</span> client.beta.threads.runs.stream(</span><br><span class="line">    thread_id=thread.<span class="built_in">id</span>,</span><br><span class="line">    assistant_id=my_assistant.<span class="built_in">id</span>,</span><br><span class="line">    event_handler=EventHandler(),</span><br><span class="line">) <span class="keyword">as</span> stream:</span><br><span class="line">    stream.until_done()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>assistant &gt; 好的，我会先读取并检视上传的CSV文件，然后计算总销售额。</p>
+<p>assistant &gt; code_interpreter</p>
+<p>import pandas as pd</p>
+<p>#读取文件</p>
+<p>file_path &#x3D; ‘&#x2F;mnt&#x2F;data&#x2F;file-1UtRq6QUYdZqZpQlPmnBWN4z’</p>
+<p>df &#x3D; pd.read_csv(file_path)</p>
+<p>#显示数据的前几行以了解其结构</p>
+<p>df.head()</p>
+<p>assistant &gt; 我们可以看到数据框有三列：<code>Product Name</code>、<code>Unit Price</code> 和 <code>Quantity Sold</code>。接下来我们将计算每个产品的销售额，并求出总销售额。产品的销售额可以通过将单价(<code>Unit Price</code>)乘以销售数量(<code>Quantity Sold</code>)获得。然后，将所有产品的销售额相加即为总销售额。# 计算每个产品的销售额</p>
+<p>df[‘Sales’] &#x3D; df[‘Unit Price’] * df[‘Quantity Sold’]</p>
+<p>#计算总销售额</p>
+<p>total_sales &#x3D; df[‘Sales’].sum()</p>
+<p>total_sales</p>
+<p>assistant &gt; CSV 文件中的总销售额为 182,100。</p>
+</blockquote>
+<h3 id="4-2-创建-Assistant-时声明-Function"><a href="#4-2-创建-Assistant-时声明-Function" class="headerlink" title="4.2 创建 Assistant 时声明 Function"></a>4.2 创建 Assistant 时声明 Function</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">assistant = client.beta.assistants.create(</span><br><span class="line">  instructions=<span class="string">&quot;你叫瓜瓜。你是AGI课堂的助手。你只回答跟AI大模型有关的问题。不要跟学生闲聊。每次回答问题前，你要拆解问题并输出一步一步的思考过程。&quot;</span><span class="punctuation">,</span></span><br><span class="line">  model=<span class="string">&quot;gpt-4o&quot;</span><span class="punctuation">,</span></span><br><span class="line">  tools=<span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;function&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;function&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;course_info&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;用于查看具体课程信息，包括时间表，题目，讲师，等等。Function输入必须是一个合法的SQL表达式。&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;parameters&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;object&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;SQL query extracting info to answer the user&#x27;s question.\nSQL should be written using this database schema:\n\nCREATE TABLE Courses (\n\tid INT AUTO_INCREMENT PRIMARY KEY,\n\tcourse_date DATE NOT NULL,\n\tstart_time TIME NOT NULL,\n\tend_time TIME NOT NULL,\n\tcourse_name VARCHAR(255) NOT NULL,\n\tinstructor VARCHAR(255) NOT NULL\n);\n\nThe query should be returned in plain text, not in JSON.\nThe query should only contain grammars supported by SQLite.&quot;</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;required&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">          <span class="string">&quot;query&quot;</span></span><br><span class="line">        <span class="punctuation">]</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>创建一个 Function</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义本地函数和数据库</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sqlite3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建数据库连接</span></span><br><span class="line">conn = sqlite3.connect(<span class="string">&#x27;:memory:&#x27;</span>)</span><br><span class="line">cursor = conn.cursor()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建orders表</span></span><br><span class="line">cursor.execute(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">CREATE TABLE Courses (</span></span><br><span class="line"><span class="string">    id INT AUTO_INCREMENT PRIMARY KEY,</span></span><br><span class="line"><span class="string">    course_date DATE NOT NULL,</span></span><br><span class="line"><span class="string">    start_time TIME NOT NULL,</span></span><br><span class="line"><span class="string">    end_time TIME NOT NULL,</span></span><br><span class="line"><span class="string">    course_name VARCHAR(255) NOT NULL,</span></span><br><span class="line"><span class="string">    instructor VARCHAR(255) NOT NULL</span></span><br><span class="line"><span class="string">);</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 插入5条明确的模拟记录</span></span><br><span class="line">timetable = [</span><br><span class="line">    (<span class="string">&#x27;2024-01-23&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;大模型应用开发基础&#x27;</span>, <span class="string">&#x27;孙志岗&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-01-25&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;Prompt Engineering&#x27;</span>, <span class="string">&#x27;孙志岗&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-01-29&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;赠课：软件开发基础概念与环境搭建&#x27;</span>, <span class="string">&#x27;西树&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-02-20&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;从AI编程认知AI&#x27;</span>, <span class="string">&#x27;林晓鑫&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-02-22&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;Function Calling&#x27;</span>, <span class="string">&#x27;孙志岗&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-02-29&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;RAG和Embeddings&#x27;</span>, <span class="string">&#x27;王卓然&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-03-05&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;Assistants API&#x27;</span>, <span class="string">&#x27;王卓然&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-03-07&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;Semantic Kernel&#x27;</span>, <span class="string">&#x27;王卓然&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-03-14&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;LangChain&#x27;</span>, <span class="string">&#x27;王卓然&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-03-19&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;LLM应用开发工具链&#x27;</span>, <span class="string">&#x27;王卓然&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-03-21&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;手撕 AutoGPT&#x27;</span>, <span class="string">&#x27;王卓然&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-03-26&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;模型微调（上）&#x27;</span>, <span class="string">&#x27;王卓然&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-03-28&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;模型微调（下）&#x27;</span>, <span class="string">&#x27;王卓然&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-04-09&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;多模态大模型（上）&#x27;</span>, <span class="string">&#x27;多老师&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-04-11&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;多模态大模型（中）&#x27;</span>, <span class="string">&#x27;多老师&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-04-16&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;多模态大模型（下）&#x27;</span>, <span class="string">&#x27;多老师&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-04-18&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;AI产品部署和交付（上）&#x27;</span>, <span class="string">&#x27;王树冬&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-04-23&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;AI产品部署和交付（下）&#x27;</span>, <span class="string">&#x27;王树冬&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-04-25&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;抓住大模型时代的创业机遇&#x27;</span>, <span class="string">&#x27;孙志岗&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-05-07&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;产品运营和业务沟通&#x27;</span>, <span class="string">&#x27;孙志岗&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-05-09&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;产品设计&#x27;</span>, <span class="string">&#x27;孙志岗&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;2024-05-14&#x27;</span>, <span class="string">&#x27;20:00&#x27;</span>, <span class="string">&#x27;22:00&#x27;</span>, <span class="string">&#x27;项目方案分析与设计&#x27;</span>, <span class="string">&#x27;王卓然&#x27;</span>),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> record <span class="keyword">in</span> timetable:</span><br><span class="line">    cursor.execute(<span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    INSERT INTO Courses (course_date, start_time, end_time, course_name, instructor)</span></span><br><span class="line"><span class="string">    VALUES (?, ?, ?, ?, ?)</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span>, record)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交事务</span></span><br><span class="line">conn.commit()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">query_database</span>(<span class="params">query</span>):</span><br><span class="line">    cursor.execute(query)</span><br><span class="line">    records = cursor.fetchall()</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">str</span>(records)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 可以被回调的函数放入此字典</span></span><br><span class="line">available_functions = &#123;</span><br><span class="line">    <span class="string">&quot;course_info&quot;</span>: query_database,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>增加回调事件的响应</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing_extensions <span class="keyword">import</span> override</span><br><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> AssistantEventHandler</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">EventHandler</span>(<span class="title class_ inherited__">AssistantEventHandler</span>):</span><br><span class="line"><span class="meta">    @override</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_text_created</span>(<span class="params">self, text</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;响应回复创建事件&quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;\nassistant &gt; &quot;</span>, end=<span class="string">&quot;&quot;</span>, flush=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @override</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_text_delta</span>(<span class="params">self, delta, snapshot</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;响应输出生成的流片段&quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">print</span>(delta.value, end=<span class="string">&quot;&quot;</span>, flush=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @override</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_tool_call_created</span>(<span class="params">self, tool_call</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;响应工具调用&quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;\nassistant &gt; <span class="subst">&#123;tool_call.<span class="built_in">type</span>&#125;</span>\n&quot;</span>, flush=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @override</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_tool_call_delta</span>(<span class="params">self, delta, snapshot</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;响应工具调用的流片段&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> delta.<span class="built_in">type</span> == <span class="string">&#x27;code_interpreter&#x27;</span>:</span><br><span class="line">            <span class="keyword">if</span> delta.code_interpreter.<span class="built_in">input</span>:</span><br><span class="line">                <span class="built_in">print</span>(delta.code_interpreter.<span class="built_in">input</span>, end=<span class="string">&quot;&quot;</span>, flush=<span class="literal">True</span>)</span><br><span class="line">            <span class="keyword">if</span> delta.code_interpreter.outputs:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;\n\noutput &gt;&quot;</span>, flush=<span class="literal">True</span>)</span><br><span class="line">                <span class="keyword">for</span> output <span class="keyword">in</span> delta.code_interpreter.outputs:</span><br><span class="line">                    <span class="keyword">if</span> output.<span class="built_in">type</span> == <span class="string">&quot;logs&quot;</span>:</span><br><span class="line">                        <span class="built_in">print</span>(<span class="string">f&quot;\n<span class="subst">&#123;output.logs&#125;</span>&quot;</span>, flush=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @override</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_event</span>(<span class="params">self, event</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        响应 &#x27;requires_action&#x27; 事件</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> event.event == <span class="string">&#x27;thread.run.requires_action&#x27;</span>:</span><br><span class="line">            run_id = event.data.<span class="built_in">id</span>  <span class="comment"># 获取 run ID</span></span><br><span class="line">            <span class="variable language_">self</span>.handle_requires_action(event.data, run_id)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">handle_requires_action</span>(<span class="params">self, data, run_id</span>):</span><br><span class="line">        tool_outputs = []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> tool <span class="keyword">in</span> data.required_action.submit_tool_outputs.tool_calls:</span><br><span class="line">            arguments = json.loads(tool.function.arguments)</span><br><span class="line">            <span class="built_in">print</span>(</span><br><span class="line">                <span class="string">f&quot;<span class="subst">&#123;tool.function.name&#125;</span>(<span class="subst">&#123;arguments&#125;</span>)&quot;</span>,</span><br><span class="line">                flush=<span class="literal">True</span></span><br><span class="line">            )</span><br><span class="line">            <span class="comment"># 运行 function</span></span><br><span class="line">            tool_outputs.append(&#123;</span><br><span class="line">                <span class="string">&quot;tool_call_id&quot;</span>: tool.<span class="built_in">id</span>,</span><br><span class="line">                <span class="string">&quot;output&quot;</span>: available_functions[tool.function.name](</span><br><span class="line">                    **arguments</span><br><span class="line">                )&#125;</span><br><span class="line">            )</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 提交 function 的结果，并继续运行 run</span></span><br><span class="line">        <span class="variable language_">self</span>.submit_tool_outputs(tool_outputs, run_id)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">submit_tool_outputs</span>(<span class="params">self, tool_outputs, run_id</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;提交function结果，并继续流&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">with</span> client.beta.threads.runs.submit_tool_outputs_stream(</span><br><span class="line">            thread_id=<span class="variable language_">self</span>.current_run.thread_id,</span><br><span class="line">            run_id=<span class="variable language_">self</span>.current_run.<span class="built_in">id</span>,</span><br><span class="line">            tool_outputs=tool_outputs,</span><br><span class="line">            event_handler=EventHandler(),</span><br><span class="line">        ) <span class="keyword">as</span> stream:</span><br><span class="line">            stream.until_done()</span><br><span class="line">            </span><br><span class="line"><span class="comment"># 创建 thread</span></span><br><span class="line">thread = client.beta.threads.create()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加 user message</span></span><br><span class="line">message = client.beta.threads.messages.create(</span><br><span class="line">    thread_id=thread.<span class="built_in">id</span>,</span><br><span class="line">    role=<span class="string">&quot;user&quot;</span>,</span><br><span class="line">    content=<span class="string">&quot;平均一堂课长时间&quot;</span>,</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 使用 stream 接口并传入 EventHandler</span></span><br><span class="line"><span class="keyword">with</span> client.beta.threads.runs.stream(</span><br><span class="line">    thread_id=thread.<span class="built_in">id</span>,</span><br><span class="line">    assistant_id=assistant.<span class="built_in">id</span>,</span><br><span class="line">    event_handler=EventHandler(),</span><br><span class="line">) <span class="keyword">as</span> stream:</span><br><span class="line">    stream.until_done()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>assistant &gt; 要回答这个问题，我需要了解各门课程的具体时间安排，然后计算平均每堂课的时长。让我们按以下步骤拆解这个问题：</p>
+<ol>
+<li>查询所有课程的开始时间和结束时间。</li>
+<li>计算每门课程的时长。</li>
+<li>计算这些课程时长的平均值。</li>
+</ol>
+<p>先执行第一步，从课程信息中提取课程的开始时间和结束时间。</p>
+<p>我会编写一个SQL查询来获取这些信息：</p>
+<p>`&#96;&#96;</p>
+<p>SELECT start_time, end_time FROM Courses;</p>
+<p>`&#96;&#96;</p>
+<p>接下来，我将使用此查询来获取数据。</p>
+<p>assistant &gt; function</p>
+<p>course_info({‘query’: ‘SELECT start_time, end_time FROM Courses;’})</p>
+<p>assistant &gt; 我们已经获取到课程的开始时间和结束时间，具体数据如下：</p>
+<ul>
+<li>所有课程的开始时间均为 20:00</li>
+<li>所有课程的结束时间均为 22:00</li>
+</ul>
+<p>下一步，我们需要计算每门课程的时长，并求出平均值。由于所有课程的时长都相同，因此我们只需要计算一次。</p>
+<p>每门课程的时长为：</p>
+<p>`&#96;&#96;</p>
+<p>22:00 - 20:00 &#x3D; 2 小时</p>
+<p>`&#96;&#96;</p>
+<p>由于所有课程的时长均为2小时，那么平均每堂课的时长也就是2小时。</p>
+</blockquote>
+<h3 id="4-3-两个无依赖的-function-会在一次请求中一起被调用"><a href="#4-3-两个无依赖的-function-会在一次请求中一起被调用" class="headerlink" title="4.3 两个无依赖的 function 会在一次请求中一起被调用"></a>4.3 两个无依赖的 function 会在一次请求中一起被调用</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建 thread</span></span><br><span class="line">thread = client.beta.threads.create()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加 user message</span></span><br><span class="line">message = client.beta.threads.messages.create(</span><br><span class="line">    thread_id=thread.<span class="built_in">id</span>,</span><br><span class="line">    role=<span class="string">&quot;user&quot;</span>,</span><br><span class="line">    content=<span class="string">&quot;王上几堂课，比孙多上几堂&quot;</span>,</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 使用 stream 接口并传入 EventHandler</span></span><br><span class="line"><span class="keyword">with</span> client.beta.threads.runs.stream(</span><br><span class="line">    thread_id=thread.<span class="built_in">id</span>,</span><br><span class="line">    assistant_id=assistant.<span class="built_in">id</span>,</span><br><span class="line">    event_handler=EventHandler(),</span><br><span class="line">) <span class="keyword">as</span> stream:</span><br><span class="line">    stream.until_done()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>assistant &gt; 首先，我需要确认王上了几堂课，然后确认孙上了几堂课，最后再计算两者之间的差异。</p>
+<p><strong>拆解问题的步骤：</strong></p>
+<ol>
+<li>查询王上了几堂课。</li>
+<li>查询孙上了几堂课。</li>
+<li>计算王比孙多上几堂课。</li>
+</ol>
+<p>现在，我会执行前两步，然后再计算差异。</p>
+<h4 id="第一步：查询王上了几堂课"><a href="#第一步：查询王上了几堂课" class="headerlink" title="第一步：查询王上了几堂课"></a>第一步：查询王上了几堂课</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> count <span class="keyword">FROM</span> Courses <span class="keyword">WHERE</span> instructor <span class="operator">=</span> <span class="string">&#x27;王&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="第二步：查询孙上了几堂课"><a href="#第二步：查询孙上了几堂课" class="headerlink" title="第二步：查询孙上了几堂课"></a>第二步：查询孙上了几堂课</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> count <span class="keyword">FROM</span> Courses <span class="keyword">WHERE</span> instructor <span class="operator">=</span> <span class="string">&#x27;孙&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>我将同时运行这两个查询。</p>
+<p>assistant &gt; function</p>
+<p>assistant &gt; function</p>
+<p>course_info({‘query’: “SELECT COUNT(*) AS count FROM Courses WHERE instructor &#x3D; ‘王’;”})</p>
+<p>course_info({‘query’: “SELECT COUNT(*) AS count FROM Courses WHERE instructor &#x3D; ‘孙’;”})</p>
+<p>assistant &gt; #### 第三步：计算王比孙多上几堂课</p>
+<p>根据查询结果：</p>
+<ul>
+<li>王上了9堂课。</li>
+<li>孙上了6堂课。</li>
+</ul>
+<p>所以王比孙多上了 ( 9 - 6 &#x3D; 3 ) 堂课。</p>
+</blockquote>
+<p><strong>更多流中的 Event：</strong> <a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/assistants-streaming/events">https://platform.openai.com/docs/api-reference/assistants-streaming/events</a></p>
+<h2 id="5-内置的-RAG-功能"><a href="#5-内置的-RAG-功能" class="headerlink" title="5 内置的 RAG 功能"></a>5 内置的 RAG 功能</h2><h3 id="5-1-创建-Vector-Store，上传文件"><a href="#5-1-创建-Vector-Store，上传文件" class="headerlink" title="5.1 创建 Vector Store，上传文件"></a>5.1 创建 Vector Store，上传文件</h3><ul>
+<li>通过代码创建 Vector Store</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vector_store = client.beta.vector_stores.create(</span><br><span class="line">  name=<span class="string">&quot;MyVectorStore&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通过代码上传文件到 OpenAI 的存储空间</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">file = client.files.create(</span><br><span class="line">  file=<span class="built_in">open</span>(<span class="string">&quot;agiclass_intro.pdf&quot;</span>, <span class="string">&quot;rb&quot;</span>),</span><br><span class="line">  purpose=<span class="string">&quot;assistants&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通过代码将文件添加到 Vector Store</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vector_store_file = client.beta.vector_stores.files.create(</span><br><span class="line">  vector_store_id=vector_store.<span class="built_in">id</span>,</span><br><span class="line">  file_id=file.<span class="built_in">id</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>批量上传文件到 Vector Store</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">files = [<span class="string">&#x27;file1.pdf&#x27;</span>,<span class="string">&#x27;file2.pdf&#x27;</span>]</span><br><span class="line">file_batch = client.beta.vector_stores.file_batches.upload_and_poll(</span><br><span class="line">    vector_store_id=vector_store.<span class="built_in">id</span>,</span><br><span class="line">    files=[<span class="built_in">open</span>(filename, <span class="string">&quot;rb&quot;</span>) <span class="keyword">for</span> filename <span class="keyword">in</span> files])</span><br></pre></td></tr></table></figure>
+
+<p>Vector store 和 vector store file 也有对应的 <code>list</code>, <code>retrieve</code>, 和 <code>delete</code> 等操作。</p>
+<p>具体文档参考：</p>
+<ul>
+<li>Vector store: <a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/vector-stores">https://platform.openai.com/docs/api-reference/vector-stores</a></li>
+<li>Vector store file: <a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/vector-stores-files">https://platform.openai.com/docs/api-reference/vector-stores-files</a></li>
+<li>Vector store file 批量操作: <a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/vector-stores-file-batches">https://platform.openai.com/docs/api-reference/vector-stores-file-batches</a></li>
+</ul>
+<p>关于文件操作，还有如下函数：</p>
+<ol>
+<li><code>client.files.list()</code> 列出所有文件</li>
+<li><code>client.files.retrieve()</code> 获取文件对象</li>
+<li><code>client.files.delete()</code> 删除文件</li>
+<li><code>client.files.content()</code> 读取文件内容</li>
+</ol>
+<p>具体文档参考：<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/files">https://platform.openai.com/docs/api-reference/files</a></p>
+<h3 id="5-2-创建-Assistant-时声明-RAG-能力"><a href="#5-2-创建-Assistant-时声明-RAG-能力" class="headerlink" title="5.2 创建 Assistant 时声明 RAG 能力"></a>5.2 创建 Assistant 时声明 RAG 能力</h3><p>RAG 实际被当作一种 tool</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">assistant = client.beta.assistants.create(</span><br><span class="line">  instructions=<span class="string">&quot;你是个问答机器人，你根据给定的知识回答用户问题。&quot;</span>,</span><br><span class="line">  model=<span class="string">&quot;gpt-4o&quot;</span>,</span><br><span class="line">  tools=[&#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;file_search&quot;</span>&#125;],)</span><br></pre></td></tr></table></figure>
+
+<p>指定检索源</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">assistant = client.beta.assistants.update(</span><br><span class="line">  assistant_id=assistant.<span class="built_in">id</span>,</span><br><span class="line">  tool_resources=&#123;<span class="string">&quot;file_search&quot;</span>: &#123;<span class="string">&quot;vector_store_ids&quot;</span>: [vector_store.<span class="built_in">id</span>]&#125;&#125;,)</span><br></pre></td></tr></table></figure>
+
+<p>试试 RAG 请求</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建 thread</span></span><br><span class="line">thread = client.beta.threads.create()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加 user message</span></span><br><span class="line">message = client.beta.threads.messages.create(</span><br><span class="line">    thread_id=thread.<span class="built_in">id</span>,</span><br><span class="line">    role=<span class="string">&quot;user&quot;</span>,</span><br><span class="line">    content=<span class="string">&quot;AI⼤模型全栈⼯程师适合哪些人&quot;</span>,</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 使用 stream 接口并传入 EventHandler</span></span><br><span class="line"><span class="keyword">with</span> client.beta.threads.runs.stream(</span><br><span class="line">    thread_id=thread.<span class="built_in">id</span>,</span><br><span class="line">    assistant_id=assistant_id,</span><br><span class="line">    event_handler=EventHandler(),</span><br><span class="line">) <span class="keyword">as</span> stream:</span><br><span class="line">    stream.until_done()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>assistant &gt; file_search</p>
+<p>assistant &gt; AI大模型全栈工程师适合以下几类人群：</p>
+<ol>
+<li><p><em><strong>自己干</strong></em>：有能力独立完成AI应用从策划、开发到落地的全过程，包括商业分析、需求分析、产品设计、开发、测试、市场推广和运营等。这类人通常具备至少一门编程语言的知识，并有过真实项目开发经验，如软件开发工程师、高级工程师、技术总监、研发经理、架构师、测试工程师等。</p>
+</li>
+<li><p><em><strong>合伙干</strong></em>：领导或配合懂AI技术的人，一起完成AI应用从策划、开发到落地的全过程。这类人可能不懂编程，但可以是产品经理、需求分析师、设计师、运营、创业者、老板、解决方案工程师、项目经理、市场、销售等。如果能善用AI学习编程、辅助编程，也可以向“自己干”迈进【4:0†source】【4:1†source】。</p>
+</li>
+</ol>
+</blockquote>
+<h3 id="5-3-内置的-RAG-是怎么实现的"><a href="#5-3-内置的-RAG-是怎么实现的" class="headerlink" title="5.3 内置的 RAG 是怎么实现的"></a>5.3 内置的 RAG 是怎么实现的</h3><p><a target="_blank" rel="noopener" href="https://platform.openai.com/docs/assistants/tools/file-search/how-it-works">官方原文</a></p>
+<p>The file_search tool implements several retrieval best practices out of the box to help you extract the right data from your files and augment the model’s responses. The file_search tool:</p>
+<ul>
+<li>Rewrites user queries to optimize them for search. (面向检索的 Query 改写)</li>
+<li>Breaks down complex user queries into multiple searches it can run in parallel.（复杂 Query 拆成多个，并行执行）</li>
+<li>Runs both keyword and semantic searches across both assistant and thread vector stores.（关键字与向量混合检索）</li>
+<li>Reranks search results to pick the most relevant ones before generating the final response.（检索后排序）</li>
+</ul>
+<p>默认配置：</p>
+<ul>
+<li>Chunk size: 800 tokens</li>
+<li>Chunk overlap: 400 tokens</li>
+<li>Embedding model: text-embedding-3-large at 256 dimensions</li>
+<li>Maximum number of chunks added to context: 20 (could be fewer)</li>
+</ul>
+<p>以上配置可以通过 <code>chunking_strategy</code> 参数自定义修改。</p>
+<p>承诺未来增加：</p>
+<ol>
+<li>Support for deterministic pre-search filtering using custom metadata.</li>
+<li>Support for parsing images within documents (including images of charts, graphs, tables etc.)</li>
+<li>Support for retrievals over structured file formats (like csv or jsonl).</li>
+<li>Better support for summarization — the tool today is optimized for search queries.</li>
+</ol>
+<p><strong>我们为什么仍然需要了解整个实现过程？</strong></p>
+<ol>
+<li>如果不能使用 OpenAI，还是需要手工实现 RAG 流程</li>
+<li>了解 RAG 的原理，可以指导你的产品开发（回忆 GitHub Copilot）</li>
+<li>用私有知识增强 LLM 的能力，是一个通用的方法论</li>
+</ol>
+<h2 id="6-多个-Assistants-协作"><a href="#6-多个-Assistants-协作" class="headerlink" title="6 多个 Assistants 协作"></a>6 多个 Assistants 协作</h2><p><strong>划重点：</strong>使用 assistant 的意义之一，是可以隔离不同角色的 instruction 和 function 能力。</p>
+<p>我们用多个 Assistants 模拟一场“六顶思维帽”方法的讨论。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">hats = <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;蓝色&quot;</span><span class="punctuation">:</span> <span class="string">&quot;思考过程的控制和组织者。你负责会议的组织、思考过程的概览和总结。&quot;</span></span><br><span class="line">    + <span class="string">&quot;首先，整个讨论从你开场，你只陈述问题不表达观点。最后，再由你对整个讨论做简短的总结并给出最终方案。&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;白色&quot;</span><span class="punctuation">:</span> <span class="string">&quot;负责提供客观事实和数据。你需要关注可获得的信息、需要的信息以及如何获取那些还未获得的信息。&quot;</span></span><br><span class="line">    + <span class="string">&quot;思考“我们有哪些数据？我们还需要哪些信息？”等问题，并提供客观答案。&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;红色&quot;</span><span class="punctuation">:</span> <span class="string">&quot;代表直觉、情感和直觉反应。不需要解释和辩解你的情感或直觉。&quot;</span></span><br><span class="line">    + <span class="string">&quot;这是表达未经过滤的情绪和感受的时刻。&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;黑色&quot;</span><span class="punctuation">:</span> <span class="string">&quot;代表谨慎和批判性思维。你需要指出提案的弱点、风险以及为什么某些事情可能无法按计划进行。&quot;</span></span><br><span class="line">    + <span class="string">&quot;这不是消极思考，而是为了发现潜在的问题。&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;黄色&quot;</span><span class="punctuation">:</span> <span class="string">&quot;代表乐观和积极性。你需要探讨提案的价值、好处和可行性。这是寻找和讨论提案中正面方面的时候。&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;绿色&quot;</span><span class="punctuation">:</span> <span class="string">&quot;代表创造性思维和新想法。鼓励发散思维、提出新的观点、解决方案和创意。这是打破常规和探索新可能性的时候。&quot;</span><span class="punctuation">,</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">queue = <span class="punctuation">[</span><span class="string">&quot;蓝色&quot;</span><span class="punctuation">,</span> <span class="string">&quot;白色&quot;</span><span class="punctuation">,</span> <span class="string">&quot;红色&quot;</span><span class="punctuation">,</span> <span class="string">&quot;黑色&quot;</span><span class="punctuation">,</span> <span class="string">&quot;黄色&quot;</span><span class="punctuation">,</span> <span class="string">&quot;绿色&quot;</span><span class="punctuation">,</span> <span class="string">&quot;蓝色&quot;</span><span class="punctuation">]</span></span><br><span class="line"></span><br><span class="line">from openai import OpenAI</span><br><span class="line">import os</span><br><span class="line">import json</span><br><span class="line"></span><br><span class="line">from dotenv import load_dotenv<span class="punctuation">,</span> find_dotenv</span><br><span class="line">_ = load_dotenv(find_dotenv())</span><br><span class="line"></span><br><span class="line"># 初始化 OpenAI 服务</span><br><span class="line">client = OpenAI()</span><br><span class="line"></span><br><span class="line">existing_assistants = <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">def create_assistant(color)<span class="punctuation">:</span></span><br><span class="line">    if color in existing_assistants<span class="punctuation">:</span></span><br><span class="line">        return existing_assistants<span class="punctuation">[</span>color<span class="punctuation">]</span></span><br><span class="line">    assistant = client.beta.assistants.create(</span><br><span class="line">        name=f<span class="string">&quot;&#123;color&#125;帽子角色&quot;</span><span class="punctuation">,</span></span><br><span class="line">        instructions=f<span class="string">&quot;我们在进行一场Six Thinking Hats讨论。按&#123;queue&#125;顺序。你的角色是&#123;color&#125;帽子。&quot;</span><span class="punctuation">,</span></span><br><span class="line">        model=<span class="string">&quot;gpt-4o&quot;</span><span class="punctuation">,</span></span><br><span class="line">    )</span><br><span class="line">    existing_assistants<span class="punctuation">[</span>color<span class="punctuation">]</span> = assistant</span><br><span class="line">    return assistant</span><br><span class="line">    </span><br><span class="line"># 创建 thread</span><br><span class="line">thread = client.beta.threads.create()</span><br><span class="line"></span><br><span class="line">topic = <span class="string">&quot;面向非AI背景的程序员群体设计一门AI大语言模型课程，应该包含哪些内容。&quot;</span></span><br><span class="line"></span><br><span class="line"># 添加 user message</span><br><span class="line">message = client.beta.threads.messages.create(</span><br><span class="line">    thread_id=thread.id<span class="punctuation">,</span></span><br><span class="line">    role=<span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">    content=f<span class="string">&quot;讨论话题：&#123;topic&#125;\n\n[开始]\n&quot;</span><span class="punctuation">,</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">for hat in queue<span class="punctuation">:</span></span><br><span class="line">    assistant = create_assistant(hat)</span><br><span class="line">    with client.beta.threads.runs.stream(</span><br><span class="line">        thread_id=thread.id<span class="punctuation">,</span></span><br><span class="line">        assistant_id=assistant.id<span class="punctuation">,</span></span><br><span class="line">        event_handler=EventHandler()<span class="punctuation">,</span></span><br><span class="line">    ) as stream<span class="punctuation">:</span></span><br><span class="line">        stream.until_done()</span><br><span class="line">    print()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>assistant &gt; <strong>蓝色帽子（蓝色）</strong>：</p>
+<p>大家好，我们今天要讨论的话题是：为非AI背景的程序员设计一门AI大语言模型课程，应该包含哪些内容。我们将按照六顶思考帽的方法来进行这次讨论，从蓝色帽子开始，然后依次是白色、红色、黑色、黄色和绿色，最后再由蓝色帽子总结。首先我们需要明确这次讨论的目标——确定课程的结构和内容，确保这些内容适合那些没有AI背景的程序员。现在请白色帽子开始发言。</p>
+<p>assistant &gt; <strong>白色帽子（白色）</strong>：</p>
+<p>好的，我来提供一些客观的数据和事实。为了设计这门课程，我们需要考虑以下几点基础信息：</p>
+<ol>
+<li><p><em><strong>非AI背景的程序员特点</strong></em>：</p>
+<ol>
+<li>他们通常具备编程基础，比如熟悉至少一种编程语言（如Python、Java、C++等）。</li>
+<li>他们可能了解基本的算法和数据结构。</li>
+<li>他们大多未接触过机器学习、深度学习等领域。</li>
+</ol>
+</li>
+<li><p><em><strong>课程目标</strong></em>：</p>
+<ol>
+<li>介绍AI和大语言模型的基本概念。</li>
+<li>帮助学员理解和使用现有的大语言模型。</li>
+<li>提供实践案例，使学习者能够在实际项目中应用所学知识。</li>
+</ol>
+</li>
+<li><p><em><strong>课程内容建议</strong></em>：</p>
+<ol>
+<li><em><strong>基础理论部分</strong></em>（例如，人工智能基础、机器学习和深度学习概念、大语言模型的基础理论）。</li>
+<li><em><strong>工具和框架</strong></em>（如TensorFlow、PyTorch等常用的深度学习框架）。</li>
+<li><em><strong>实际应用</strong></em>（通过Kaggle或其他平台提供的项目进行实践）。</li>
+<li><em><strong>大语言模型的具体应用</strong></em>（如GPT-3、BERT的使用和调优）。</li>
+<li><em><strong>道德与隐私问题</strong></em>（关于使用大语言模型时可能涉及的道德和隐私问题）。</li>
+</ol>
+</li>
+</ol>
+<p>这些是我们目前能够确定的一些基本信息和建议。接下来我们听听红色帽子带来的情感和直觉上的反馈。</p>
+<p>assistant &gt; <strong>红色帽子（红色）</strong>：</p>
+<p>在情感和直觉上，我觉得设计这样一门课程既令人兴奋又有点令人担忧。兴奋是因为这是一个非常前沿和热门的领域，能够激发学员的兴趣和积极性。具体几点感受：</p>
+<ol>
+<li><p><em><strong>激情和兴趣</strong></em>：AI和大语言模型是当下非常受关注的技术，很多人都对其充满好奇心和学习欲望。提供这样一门课程，很可能会引起学员们的强烈兴趣和参与热情。</p>
+</li>
+<li><p><em><strong>焦虑和不安</strong></em>：对于非AI背景的程序员来说，接触这么前沿的技术可能会带来一定的压力和不安。他们可能会担心自己的基础知识是否足够，是否能够跟上课程的步伐。</p>
+</li>
+<li><p><em><strong>成就感</strong></em>：如果课程设计得当，让学员能够逐步掌握并应用大语言模型，他们会感受到巨大的成就感，这也将激励他们进一步深入学习。</p>
+</li>
+<li><p><em><strong>实用性</strong></em>：学员们可能会希望这门课程不仅仅提供理论知识，更能在实际工作中应用。课中的案例和实践环节是否足够实用，能否解决他们在工作中遇到的问题，这些都是情感上很重要的考量。</p>
+</li>
+</ol>
+<p>总的来说，我对这门课程的设计充满期待，希望它既能激发学员的兴趣，又能在他们遇到困惑和压力时给予足够的支持和引导。接下来请黑色帽子提出可能的风险和问题。</p>
+<p>assistant &gt; <strong>黑色帽子（黑色）</strong>：</p>
+<p>我们需要客观看待这门课程设计过程中可能遇到的各种问题和风险，确保提前做好准备以避免或应对。以下是一些可能出现的挑战和潜在问题：</p>
+<ol>
+<li><p><em><strong>知识深度和广度的平衡</strong></em>：</p>
+<ol>
+<li>对非AI背景的程序员来说，如何在有限的课程时间内，既讲解足够的理论知识又能进行充分的实践，可能是一个挑战。如果内容过多，学员可能会感到疲惫和无所适从。</li>
+</ol>
+</li>
+<li><p><em><strong>学习曲线陡峭</strong></em>：</p>
+<ol>
+<li>人工智能和大语言模型涉及到较为复杂的数学和算法。这对于没有相关背景的程序员来说，可能会遇到学习上的困难，导致学习积极性和效果下降。</li>
+</ol>
+</li>
+<li><p><em><strong>技术更新速度快</strong></em>：</p>
+<ol>
+<li>AI领域的发展速度极快，新技术、新方法和新工具层出不穷。课程内容如果设计得不够灵活，很容易过时，影响学习效果。</li>
+</ol>
+</li>
+<li><p><em><strong>实践和理论的脱节</strong></em>：</p>
+<ol>
+<li>由于大语言模型的应用需要大量的计算资源，非AI背景的学员可能在实践部分难以获得足够的资源，使得他们无法体验到真实的应用效果。</li>
+</ol>
+</li>
+<li><p><em><strong>心理障碍</strong></em>：</p>
+<ol>
+<li>有些学员可能会因为对AI的陌生感和潜在的难度而自我设限，导致学习的过程中产生心理上的抵触和逃避。</li>
+</ol>
+</li>
+<li><p><em><strong>时间管理与工作负担</strong></em>：</p>
+<ol>
+<li>作为程序员，他们可能已经有较高的工作负担，额外学习一门新的高强度课程，需要很好的时间管理和精力分配，否则容易产生疲劳和压力。</li>
+</ol>
+</li>
+</ol>
+<p>为了成功设计并实施这门课程，我们必须提前识别和准备应对这些挑战。接下来，请黄色帽子提出一些乐观和积极的解决方案和机会。</p>
+<p>assistant &gt; <strong>黄色帽子（黄色）</strong>：</p>
+<p>好的，我来看看我们可以从积极的角度来看待并解决这些问题。这门AI大语言模型课程实际上充满了机会和潜在的好处：</p>
+<ol>
+<li><p><em><strong>激发兴趣和职业发展</strong></em>：</p>
+<ol>
+<li>通过学习AI和大语言模型，程序员们可以极大地扩展自己的技能集，这不仅有助于他们的职业发展，还能让他们在工作中更加得心应手。</li>
+<li>兴趣是最好的老师，前沿的技术和创新性的应用能够极大地激发学员的学习兴趣。</li>
+</ol>
+</li>
+<li><p><em><strong>课程结构设计灵活</strong></em>：</p>
+<ol>
+<li>课程可以采用模块化设计，分成多个相对独立的部分，如基础理论、工具使用、实际案例和高级应用，这样学员能根据自身情况灵活选学，避免知识点过于集中。</li>
+<li>包含循序渐进的项目，慢慢增加难度，帮助学员逐步掌握基础知识和实际操作。</li>
+</ol>
+</li>
+<li><p><em><strong>丰富的实践机会</strong></em>：</p>
+<ol>
+<li>采用在线实验平台或者云服务，让学员能够在没有硬件限制的条件下，进行大语言模型的实验和训练。</li>
+<li>提供实际案例和项目作业，如构建一个简单的聊天机器人、文本分类或生成任务，通过动手实践巩固所学知识。</li>
+</ol>
+</li>
+<li><p><em><strong>社区和支持</strong></em>：</p>
+<ol>
+<li>课程可以配备在线社区或论坛，提供学员间的交流平台，分享学习心得和解决疑难问题。</li>
+<li>定期举行线上或线下的研讨会、工作坊，邀请行业专家进行讲座和互动，提高学员的参与感和成就感。</li>
+</ol>
+</li>
+<li><p><em><strong>持续更新</strong></em>：</p>
+<ol>
+<li>制定课程内容的定期更新计划，跟踪最新的技术发展，确保教学材料的前沿性和适用性。</li>
+<li>与业界企业和研究机构合作，引入最新的研究成果和应用案例。</li>
+</ol>
+</li>
+<li><p><em><strong>设置阶段性评价和反馈</strong></em>：</p>
+<ol>
+<li>课程中设置阶段性的评价和反馈机制，帮助学员了解自己的学习进度，并及时进行调整，确保学习效果。</li>
+<li>鼓励学员提交课程反馈，不断改进和提升课程质量。</li>
+</ol>
+</li>
+</ol>
+<p>总的来说，这门课程有潜力成为非AI背景程序员进入AI领域的重要桥梁，只要我们仔细设计，提供足够的支持和激励，完全可以帮助学员成功掌握大语言模型的相关知识和技能。接下来请绿色帽子提出一些创新的想法和改进的建议。</p>
+<p>assistant &gt; <strong>绿色帽子（绿色）</strong>：</p>
+<p>现在，我将提出一些创造性和创新性的想法，进一步改进和丰富这门课程，让它更加有趣、有效和具有吸引力。</p>
+<ol>
+<li><p><em><strong>互动式学习平台</strong></em>：</p>
+<ol>
+<li>设计一个互动式的在线学习平台，其中包括实时代码运行、即时反馈、可视化工具等。学员可以通过平台进行实时编程实验，得到即时的反馈和指导。</li>
+</ol>
+</li>
+<li><p><em><strong>游戏化学习</strong></em>：</p>
+<ol>
+<li>将课程内容游戏化，比如通过积分、徽章、排行榜等方式激励学员增加学习乐趣。可以设计一些小挑战和任务，完成后获得奖励，增加课程的互动性和趣味性。</li>
+</ol>
+</li>
+<li><p><em><strong>虚拟助手和AI教练</strong></em>：</p>
+<ol>
+<li>创建一个由大语言模型驱动的虚拟助手或AI教练，帮助学员解答问题、提供提示和建议。这不仅能提供及时的帮助，还能让学员亲身体验大语言模型的应用。</li>
+</ol>
+</li>
+<li><p><em><strong>跨学科结合</strong></em>：</p>
+<ol>
+<li>引入跨学科的应用案例，如医学、金融、艺术等领域的大语言模型应用，展示其广泛的应用前景，激发学员的兴趣。</li>
+<li>例如，通过AI创作的艺术作品、金融数据分析等案例展示，让学员更直观地认识到AI的潜力和实际应用。</li>
+</ol>
+</li>
+<li><p><em><strong>团队合作项目</strong></em>：</p>
+<ol>
+<li>设计团队合作项目，让学员组队完成一个复杂的大语言模型应用。这不仅培养协作精神，还能让学员互相学习，共同进步。</li>
+<li>可以引入赛制，类似黑客马拉松，激发创意和竞争精神。</li>
+</ol>
+</li>
+<li><p><em><strong>个性化学习路径</strong></em>：</p>
+<ol>
+<li>利用AI技术个性化教学，根据学员的学习进度和掌握情况，动态调整学习内容和难度，提供量身定制的学习计划。</li>
+<li>给出学习路径建议，推荐适合学员的扩展阅读和实践项目。</li>
+</ol>
+</li>
+<li><p><em><strong>开放资源和跨平台学习</strong></em>：</p>
+<ol>
+<li>提供开放的学习资源，如公开课、科研论文、开源项目等，让学员能够自由探索和学习。</li>
+<li>设计灵活的跨平台学习模式，比如移动端应用，让学员随时随地进行学习和复习。</li>
+</ol>
+</li>
+<li><p><em><strong>行业专家讲座和互动沙龙</strong></em>：</p>
+<ol>
+<li>定期邀请行业专家进行在线讲座，分享最新的研究成果和实践经验。</li>
+<li>举办线上互动沙龙，让学员有机会与专家直接交流，激发学术和实践灵感。</li>
+</ol>
+</li>
+</ol>
+<p>这些创意和创新方法可以使这门AI大语言模型课程更加丰富多彩，提高学员的学习体验和实际应用能力。最终目标是让学员不只是学习知识，而是激发他们对AI的兴趣，并能够在实践中灵活应用。这就是我作为绿色帽子的贡献，现在请蓝色帽子总结并提出下一步的行动计划。</p>
+<p>assistant &gt; <strong>蓝色帽子（蓝色）总结</strong>：</p>
+<p>感谢每位思考帽的贡献，通过大家的讨论，我们已经对如何为非AI背景的程序员设计一门AI大语言模型课程有了全面而深入的认识。以下是我们讨论的主要观点和下一步的行动计划：</p>
+<ol>
+<li><p><em><strong>白色帽子</strong></em>：我们明确了目标受众的特点和这门课程应包含的基础内容，包括理论基础、工具和框架介绍、实际应用和道德隐私问题。</p>
+</li>
+<li><p><em><strong>红色帽子</strong></em>：强调了学员的情感和心理因素，如兴趣、焦虑、成就感和实用性，提醒我们在课程设计中要考虑学员的心理需求并提供支持。</p>
+</li>
+<li><p><em><strong>黑色帽子</strong></em>：指明了可能的挑战，包括知识深度的平衡、学习曲线、技术更新速度、实践和理论的脱节、心理障碍和时间管理问题。这些都是我们需要重点关注并处理的。</p>
+</li>
+<li><p><em><strong>黄色帽子</strong></em>：提出了解决方案和乐观预期，如课程的模块化设计、丰富的实践机会、提供社区支持和持续更新内容，确保课程有效且吸引人。</p>
+</li>
+<li><p><em><strong>绿色帽子</strong></em>：带来了许多创新的建议，比如互动式平台、游戏化学习、跨学科结合、团队项目、个性化学习路径、开放资源以及行业专家讲座等。所有这些创意都可以极大地提升课程的吸引力和效果。</p>
+</li>
+</ol>
+<p><em><strong>下一步行动计划</strong></em>：</p>
+<ol>
+<li><p><em><strong>确定课程结构</strong></em>：根据讨论内容设计课程结构，分模块安排教学内容，确保基础理论、工具和实践环节的平衡。</p>
+</li>
+<li><p><em><strong>开发互动式平台</strong></em>：创建或集成一个互动式学习平台，支持实时编程和反馈，提升学员的实际操作体验。</p>
+</li>
+<li><p><em><strong>推出试点课程</strong></em>：先推出一个试点课程版本，包含一部分核心内容和实践环节，邀请一批学员进行测试。</p>
+</li>
+<li><p><em><strong>收集反馈</strong></em>：通过调研和反馈机制，收集试点学员的反馈，了解课程的优缺点，并进行相应调整。</p>
+</li>
+<li><p><em><strong>完善和扩展</strong></em>：根据反馈完善课程内容，并持续更新最新的技术和案例，同时开发更多的创新教学方式。</p>
+</li>
+<li><p><em><strong>推广与支持</strong></em>：通过多种渠道推广课程，并建立一个支持社区，定期举行线上活动，如专家讲座、互动沙龙等，增加学员的参与感和学习深度。</p>
+</li>
+</ol>
+<p>通过以上行动计划，我们将这门面向非AI背景程序员的AI大语言模型课程打造成一门高质量、实践性强、贴近学员需求的课程。如果没有其他问题，这次讨论就到这里了。感谢大家的参与！</p>
+</blockquote>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 清理实验环境</span><br><span class="line">for _<span class="punctuation">,</span> assistant in existing_assistants.items()<span class="punctuation">:</span></span><br><span class="line">    client.beta.assistants.delete(assistant.id)</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-总结"><a href="#7-总结" class="headerlink" title="7 总结"></a>7 总结</h2><img src="/2025/03/26/05-Assistant-API/1742963388229-1.png" class="">
+
+<h3 id="7-1-技术选型参考"><a href="#7-1-技术选型参考" class="headerlink" title="7.1 技术选型参考"></a>7.1 技术选型参考</h3><p><strong>GPTs 现状：</strong></p>
+<ol>
+<li>界面不可定制，不能集成进自己的产品</li>
+<li>只有 ChatGPT Plus&#x2F;Team&#x2F;Enterprise 用户才能访问</li>
+<li>未来开发者可以根据使用量获得报酬，北美先开始</li>
+<li>承诺会推出 Team&#x2F;Enterprise 版的组织内部专属 GPTs</li>
+</ol>
+<p><strong>适合使用 Assistants</strong> <strong>API</strong> <strong>的场景：</strong></p>
+<ol>
+<li>定制界面，或和自己的产品集成</li>
+<li>需要传大量文件</li>
+<li>服务国外用户，或国内 B 端客户</li>
+<li>数据保密性要求不高</li>
+<li>不差钱</li>
+</ol>
+<p><strong>适合使用原生</strong> <strong>API</strong> <strong>的场景：</strong></p>
+<ol>
+<li>需要极致调优</li>
+<li>追求性价比</li>
+<li>服务国外用户，或国内 B 端客户</li>
+<li>数据保密性要求不高</li>
+</ol>
+<p><strong>适合使用国产或开源<strong><strong>大模型</strong></strong>的场景：</strong></p>
+<ol>
+<li>服务国内用户</li>
+<li>数据保密性要求高</li>
+<li>压缩长期成本</li>
+<li>需要极致调优</li>
+</ol>
+<h3 id="7-2-类似-Assistants-API-的国产模型"><a href="#7-2-类似-Assistants-API-的国产模型" class="headerlink" title="7.2 类似 Assistants API 的国产模型"></a>7.2 类似 Assistants API 的国产模型</h3><ul>
+<li>百川：<a target="_blank" rel="noopener" href="https://platform.baichuan-ai.com/docs/assistants-overview">https://platform.baichuan-ai.com/docs/assistants-overview</a></li>
+<li>Minimax：<a target="_blank" rel="noopener" href="https://platform.minimaxi.com/document/lbYEaWKRCr5f7EVikjFJjSDK?key=6671906aa427f0c8a570166b">https://platform.minimaxi.com/document/lbYEaWKRCr5f7EVikjFJjSDK?key=6671906aa427f0c8a570166b</a></li>
+<li>智谱 GLM-4-AllTools：<a target="_blank" rel="noopener" href="https://open.bigmodel.cn/dev/api#glm-4-alltools">https://open.bigmodel.cn/dev/api#glm-4-alltools</a></li>
+<li>讯飞星火助手：<a target="_blank" rel="noopener" href="https://www.xfyun.cn/doc/spark/SparkAssistantAPI.html">https://www.xfyun.cn/doc/spark/SparkAssistantAPI.html</a></li>
+<li>阿里通义千问：<a target="_blank" rel="noopener" href="https://help.aliyun.com/zh/model-studio/developer-reference/overview">https://help.aliyun.com/zh/model-studio/developer-reference/overview</a></li>
+</ul>
+<h3 id="7-3-思考题"><a href="#7-3-思考题" class="headerlink" title="7.3 思考题"></a>7.3 思考题</h3><p><strong>思考：</strong> 进一步理解 run 与 thread 的设计</p>
+<ul>
+<li>抛开 Assistants API，假设你要开发任意一个多轮对话的 AI 机器人</li>
+<li>从架构设计的角度，应该怎么维护用户、对话历史、对话引擎、对话服务？</li>
+</ul>
+<img src="/2025/03/26/05-Assistant-API/1742963388229-2.png" class="">
+
+<p><strong>其它</strong></p>
+<p>小知识点：</p>
+<ol>
+<li>Annotations 获取参考资料地址：<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/assistants/how-it-works/message-annotations">https://platform.openai.com/docs/assistants/how-it-works/message-annotations</a></li>
+<li>创建 thread 时立即执行：<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/runs/createThreadAndRun">https://platform.openai.com/docs/api-reference/runs/createThreadAndRun</a></li>
+<li>Run 的状态管理 (run steps）: <a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/run-steps">https://platform.openai.com/docs/api-reference/run-steps</a></li>
+</ol>
+<p>官方文档：</p>
+<ol>
+<li>Guide: <a target="_blank" rel="noopener" href="https://platform.openai.com/docs/assistants/overview">https://platform.openai.com/docs/assistants/overview</a></li>
+<li>API Reference: <a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/assistants">https://platform.openai.com/docs/api-reference/assistants</a></li>
+</ol>
+
+                
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/LLM/">
+                                    <span class="chip bg-color">LLM</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
+            <div class="card">
+                <a href="/2025/03/26/05-Assistant-API/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="05-Assistant API">
+                        
+                        <span class="card-title">05-Assistant API</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-03-26
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Zhangyan
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/LLM/">
+                        <span class="chip bg-color">LLM</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2025/03/25/04-RAG-Embedding/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="04-RAG Embedding">
+                        
+                        <span class="card-title">04-RAG Embedding</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-03-25
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Zhangyan
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/LLM/">
+                        <span class="chip bg-color">LLM</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('4'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2024-2025</span>
+            
+            <a href="/about" target="_blank">Zhangyan</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;Total visits:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;Total visitors:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/TangCharlotte/AI-Classes" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:485480375@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=485480375" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 485480375" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+    <a href="https://www.zhihu.com/people/bu-yan-92-91" class="tooltipped" target="_blank" data-tooltip="关注我的知乎: https://www.zhihu.com/people/bu-yan-92-91" data-position="top" data-delay="50">
+        <i class="fab fa-zhihu1">知</i>
+    </a>
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+    
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
