@@ -299,7 +299,7 @@ OutputParser：解析输出
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2025-03-26
+                    2025-04-05
                 </div>
                 
 
@@ -356,7 +356,7 @@ OutputParser：解析输出
 </li>
 <li>Callbacks</li>
 </ol>
-<img src="/2025/03/26/07-LangChain/1742985220520-5.png" class="">
+<img src="/2025/04/05/07-LangChain/1742985220520-5.png" class="">
 
 <h3 id="文档（以-Python-版为例）"><a href="#文档（以-Python-版为例）" class="headerlink" title="文档（以 Python 版为例）"></a>文档（以 Python 版为例）</h3><ul>
 <li>功能模块：<a target="_blank" rel="noopener" href="https://python.langchain.com/docs/get_started/introduction">https://python.langchain.com/docs/get_started/introduction</a></li>
@@ -386,7 +386,7 @@ OutputParser：解析输出
 <p>[INFO][2024-08-20 12:16:43.110] oauth.py:243 [t:140521157437248]: sucessfully refresh access_token</p>
 <p>您好，我是文心一言，英文名是ERNIE Bot。我能够与人对话互动，回答问题，协助创作，高效便捷地帮助人们获取信息、知识和灵感。</p>
 </blockquote>
-<h3 id="2-2-模型的输入与输出"><a href="#2-2-模型的输入与输出" class="headerlink" title="2.2 模型的输入与输出"></a>2.2 模型的输入与输出</h3><img src="/2025/03/26/07-LangChain/1742985220519-1.jpeg" class="">
+<h3 id="2-2-模型的输入与输出"><a href="#2-2-模型的输入与输出" class="headerlink" title="2.2 模型的输入与输出"></a>2.2 模型的输入与输出</h3><img src="/2025/04/05/07-LangChain/1742985220519-1.jpeg" class="">
 
 <h4 id="2-2-1-Prompt-模板封装"><a href="#2-2-1-Prompt-模板封装" class="headerlink" title="2.2.1 Prompt 模板封装"></a>2.2.1 Prompt 模板封装</h4><ol>
 <li>PromptTemplate 可以在模板中自定义变量</li>
@@ -508,7 +508,7 @@ OutputParser：解析输出
 <li>LangChain 提供了 Function Calling 的封装</li>
 <li>上述模型属于 LangChain 中较为实用的部分</li>
 </ol>
-<h2 id="3-数据连接封装"><a href="#3-数据连接封装" class="headerlink" title="3 数据连接封装"></a>3 数据连接封装</h2><img src="/2025/03/26/07-LangChain/1742985220519-2.jpeg" class="">
+<h2 id="3-数据连接封装"><a href="#3-数据连接封装" class="headerlink" title="3 数据连接封装"></a>3 数据连接封装</h2><img src="/2025/04/05/07-LangChain/1742985220519-2.jpeg" class="">
 
 <h3 id="3-1-文档加载器：Document-Loaders"><a href="#3-1-文档加载器：Document-Loaders" class="headerlink" title="3.1 文档加载器：Document Loaders"></a>3.1 文档加载器：Document Loaders</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#!pip install pymupdf</span><br><span class="line"></span><br><span class="line">from langchain_community.document_loaders <span class="keyword">import</span> PyMuPDFLoader</span><br><span class="line"></span><br><span class="line">loader = PyMuPDFLoader(<span class="string">&quot;llama2.pdf&quot;</span>)</span><br><span class="line">pages = loader.load_and_split()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(pages[<span class="number">0</span>].page_content)</span><br></pre></td></tr></table></figure>
 
@@ -751,7 +751,7 @@ OutputParser：解析输出
 </ol>
 <p>更多例子：<a target="_blank" rel="noopener" href="https://python.langchain.com/v0.2/docs/how_to/lcel_cheatsheet/">https://python.langchain.com/v0.2/docs/how_to/lcel_cheatsheet/</a></p>
 <h2 id="6-智能体架构：Agent"><a href="#6-智能体架构：Agent" class="headerlink" title="6 智能体架构：Agent"></a>6 智能体架构：Agent</h2><h3 id="6-1-什么是智能体（Agent）"><a href="#6-1-什么是智能体（Agent）" class="headerlink" title="6.1 什么是智能体（Agent）"></a>6.1 什么是智能体（Agent）</h3><p>将大语言模型作为一个推理引擎。给定一个任务，智能体自动生成完成任务所需的步骤，执行相应动作（例如选择并调用工具），直到任务完成。</p>
-<img src="/2025/03/26/07-LangChain/1742985220519-3.png" class="">
+<img src="/2025/04/05/07-LangChain/1742985220519-3.png" class="">
 
 <h3 id="6-2-先定义一些工具：Tools"><a href="#6-2-先定义一些工具：Tools" class="headerlink" title="6.2 先定义一些工具：Tools"></a>6.2 先定义一些工具：Tools</h3><ul>
 <li>可以是一个函数或三方 API</li>
@@ -762,7 +762,7 @@ OutputParser：解析输出
 <p>需要注册 <a target="_blank" rel="noopener" href="https://serpapi.com/">SerpAPI</a>（限量免费），并将 <code>SERPAPI_API_KEY</code> 写在环境变量中</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> calendar</span><br><span class="line"><span class="keyword">import</span> dateutil.parser <span class="keyword">as</span> parser</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> date</span><br><span class="line"></span><br><span class="line"><span class="comment"># 自定义工具</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@tool(<span class="params"><span class="string">&quot;weekday&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">weekday</span>(<span class="params">date_str: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Convert date to weekday name&quot;&quot;&quot;</span></span><br><span class="line">    d = parser.parse(date_str)</span><br><span class="line">    <span class="keyword">return</span> calendar.day_name[d.weekday()]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tools += [weekday]</span><br></pre></td></tr></table></figure>
 
-<h3 id="6-3-智能体类型：ReAct"><a href="#6-3-智能体类型：ReAct" class="headerlink" title="6.3 智能体类型：ReAct"></a>6.3 智能体类型：ReAct</h3><img src="/2025/03/26/07-LangChain/1742985220520-4.png" class="">
+<h3 id="6-3-智能体类型：ReAct"><a href="#6-3-智能体类型：ReAct" class="headerlink" title="6.3 智能体类型：ReAct"></a>6.3 智能体类型：ReAct</h3><img src="/2025/04/05/07-LangChain/1742985220520-4.png" class="">
 
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># !pip install google-search-results</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># !pip install --upgrade langchainhub</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> langchain <span class="keyword">import</span> hub</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载一个现有的 Prompt 模板</span></span><br><span class="line">react_prompt = hub.pull(<span class="string">&quot;hwchase17/react&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(react_prompt.template)</span><br></pre></td></tr></table></figure>
 
@@ -997,7 +997,7 @@ OutputParser：解析输出
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
             <div class="card">
-                <a href="/2025/04/01/08-LLM-Tool/">
+                <a href="/2025/04/06/08-LLM-Tool/">
                     <div class="card-image">
                         
                         
@@ -1014,7 +1014,7 @@ OutputParser：解析输出
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2025-04-01
+                            <i class="far fa-clock fa-fw icon-date"></i>2025-04-06
                         </span>
                         <span class="publish-author">
                             
