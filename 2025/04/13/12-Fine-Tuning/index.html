@@ -1,0 +1,1294 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="12-Fine-Tuning, Blog">
+    <meta name="description" content="面向初学者的深度学习课：
+
+吴恩达《人人 AI》(特别通俗) https://www.zhihu.com/education/video-course/1556316449043668992
+李沐的深度学习课 (稍微深一点) https:/">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>12-Fine-Tuning | Blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/reward.css">
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Index</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>Contact</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Blog</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Index
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			Contact
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/TangCharlotte/AI-Classes" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/TangCharlotte/AI-Classes" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">12-Fine-Tuning</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/LLM/">
+                                <span class="chip bg-color">LLM</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2025-04-13
+                </div>
+                
+
+                
+
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+        <!-- 代码块折行 -->
+        <style type="text/css">
+            code[class*="language-"], pre[class*="language-"] { white-space: pre-wrap !important; }
+        </style>
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p><strong>面向初学者的深度学习课：</strong></p>
+<ol>
+<li>吴恩达《人人 AI》(特别通俗) <a target="_blank" rel="noopener" href="https://www.zhihu.com/education/video-course/1556316449043668992">https://www.zhihu.com/education/video-course/1556316449043668992</a></li>
+<li>李沐的深度学习课 (稍微深一点) <a target="_blank" rel="noopener" href="https://www.zhihu.com/education/video-course/1647604835598092705">https://www.zhihu.com/education/video-course/1647604835598092705</a></li>
+</ol>
+<p>在这个更广泛的定位上，已经有很多优秀的课程。本课程只针对大模型微调的知识基础展开。</p>
+<h2 id="什么时候需要-Fine-Tuning"><a href="#什么时候需要-Fine-Tuning" class="headerlink" title="什么时候需要 Fine-Tuning"></a>什么时候需要 Fine-Tuning</h2><ol>
+<li>有私有部署的需求</li>
+<li>开源模型原生的能力不满足业务需求</li>
+</ol>
+<p><strong>例子</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">http<span class="punctuation">:</span><span class="comment">//localhost:6006/</span></span><br><span class="line">订酒店机器人</span><br><span class="line"><span class="punctuation">[</span><span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;您好，我要找一家舒适型酒店住宿，然后希望酒店提供暖气与行李寄存。&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;search&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;facilities&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;暖气&quot;</span><span class="punctuation">,</span> <span class="string">&quot;行李寄存&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;舒适型&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;return&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;records&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span><span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;北京香江戴斯酒店&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;舒适型&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;address&quot;</span><span class="punctuation">:</span> <span class="string">&quot;北京东城区南河沿大街南湾子胡同1号&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;subway&quot;</span><span class="punctuation">:</span> <span class="string">&quot;天安门东地铁站B口&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;phone&quot;</span><span class="punctuation">:</span> <span class="string">&quot;010-65127788&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;facilities&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;酒店各处提供wifi&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;国际长途电话&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;吹风机&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;24小时热水&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;暖气&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;西式餐厅&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;中式餐厅&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;残疾人设施&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;会议室&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;无烟房&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;商务中心&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;早餐服务&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;接机服务&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;接待外宾&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;洗衣服务&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;行李寄存&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;租车&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;叫醒服务&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;price&quot;</span><span class="punctuation">:</span> <span class="number">328.0</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;rating&quot;</span><span class="punctuation">:</span> <span class="number">4.2</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;hotel_id&quot;</span><span class="punctuation">:</span> <span class="number">10</span><span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;assistant&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;那推荐您北京香江戴斯酒店，符合您的全部住宿要求并且价格又比较合适的酒店。&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这家酒店的价格是多少？&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;assistant&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这家酒店的价格是每晚328.0元。&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;好的，那就预订北京香江戴斯酒店吧！&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;assistant&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;好的，祝您入住愉快！&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="1-举例"><a href="#1-举例" class="headerlink" title="1 举例"></a>1 举例</h2><p>上手操作一个简单的例子：</p>
+<ul>
+<li><strong>情感分类</strong><ul>
+<li>输入：电影评论</li>
+<li>输出：标签 [‘neg’,’pos’]</li>
+<li>数据源：<a target="_blank" rel="noopener" href="https://huggingface.co/datasets/rotten_tomatoes">https://huggingface.co/datasets/rotten_tomatoes</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="1-1-模型训练工具：Hugging-Face"><a href="#1-1-模型训练工具：Hugging-Face" class="headerlink" title="1.1 模型训练工具：Hugging Face"></a>1.1 模型训练<strong>工具</strong>：Hugging Face</h3><ul>
+<li>官网：<a target="_blank" rel="noopener" href="http://www.huggingface.co/">http://www.huggingface.co</a></li>
+<li>相当于面向 NLP 模型的 Github</li>
+<li>尤其基于 transformer 的开源模型非常全</li>
+<li>封装了模型、数据集、训练器等，使模型的下载、使用、训练都非常方便</li>
+</ul>
+<p><strong>安装依赖</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># pip安装</span><br><span class="line">pip install transformers # 安装最新的版本</span><br><span class="line">pip install transformers == <span class="number">4.30</span> # 安装指定版本# conda安装</span><br><span class="line">conda install -c huggingface transformers  # 只<span class="number">4.0</span>以后的版本</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-操作流程"><a href="#1-2-操作流程" class="headerlink" title="1.2 操作流程"></a>1.2 操作流程</h3><img src="/2025/04/13/12-Fine-Tuning/1744595250344-14.png" class="">
+
+<p><strong>注意：</strong></p>
+<ul>
+<li>以下的代码，都不要在Jupyter笔记上直接运行，会死机！！</li>
+<li>请下载左边的脚本<code>experiments/tiny/train.py</code>，在实验服务器上运行。</li>
+</ul>
+<ol>
+<li>导入相关库</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">from</span> datasets <span class="keyword">import</span> load_dataset</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer, AutoModel</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForCausalLM</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> TrainingArguments, Seq2SeqTrainingArguments</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> Trainer, Seq2SeqTrainer</span><br><span class="line"><span class="keyword">import</span> transformers</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> DataCollatorWithPadding</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> TextGenerationPipeline</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> os, re</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>加载<strong>数据集</strong></li>
+</ol>
+<p>通过 HuggingFace，可以指定数据集名称，运行时自动下载</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 数据集名称</span></span><br><span class="line">DATASET_NAME = <span class="string">&quot;rotten_tomatoes&quot;</span><span class="comment"># 加载数据集</span></span><br><span class="line">raw_datasets = load_dataset(DATASET_NAME)<span class="comment"># 训练集</span></span><br><span class="line">raw_train_dataset = raw_datasets[<span class="string">&quot;train&quot;</span>]<span class="comment"># 验证集</span></span><br><span class="line">raw_valid_dataset = raw_datasets[<span class="string">&quot;validation&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>加载<strong>模型</strong></li>
+</ol>
+<p>通过 HuggingFace，可以指定模型名称，运行时自动下载</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 模型名称</span><br><span class="line"><span class="variable constant_">MODEL_NAME</span> = <span class="string">&quot;gpt2&quot;</span># 加载模型</span><br><span class="line">model = <span class="title class_">AutoModelForCausalLM</span>.<span class="title function_">from_pretrained</span>(<span class="variable constant_">MODEL_NAME</span>,trust_remote_code=<span class="title class_">True</span>)</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>加载 <strong>Tokenizer</strong></li>
+</ol>
+<p>通过 HuggingFace，可以指定模型名称，运行时自动下载对应 Tokenizer</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 加载tokenizer</span></span><br><span class="line">tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME,trust_remote_code=<span class="literal">True</span>)</span><br><span class="line">tokenizer.add_special_tokens(&#123;<span class="string">&#x27;pad_token&#x27;</span>: <span class="string">&#x27;[PAD]&#x27;</span>&#125;)</span><br><span class="line">tokenizer.pad_token_id = <span class="number">0</span></span><br><span class="line"><span class="comment"># 其它相关公共变量赋值# 设置随机种子：同个种子的随机序列可复现</span></span><br><span class="line">transformers.set_seed(<span class="number">42</span>)<span class="comment"># 标签集</span></span><br><span class="line">named_labels = [<span class="string">&#x27;neg&#x27;</span>,<span class="string">&#x27;pos&#x27;</span>]<span class="comment"># 标签转 token_id</span></span><br><span class="line">label_ids = [</span><br><span class="line">    tokenizer(named_labels[i],add_special_tokens=<span class="literal">False</span>)[<span class="string">&quot;input_ids&quot;</span>][<span class="number">0</span>]<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(named_labels))]</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>处理数据集</strong>：转成模型接受的输入格式<ol>
+<li>模型的输入：&lt;提示词…&gt;&lt;输入文本&gt;&lt;提示词…&gt;</li>
+<li>模型的输出：&lt;输出文本&gt;</li>
+<li>文本转 Token IDs：<PROMPT_TOKEN_IDS><INPUT TOKEN IDS><PROMPT_TOKEN_IDS><OUTPUT TOKEN IDS></li>
+<li>PAD 成相等长度：<ul>
+<li><PROMPT_TOKEN_IDS>&lt;INPUT 1.1&gt;&lt;INPUT 1.2&gt;…<PROMPT_TOKEN_IDS><OUTPUT TOKEN IDS><PAD>…<PAD></li>
+<li><PROMPT_TOKEN_IDS>&lt;INPUT 2.1&gt;&lt;INPUT 2.2&gt;…<PROMPT_TOKEN_IDS><OUTPUT TOKEN IDS><PAD>…<PAD></li>
+</ul>
+</li>
+<li>标识出不参与 Attention 计算的 Tokens（Attention Mask）</li>
+<li>标识出参与 Loss 计算的 Tokens (只有输出 Token 参与 Loss 计算)<ul>
+<li>&lt;-100&gt;&lt;-100&gt;…<OUTPUT TOKEN IDS>&lt;-100&gt;…&lt;-100&gt;</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<img src="/2025/04/13/12-Fine-Tuning/1744595250341-1.png" class="">
+
+<p><strong>划重点：</strong> 实际带入模型计算的是三个矩阵（tensor）</p>
+<ol>
+<li>经过拼接和 PADDING 的输入输出 Token 序列</li>
+<li>Attention Mask 序列，标识出 1 中的有效 Tokens（用于 Attention 计算）</li>
+<li>Labels 序列，标识出 1 中作为输出的 Tokens（用于 Loss 计算）</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">MAX_LEN=<span class="number">512</span>   <span class="comment">#最大序列长度（输入+输出）</span></span><br><span class="line">DATA_BODY_KEY = <span class="string">&quot;text&quot;</span> <span class="comment"># 数据集中的输入字段名</span></span><br><span class="line">DATA_LABEL_KEY = <span class="string">&quot;label&quot;</span> <span class="comment">#数据集中输出字段名# 定义数据处理函数，把原始数据转成input_ids, attention_mask, labelsdef process_fn(examples):</span></span><br><span class="line">    model_inputs = &#123;<span class="string">&quot;input_ids&quot;</span>: [],<span class="string">&quot;attention_mask&quot;</span>: [],<span class="string">&quot;labels&quot;</span>: [],&#125;<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(examples[DATA_BODY_KEY])):</span><br><span class="line">        <span class="comment"># 自定义 Prompt 格式</span></span><br><span class="line">        prompt = <span class="string">f&quot;<span class="subst">&#123;examples[DATA_BODY_KEY][i]&#125;</span> Sentiment: &quot;</span></span><br><span class="line">        inputs = tokenizer(prompt, add_special_tokens=<span class="literal">False</span>)</span><br><span class="line">        label = label_ids[examples[DATA_LABEL_KEY][i]]</span><br><span class="line">        input_ids = inputs[<span class="string">&quot;input_ids&quot;</span>] + [label]</span><br><span class="line"></span><br><span class="line">        raw_len = <span class="built_in">len</span>(input_ids)<span class="keyword">if</span> raw_len &gt;= MAX_LEN:</span><br><span class="line">            input_ids = input_ids[-MAX_LEN:]</span><br><span class="line">            attention_mask = [<span class="number">1</span>] * MAX_LEN</span><br><span class="line">            labels = [-<span class="number">100</span>]*(MAX_LEN - <span class="number">1</span>) + [label]<span class="keyword">else</span>:</span><br><span class="line">            input_ids = input_ids + [tokenizer.pad_token_id] * (MAX_LEN - raw_len)</span><br><span class="line">            attention_mask = [<span class="number">1</span>] * raw_len + [<span class="number">0</span>] * (MAX_LEN - raw_len)</span><br><span class="line">            labels = [-<span class="number">100</span>]*(raw_len-<span class="number">1</span>) + [label] + [-<span class="number">100</span>] * (MAX_LEN - raw_len)</span><br><span class="line">        model_inputs[<span class="string">&quot;input_ids&quot;</span>].append(input_ids)</span><br><span class="line">        model_inputs[<span class="string">&quot;attention_mask&quot;</span>].append(attention_mask)</span><br><span class="line">        model_inputs[<span class="string">&quot;labels&quot;</span>].append(labels)<span class="keyword">return</span> model_inputs</span><br><span class="line">        </span><br><span class="line">    <span class="comment"># 处理训练数据集</span></span><br><span class="line">tokenized_train_dataset = raw_train_dataset.<span class="built_in">map</span>(</span><br><span class="line">    process_fn,</span><br><span class="line">    batched=<span class="literal">True</span>,</span><br><span class="line">    remove_columns=raw_train_dataset.columns,</span><br><span class="line">    desc=<span class="string">&quot;Running tokenizer on train dataset&quot;</span>,)<span class="comment"># 处理验证数据集</span></span><br><span class="line">tokenized_valid_dataset = raw_valid_dataset.<span class="built_in">map</span>(</span><br><span class="line">    process_fn,</span><br><span class="line">    batched=<span class="literal">True</span>,</span><br><span class="line">    remove_columns=raw_valid_dataset.columns,</span><br><span class="line">    desc=<span class="string">&quot;Running tokenizer on validation dataset&quot;</span>,)</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>定义<strong>数据规整器</strong>：训练时自动将数据拆分成 <strong>Batch</strong></li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 定义数据校准器（自动生成batch）</span><br><span class="line">collater = <span class="title class_">DataCollatorWithPadding</span>(</span><br><span class="line">    tokenizer=tokenizer, return_tensors=<span class="string">&quot;pt&quot;</span>,)</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>定义训练 <strong>超参</strong>：比如<strong>学习率</strong></li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">LR=<span class="number">2e-5</span>         <span class="comment"># 学习率</span></span><br><span class="line">BATCH_SIZE=<span class="number">8</span>    <span class="comment"># Batch大小</span></span><br><span class="line">INTERVAL=<span class="number">100</span>    <span class="comment"># 每多少步打一次 log / 做一次 eval# 定义训练参数</span></span><br><span class="line">training_args = TrainingArguments(</span><br><span class="line">    output_dir=<span class="string">&quot;./output&quot;</span>,              <span class="comment"># checkpoint保存路径</span></span><br><span class="line">    evaluation_strategy=<span class="string">&quot;steps&quot;</span>,        <span class="comment"># 按步数计算eval频率</span></span><br><span class="line">    overwrite_output_dir=<span class="literal">True</span>,</span><br><span class="line">    num_train_epochs=<span class="number">1</span>,                 <span class="comment"># 训练epoch数</span></span><br><span class="line">    per_device_train_batch_size=BATCH_SIZE,     <span class="comment"># 每张卡的batch大小</span></span><br><span class="line">    gradient_accumulation_steps=<span class="number">1</span>,              <span class="comment"># 累加几个step做一次参数更新</span></span><br><span class="line">    per_device_eval_batch_size=BATCH_SIZE,      <span class="comment"># evaluation batch size</span></span><br><span class="line">    eval_steps=INTERVAL,                <span class="comment"># 每N步eval一次</span></span><br><span class="line">    logging_steps=INTERVAL,             <span class="comment"># 每N步log一次</span></span><br><span class="line">    save_steps=INTERVAL,                <span class="comment"># 每N步保存一个checkpoint</span></span><br><span class="line">    learning_rate=LR,                   <span class="comment"># 学习率)</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>定义<strong>训练器</strong></li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 节省显存</span></span><br><span class="line">model.gradient_checkpointing_enable()<span class="comment"># 定义训练器</span></span><br><span class="line">trainer = Trainer(</span><br><span class="line">    model=model, <span class="comment"># 待训练模型</span></span><br><span class="line">    args=training_args, <span class="comment"># 训练参数</span></span><br><span class="line">    data_collator=collater, <span class="comment"># 数据校准器</span></span><br><span class="line">    train_dataset=tokenized_train_dataset,  <span class="comment"># 训练集</span></span><br><span class="line">    eval_dataset=tokenized_valid_dataset,   <span class="comment"># 验证集</span></span><br><span class="line">    <span class="comment"># compute_metrics=compute_metric,         </span></span><br><span class="line">    <span class="comment"># 计算自定义评估指标，如果 MAX_LEN &gt; 32, 需要将此行注释掉，否则显存溢出)</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>开始训练</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 开始训练</span><br><span class="line">trainer.<span class="title function_">train</span>()</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>使用 <code>tensorboard</code> 工具可视化训练过程（可选）</li>
+</ol>
+<p>在系统命令行模式下运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tensorboard --logdir output</span><br></pre></td></tr></table></figure>
+
+<img src="/2025/04/13/12-Fine-Tuning/1744595250341-2.png" class="">
+
+<ol>
+<li>加载训练后的模型进行推理（参考）</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer, AutoModelForCausalLM</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载训练后的 checkpoint</span></span><br><span class="line">model = AutoModelForCausalLM.from_pretrained(<span class="string">&quot;output/checkpoint-1000&quot;</span>)<span class="comment"># 模型设为推理模式</span></span><br><span class="line">model.<span class="built_in">eval</span>()<span class="comment"># 加载 tokenizer</span></span><br><span class="line">tokenizer = AutoTokenizer.from_pretrained(<span class="string">&quot;gpt2&quot;</span>)<span class="comment"># 待分类文本</span></span><br><span class="line">text = <span class="string">&quot;This is a good movie!&quot;</span><span class="comment"># 文本转 token ids - 与训练时一样</span></span><br><span class="line">inputs = tokenizer(<span class="string">f&quot;<span class="subst">&#123;text&#125;</span> Sentiment: &quot;</span>, return_tensors=<span class="string">&quot;pt&quot;</span>)<span class="comment"># 推理：预测标签</span></span><br><span class="line">output = model.generate(**inputs, do_sample=<span class="literal">False</span>, max_new_tokens=<span class="number">1</span>)<span class="comment"># label token 转标签文本</span></span><br><span class="line">tokenizer.decode(output[<span class="number">0</span>][-<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
+
+<p>「Checkpoint」指的是在特定时间点保存的模型的状态。这个状态包括了模型的参数权重和优化器的状态，使得训练可以从这个点重新开始而不是从头开始。</p>
+<p>通常，我们通过观察在验证集上的评估结果，选择某个 checkpoint 作为最终用于推理的模型。</p>
+<ol>
+<li>加载 checkpoint 并继续训练（选）</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">trainer.<span class="title function_">train</span>(resume_from_checkpoint=<span class="string">&quot;/path/to/checkpoint&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong></p>
+<ul>
+<li>以上实验建议在 4G 以上显存的 GPU 上运行</li>
+<li>如显存低于 24G 的情况下，可通过修改以下超参来降低显存需求</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 此处只列出需修改的超参，其它超参与之前配置一致</span><br><span class="line">training_args = <span class="title class_">TrainingArguments</span>(</span><br><span class="line">    per_device_train_batch_size=<span class="number">1</span>,     # 减小每张卡的训练时 batch 大小</span><br><span class="line">    gradient_accumulation_steps=<span class="number">8</span>,     # 增大累计参数更新的步数</span><br><span class="line">    per_device_eval_batch_size=<span class="number">1</span>,      # 减小每张卡的评估时 batch 大小)</span><br><span class="line"></span><br><span class="line">trainer = <span class="title class_">Trainer</span>(</span><br><span class="line">    model=model, </span><br><span class="line">    args=training_args, </span><br><span class="line">    data_collator=collater, </span><br><span class="line">    train_dataset=tokenized_train_dataset,  </span><br><span class="line">    eval_dataset=tokenized_valid_dataset,   </span><br><span class="line">    # compute_metrics=compute_metric,         # 注释掉！不使用自定义评估器)</span><br></pre></td></tr></table></figure>
+
+<p><strong>扩展知识：</strong></p>
+<ul>
+<li>以上实验是从生成模型视角训练一个分类任务；</li>
+<li>上述分类任务也可以从分类器视角建模，使用类似 <a target="_blank" rel="noopener" href="https://huggingface.co/docs/transformers/en/model_doc/bert#transformers.BertForSequenceClassification">BERT 加额外分类器层的形式。</a></li>
+</ul>
+<h3 id="1-3-过程概述"><a href="#1-3-过程概述" class="headerlink" title="1.3 过程概述"></a>1.3 过程概述</h3><ol>
+<li>加载数据集</li>
+<li>数据预处理：<ol>
+<li>将输入输出按特定格式拼接</li>
+<li>文本转 Token IDs</li>
+<li>通过 labels 标识出哪部分是输出（只有输出的 token 参与 loss 计算）</li>
+</ol>
+</li>
+<li>加载模型、Tokenizer</li>
+<li>定义数据规整器</li>
+<li>定义训练超参：学习率、批次大小、…</li>
+<li>定义训练器</li>
+<li>开始训练</li>
+<li>注意：训练后推理时，输入数据的拼接方式要与训练时一致</li>
+</ol>
+<p><strong>划重点：</strong></p>
+<ul>
+<li>记住上面的流程，你就能跑通模型训练过程</li>
+<li>理解下面的知识，你就能训练好模型效果</li>
+</ul>
+<h2 id="2-什么是模型"><a href="#2-什么是模型" class="headerlink" title="2 什么是模型"></a>2 什么是模型</h2><p><strong>尝试：</strong> 用简单的数学语言表达概念</p>
+<h3 id="2-1-通俗（不严谨）地说，模型是一个函数"><a href="#2-1-通俗（不严谨）地说，模型是一个函数" class="headerlink" title="2.1 通俗（不严谨）地说，模型是一个函数"></a>2.1 通俗（不严谨）地说，<strong>模型</strong>是一个函数</h3><ol>
+<li>先举个最简单的例子：</li>
+</ol>
+<ul>
+<li>y&#x3D;ax+b: 描述输入 x 与输出 y 的关系</li>
+<li>这个例子中，x 与 y 是「线性关系」，画在 x-y 轴上就是一条直线</li>
+<li>其中 a, b 是参数，决定这条直线的斜率和偏离原点的距离</li>
+<li>a 和 b 是未知的，需要我们从一组数据（{(xi,yi)}i&#x3D;1⋯N）中推导出来（训练）</li>
+</ul>
+<ol>
+<li>实际问题中，x 与 y 不一定是直线关系，所以我们用一个更广义的表示</li>
+</ol>
+<ul>
+<li>y&#x3D;F(x;ω): F 是任意一个函数形式</li>
+<li>它接收输入x：可以是一个词、一个句子、一篇文章或图片、语音、视频 …<ul>
+<li>这些物体都被表示成一个数学「矩阵」（其实应该叫张量，tensor）</li>
+</ul>
+</li>
+<li>它预测输出y<ul>
+<li>可以是「是否」（{0,1}）、标签（{0,1,2,3…}）、一个数值（回归问题）、下一个词的概率 …</li>
+</ul>
+</li>
+<li>F 的数学表达式就是网络结构（这里特指深度学习）</li>
+<li>F 有一组<strong>参数</strong> ω，这就是我们要训练的部分</li>
+</ul>
+<p><strong>把它想象成一个方程：</strong></p>
+<ol>
+<li>每条数据就是一对儿 (x,y) ，它们是常量</li>
+<li>参数是未知数，是变量</li>
+<li>F 就是表达式：我们不知道真实的公式是什么样的，所以假设了一个足够复杂的公式（比如，一个特定结构的神经网络）</li>
+<li>这个求解这个方程（近似解）就是训练过程</li>
+</ol>
+<p><strong>通俗的讲：</strong> 训练，就是确定这组参数的取值</p>
+<ul>
+<li>用数学（数值分析）方法找到使模型在训练集上表现足够好的一个值</li>
+<li>表现足够好，就是说，对每个数据样本(x,y)，使 F(x;ω) 的值尽可能接近</li>
+</ul>
+<h3 id="2-2-一个最简单的神经网络"><a href="#2-2-一个最简单的神经网络" class="headerlink" title="2.2 一个最简单的神经网络"></a>2.2 一个最简单的神经网络</h3><p>一个神经元：$$y&#x3D;f(\sum_i w_i\cdot x_i)$$</p>
+<img src="/2025/04/13/12-Fine-Tuning/1744595250342-3.jpeg" class="">
+
+<p>把很多神经元连接起来，就成了神经网络：$$y&#x3D;f(\sum_i w_i\cdot x_i),z&#x3D;f(\sum_i w’_i\cdot y_i),\tau&#x3D;f(\sum_i w’’_i\cdot z_i)$$</p>
+<img src="/2025/04/13/12-Fine-Tuning/1744595250342-4.jpeg" class="">
+
+<p>这里的f叫激活函数，有很多种形式</p>
+<p>现今的大模型中常用的激活函数包括：ReLU、GELU、Swish</p>
+<img src="/2025/04/13/12-Fine-Tuning/1744595250342-5.jpeg" class="">
+
+<p><strong>思考：</strong> 这里如果没有激活函数会怎样？</p>
+<h2 id="3-模型训练"><a href="#3-模型训练" class="headerlink" title="3 模型训练"></a>3 模型训练</h2><p>我们希望找到一组参数ω，使模型预测的输出$$\hat{y}&#x3D;F(x;\omega)$$与真实的输出y，尽可能的接近</p>
+<p>这里，我们（至少）需要两个要素：</p>
+<ul>
+<li>一个数据集，包含N个输入输出的例子（称为样本）：$$D&#x3D;{(x_i,y_i)}_{i&#x3D;1}^N$$</li>
+<li>一个<strong>损失函数</strong>，衡量模型预测的输出与真实输出之间的差距：$$\mathrm{loss}(y,F(x;\omega))$$<ul>
+<li>例如：$$\mathrm{loss}(y,F(x;\omega))&#x3D;|y-F(x;\omega)|$$</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-1-模型训练本质上是一个求解最优化问题的过程"><a href="#3-1-模型训练本质上是一个求解最优化问题的过程" class="headerlink" title="3.1 模型训练本质上是一个求解最优化问题的过程"></a>3.1 模型训练本质上是一个求解最优化问题的过程</h3><p>$$\min_{\omega} L(D,\omega)$$</p>
+<p>$$L(D,\omega)&#x3D;\frac{1}{N}\sum_{i&#x3D;1}^N\mathrm{loss}(y_i,F(x_i;\omega))$$</p>
+<h3 id="3-2-求解"><a href="#3-2-求解" class="headerlink" title="3.2 求解"></a>3.2 求解</h3><p>回忆一下梯度的定义</p>
+<img src="/2025/04/13/12-Fine-Tuning/1744595250342-6.png" class="">
+
+<p>从最简单的情况说起：梯度下降与凸问题</p>
+<img src="/2025/04/13/12-Fine-Tuning/1744595250342-7.png" class="">
+
+<p>梯度决定了函数变化的方向，每次迭代更新我们会收敛到一个极值</p>
+<p>$$\omega_{n+1}\leftarrow \omega_n - \gamma \nabla_{\omega}L(D,\omega)$$</p>
+<p>其中，$$\gamma&lt;1$$叫做<strong>学习率</strong>，它和梯度的模数共同决定了每步走多远</p>
+<h3 id="3-3-难点（1）：深度学习没有全局最优解（非凸问题）"><a href="#3-3-难点（1）：深度学习没有全局最优解（非凸问题）" class="headerlink" title="3.3 难点（1）：深度学习没有全局最优解（非凸问题）"></a>3.3 难点<strong>（1）</strong>：深度学习没有全局最优解（非凸问题）</h3><img src="/2025/04/13/12-Fine-Tuning/1744595250342-8.png" class="">
+
+<h3 id="3-4-难点（2）：在整个数据集上求梯度计算量太大"><a href="#3-4-难点（2）：在整个数据集上求梯度计算量太大" class="headerlink" title="3.4 难点（2）：在整个数据集上求梯度计算量太大"></a>3.4 难点<strong>（2）</strong>：在整个数据集上求梯度计算量太大</h3><img src="/2025/04/13/12-Fine-Tuning/1744595250342-9.png" class="">
+
+<p><strong>经验：</strong></p>
+<ul>
+<li>如果全量参数训练：条件允许的情况下，先尝试Batch Size大些</li>
+<li>小参数量微调：Batch Size 大不一定就好，看稳定性</li>
+</ul>
+<h3 id="3-5-难点（3）：学习率也很关键，甚至需要动态调整"><a href="#3-5-难点（3）：学习率也很关键，甚至需要动态调整" class="headerlink" title="3.5 难点（3）：学习率也很关键，甚至需要动态调整"></a>3.5 难点<strong>（3）</strong>：学习率也很关键，甚至需要动态调整</h3><img src="/2025/04/13/12-Fine-Tuning/1744595250342-10.png" class="">
+
+<p><strong>划重点：</strong>适当调整学习率（Learning Rate），避免陷入很差的局部解或者跳过了好的解</p>
+<h2 id="4-求解器"><a href="#4-求解器" class="headerlink" title="4 求解器"></a>4 求解器</h2><p>为了让训练过程更好的收敛，人们设计了很多更复杂的求解器</p>
+<ul>
+<li>比如：SGD、L-BFGS、Rprop、RMSprop、Adam、AdamW、AdaGrad、AdaDelta 等等</li>
+<li>但是，好在对于 Transformer 最常用的就是 Adam 或者 AdamW</li>
+</ul>
+<h2 id="5-一些常用的损失函数"><a href="#5-一些常用的损失函数" class="headerlink" title="5 一些常用的损失函数"></a>5 一些常用的<strong>损失函数</strong></h2><ul>
+<li>两个数值的差距，Mean Squared Error：$$\ell_{\mathrm{MSE}}&#x3D;\frac{1}{N}\sum_{i&#x3D;1}^N(y_i-\hat{y}_i)^2$$(等价于欧式距离，见下文)</li>
+<li>两个向量之间的（欧式）距离：$$\ell(\mathbf{y},\mathbf{\hat{y}})&#x3D;|\mathbf{y}-\mathbf{\hat{y}}|$$</li>
+<li>两个向量之间的夹角（余弦距离）：</li>
+</ul>
+<img src="/2025/04/13/12-Fine-Tuning/1744595250342-11.png" class="">
+
+<ul>
+<li>两个概率分布之间的差异，交叉熵：$$\ell_{\mathrm{CE}}(p,q)&#x3D;-\sum_i p_i\log q_i$$——假设是概率分布 p,q 是离散的</li>
+<li>这些损失函数也可以组合使用（在模型蒸馏的场景常见这种情况），例如$$L&#x3D;L_1+\lambda L_2$$，其中$$\lambda$$是一个预先定义的权重，也叫一个「超参」</li>
+</ul>
+<img src="/2025/04/13/12-Fine-Tuning/1744595250342-12.png" class="">
+
+<p><strong>思考：</strong> 你能找到这些损失函数和分类、回归问题之间的关系吗？</p>
+<h2 id="6-再动手复习一下上述过程"><a href="#6-再动手复习一下上述过程" class="headerlink" title="6 再动手复习一下上述过程"></a>6 再动手复习一下上述过程</h2><p>用 PyTorch 训练一个最简单的神经网络</p>
+<p>数据集（MNIST）样例：</p>
+<img src="/2025/04/13/12-Fine-Tuning/1744595250342-13.jpeg" class="">
+
+<p>输入一张 28×28 的图像，输出标签 0–9</p>
+<p><strong>注意：</strong></p>
+<ul>
+<li>以下的代码，都不要在Jupyter笔记上直接运行，会死机！！</li>
+<li>请将左侧的 <code>experiments/mnist/train.py</code> 文件下载到本地</li>
+<li>安装相关依赖包: pip install torch torchvision</li>
+<li>运行：python3 train.py</li>
+<li>普通的 CPU 也足够运行此实验</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">from</span> torchvision <span class="keyword">import</span> datasets, transforms</span><br><span class="line"><span class="keyword">from</span> torch.optim.lr_scheduler <span class="keyword">import</span> StepLR</span><br><span class="line"></span><br><span class="line">BATCH_SIZE = <span class="number">64</span></span><br><span class="line">TEST_BACTH_SIZE = <span class="number">1000</span></span><br><span class="line">EPOCHS = <span class="number">5</span></span><br><span class="line">LR = <span class="number">0.01</span></span><br><span class="line">SEED = <span class="number">42</span></span><br><span class="line">LOG_INTERVAL = <span class="number">100</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义一个全连接网络</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FeedForwardNet</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="comment"># 第一层784维输入、256维输出 -- 图像大小28×28=784</span></span><br><span class="line">        <span class="variable language_">self</span>.fc1 = nn.Linear(<span class="number">784</span>, <span class="number">256</span>)</span><br><span class="line">        <span class="comment"># 第二层256维输入、128维输出</span></span><br><span class="line">        <span class="variable language_">self</span>.fc2 = nn.Linear(<span class="number">256</span>, <span class="number">128</span>)</span><br><span class="line">        <span class="comment"># 第三层128维输入、64维输出</span></span><br><span class="line">        <span class="variable language_">self</span>.fc3 = nn.Linear(<span class="number">128</span>, <span class="number">64</span>)</span><br><span class="line">        <span class="comment"># 第四层64维输入、10维输出 -- 输出类别10类（0,1,...9）</span></span><br><span class="line">        <span class="variable language_">self</span>.fc4 = nn.Linear(<span class="number">64</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Dropout module with 0.2 drop probability</span></span><br><span class="line">        <span class="variable language_">self</span>.dropout = nn.Dropout(p=<span class="number">0.2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="comment"># 把输入展平成1D向量</span></span><br><span class="line">        x = x.view(x.shape[<span class="number">0</span>], -<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 每层激活函数是ReLU，额外加dropout</span></span><br><span class="line">        x = <span class="variable language_">self</span>.dropout(F.relu(<span class="variable language_">self</span>.fc1(x)))</span><br><span class="line">        x = <span class="variable language_">self</span>.dropout(F.relu(<span class="variable language_">self</span>.fc2(x)))</span><br><span class="line">        x = <span class="variable language_">self</span>.dropout(F.relu(<span class="variable language_">self</span>.fc3(x)))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 输出为10维概率分布</span></span><br><span class="line">        x = F.log_softmax(<span class="variable language_">self</span>.fc4(x), dim=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练过程</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">model, loss_fn, device, train_loader, optimizer, epoch</span>):</span><br><span class="line">    <span class="comment"># 开启梯度计算</span></span><br><span class="line">    model.train()</span><br><span class="line">    <span class="keyword">for</span> batch_idx, (data_input, true_label) <span class="keyword">in</span> <span class="built_in">enumerate</span>(train_loader):</span><br><span class="line">        <span class="comment"># 从数据加载器读取一个batch</span></span><br><span class="line">        <span class="comment"># 把数据上载到GPU（如有）</span></span><br><span class="line">        data_input, true_label = data_input.to(device), true_label.to(device)</span><br><span class="line">        <span class="comment"># 求解器初始化（每个batch初始化一次）</span></span><br><span class="line">        optimizer.zero_grad()</span><br><span class="line">        <span class="comment"># 正向传播：模型由输入预测输出</span></span><br><span class="line">        output = model(data_input)</span><br><span class="line">        <span class="comment"># 计算loss</span></span><br><span class="line">        loss = loss_fn(output, true_label)</span><br><span class="line">        <span class="comment"># 反向传播：计算当前batch的loss的梯度</span></span><br><span class="line">        loss.backward()</span><br><span class="line">        <span class="comment"># 由求解器根据梯度更新模型参数</span></span><br><span class="line">        optimizer.step()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 间隔性的输出当前batch的训练loss</span></span><br><span class="line">        <span class="keyword">if</span> batch_idx % LOG_INTERVAL == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;Train Epoch: &#123;&#125; [&#123;&#125;/&#123;&#125; (&#123;:.0f&#125;%)]\tLoss: &#123;:.6f&#125;&#x27;</span>.<span class="built_in">format</span>(</span><br><span class="line">                epoch, batch_idx * <span class="built_in">len</span>(data_input), <span class="built_in">len</span>(train_loader.dataset),</span><br><span class="line">                <span class="number">100.</span> * batch_idx / <span class="built_in">len</span>(train_loader), loss.item()))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算在测试集的准确率和loss</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>(<span class="params">model, loss_fn, device, test_loader</span>):</span><br><span class="line">    model.<span class="built_in">eval</span>()</span><br><span class="line">    test_loss = <span class="number">0</span></span><br><span class="line">    correct = <span class="number">0</span></span><br><span class="line">    <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">        <span class="keyword">for</span> data, target <span class="keyword">in</span> test_loader:</span><br><span class="line">            data, target = data.to(device), target.to(device)</span><br><span class="line">            output = model(data)</span><br><span class="line">            <span class="comment"># sum up batch loss</span></span><br><span class="line">            test_loss += loss_fn(output, target, reduction=<span class="string">&#x27;sum&#x27;</span>).item()</span><br><span class="line">            <span class="comment"># get the index of the max log-probability</span></span><br><span class="line">            pred = output.argmax(dim=<span class="number">1</span>, keepdim=<span class="literal">True</span>)</span><br><span class="line">            correct += pred.eq(target.view_as(pred)).<span class="built_in">sum</span>().item()</span><br><span class="line"></span><br><span class="line">    test_loss /= <span class="built_in">len</span>(test_loader.dataset)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;\nTest set: Average loss: &#123;:.4f&#125;, Accuracy: &#123;&#125;/&#123;&#125; (&#123;:.0f&#125;%)\n&#x27;</span>.<span class="built_in">format</span>(</span><br><span class="line">        test_loss, correct, <span class="built_in">len</span>(test_loader.dataset),</span><br><span class="line">        <span class="number">100.</span> * correct / <span class="built_in">len</span>(test_loader.dataset)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="comment"># 检查是否有GPU</span></span><br><span class="line">    use_cuda = torch.cuda.is_available()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 设置随机种子（以保证结果可复现）</span></span><br><span class="line">    torch.manual_seed(SEED)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 训练设备（GPU或CPU）</span></span><br><span class="line">    device = torch.device(<span class="string">&quot;cuda&quot;</span> <span class="keyword">if</span> use_cuda <span class="keyword">else</span> <span class="string">&quot;cpu&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 设置batch size</span></span><br><span class="line">    train_kwargs = &#123;<span class="string">&#x27;batch_size&#x27;</span>: BATCH_SIZE&#125;</span><br><span class="line">    test_kwargs = &#123;<span class="string">&#x27;batch_size&#x27;</span>: TEST_BACTH_SIZE&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> use_cuda:</span><br><span class="line">        cuda_kwargs = &#123;<span class="string">&#x27;num_workers&#x27;</span>: <span class="number">1</span>,</span><br><span class="line">                       <span class="string">&#x27;pin_memory&#x27;</span>: <span class="literal">True</span>,</span><br><span class="line">                       <span class="string">&#x27;shuffle&#x27;</span>: <span class="literal">True</span>&#125;</span><br><span class="line">        train_kwargs.update(cuda_kwargs)</span><br><span class="line">        test_kwargs.update(cuda_kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 数据预处理（转tensor、数值归一化）</span></span><br><span class="line">    transform = transforms.Compose([</span><br><span class="line">        transforms.ToTensor(),</span><br><span class="line">        transforms.Normalize((<span class="number">0.1307</span>,), (<span class="number">0.3081</span>,))</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 自动下载MNIST数据集</span></span><br><span class="line">    dataset_train = datasets.MNIST(<span class="string">&#x27;data&#x27;</span>, train=<span class="literal">True</span>, download=<span class="literal">True</span>,</span><br><span class="line">                                   transform=transform)</span><br><span class="line">    dataset_test = datasets.MNIST(<span class="string">&#x27;data&#x27;</span>, train=<span class="literal">False</span>,</span><br><span class="line">                                  transform=transform)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义数据加载器（自动对数据加载、多线程、随机化、划分batch、等等）</span></span><br><span class="line">    train_loader = torch.utils.data.DataLoader(dataset_train, **train_kwargs)</span><br><span class="line">    test_loader = torch.utils.data.DataLoader(dataset_test, **test_kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建神经网络模型</span></span><br><span class="line">    model = FeedForwardNet().to(device)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 指定求解器</span></span><br><span class="line">    optimizer = optim.SGD(model.parameters(), lr=LR)</span><br><span class="line">    <span class="comment"># scheduler = StepLR(optimizer, step_size=1, gamma=0.9)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义loss函数</span></span><br><span class="line">    <span class="comment"># 注：nll 作用于 log_softmax 等价于交叉熵，感兴趣的同学可以自行推导</span></span><br><span class="line">    <span class="comment"># https://blog.csdn.net/weixin_38145317/article/details/103288032</span></span><br><span class="line">    loss_fn = F.nll_loss</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 训练N个epoch</span></span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, EPOCHS + <span class="number">1</span>):</span><br><span class="line">        train(model, loss_fn, device, train_loader, optimizer, epoch)</span><br><span class="line">        test(model, loss_fn, device, test_loader)</span><br><span class="line">        <span class="comment"># scheduler.step()</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>&#x2F;opt&#x2F;conda&#x2F;lib&#x2F;python3.11&#x2F;site-packages&#x2F;tqdm&#x2F;auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See <a target="_blank" rel="noopener" href="https://ipywidgets.readthedocs.io/en/stable/user_install.html">https://ipywidgets.readthedocs.io/en/stable/user_install.html</a>  from .autonotebook import tqdm as notebook_tqdm</p>
+<p>Train Epoch: 1 [0&#x2F;60000 (0%)]        Loss: 2.287443</p>
+<p>Train Epoch: 1 [6400&#x2F;60000 (11%)]        Loss: 2.284967</p>
+<p>Train Epoch: 1 [12800&#x2F;60000 (21%)]        Loss: 2.273498</p>
+<p>Train Epoch: 1 [19200&#x2F;60000 (32%)]        Loss: 2.022655</p>
+<p>Train Epoch: 1 [25600&#x2F;60000 (43%)]        Loss: 1.680803</p>
+<p>Train Epoch: 1 [32000&#x2F;60000 (53%)]        Loss: 1.322924</p>
+<p>Train Epoch: 1 [38400&#x2F;60000 (64%)]        Loss: 0.978875</p>
+<p>Train Epoch: 1 [44800&#x2F;60000 (75%)]        Loss: 0.955985</p>
+<p>Train Epoch: 1 [51200&#x2F;60000 (85%)]        Loss: 0.670422</p>
+<p>Train Epoch: 1 [57600&#x2F;60000 (96%)]        Loss: 0.821590</p>
+<p>Test set: Average loss: 0.5133, Accuracy: 8522&#x2F;10000 (85%)</p>
+<p>Train Epoch: 2 [0&#x2F;60000 (0%)]        Loss: 0.740346</p>
+<p>Train Epoch: 2 [6400&#x2F;60000 (11%)]        Loss: 0.697988</p>
+<p>Train Epoch: 2 [12800&#x2F;60000 (21%)]        Loss: 0.676830</p>
+<p>Train Epoch: 2 [19200&#x2F;60000 (32%)]        Loss: 0.531716</p>
+<p>Train Epoch: 2 [25600&#x2F;60000 (43%)]        Loss: 0.457828</p>
+<p>Train Epoch: 2 [32000&#x2F;60000 (53%)]        Loss: 0.621303</p>
+<p>Train Epoch: 2 [38400&#x2F;60000 (64%)]        Loss: 0.354285</p>
+<p>Train Epoch: 2 [44800&#x2F;60000 (75%)]        Loss: 0.588098</p>
+<p>Train Epoch: 2 [51200&#x2F;60000 (85%)]        Loss: 0.530143</p>
+<p>Train Epoch: 2 [57600&#x2F;60000 (96%)]        Loss: 0.533157</p>
+<p>Test set: Average loss: 0.3203, Accuracy: 9035&#x2F;10000 (90%)</p>
+<p>Train Epoch: 3 [0&#x2F;60000 (0%)]        Loss: 0.425095</p>
+<p>Train Epoch: 3 [6400&#x2F;60000 (11%)]        Loss: 0.301024</p>
+<p>Train Epoch: 3 [12800&#x2F;60000 (21%)]        Loss: 0.330063</p>
+<p>Train Epoch: 3 [19200&#x2F;60000 (32%)]        Loss: 0.362905</p>
+<p>Train Epoch: 3 [25600&#x2F;60000 (43%)]        Loss: 0.387243</p>
+<p>Train Epoch: 3 [32000&#x2F;60000 (53%)]        Loss: 0.436325</p>
+<p>Train Epoch: 3 [38400&#x2F;60000 (64%)]        Loss: 0.266472</p>
+<p>Train Epoch: 3 [44800&#x2F;60000 (75%)]        Loss: 0.463275</p>
+<p>Train Epoch: 3 [51200&#x2F;60000 (85%)]        Loss: 0.264305</p>
+<p>Train Epoch: 3 [57600&#x2F;60000 (96%)]        Loss: 0.480805</p>
+<p>Test set: Average loss: 0.2456, Accuracy: 9262&#x2F;10000 (93%)</p>
+<p>Train Epoch: 4 [0&#x2F;60000 (0%)]        Loss: 0.343381</p>
+<p>Train Epoch: 4 [6400&#x2F;60000 (11%)]        Loss: 0.222288</p>
+<p>Train Epoch: 4 [12800&#x2F;60000 (21%)]        Loss: 0.200421</p>
+<p>Train Epoch: 4 [19200&#x2F;60000 (32%)]        Loss: 0.301372</p>
+<p>Train Epoch: 4 [25600&#x2F;60000 (43%)]        Loss: 0.282800</p>
+<p>Train Epoch: 4 [32000&#x2F;60000 (53%)]        Loss: 0.424678</p>
+<p>Train Epoch: 4 [38400&#x2F;60000 (64%)]        Loss: 0.160868</p>
+<p>Train Epoch: 4 [44800&#x2F;60000 (75%)]        Loss: 0.373828</p>
+<p>Train Epoch: 4 [51200&#x2F;60000 (85%)]        Loss: 0.273351</p>
+<p>Train Epoch: 4 [57600&#x2F;60000 (96%)]        Loss: 0.498258</p>
+<p>Test set: Average loss: 0.2007, Accuracy: 9388&#x2F;10000 (94%)</p>
+<p>Train Epoch: 5 [0&#x2F;60000 (0%)]        Loss: 0.175644</p>
+<p>Train Epoch: 5 [6400&#x2F;60000 (11%)]        Loss: 0.349571</p>
+<p>Train Epoch: 5 [12800&#x2F;60000 (21%)]        Loss: 0.231020</p>
+<p>Train Epoch: 5 [19200&#x2F;60000 (32%)]        Loss: 0.277835</p>
+<p>Train Epoch: 5 [25600&#x2F;60000 (43%)]        Loss: 0.248639</p>
+<p>Train Epoch: 5 [32000&#x2F;60000 (53%)]        Loss: 0.338623</p>
+<p>Train Epoch: 5 [38400&#x2F;60000 (64%)]        Loss: 0.174397</p>
+<p>Train Epoch: 5 [44800&#x2F;60000 (75%)]        Loss: 0.384121</p>
+<p>Train Epoch: 5 [51200&#x2F;60000 (85%)]        Loss: 0.238978</p>
+<p>Train Epoch: 5 [57600&#x2F;60000 (96%)]        Loss: 0.279425</p>
+<p>Test set: Average loss: 0.1718, Accuracy: 9461&#x2F;10000 (95%)</p>
+</blockquote>
+<h2 id="7-选修内容"><a href="#7-选修内容" class="headerlink" title="7 选修内容"></a>7 <a target="_blank" rel="noopener" href="http://localhost:8888/files/13-fine-tuning-01/optional/index.ipynb?_xsrf=2%7Cae0d2c71%7C210dc1c6729a7a86b8cdd1c4ac1722a3%7C1742464210">选修内容</a></h2>
+                
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/LLM/">
+                                    <span class="chip bg-color">LLM</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
+            <div class="card">
+                <a href="/2025/04/13/12-Fine-Tuning/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="12-Fine-Tuning">
+                        
+                        <span class="card-title">12-Fine-Tuning</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-04-13
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Tang
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/LLM/">
+                        <span class="chip bg-color">LLM</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2025/04/11/11-Transformer/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="11-Transformer">
+                        
+                        <span class="card-title">11-Transformer</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-04-11
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Tang
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/LLM/">
+                        <span class="chip bg-color">LLM</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('4'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2024-2025</span>
+            
+            <a href="/about" target="_blank">Tang</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;Total visits:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;Total visitors:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/TangCharlotte/AI-Classes" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:485480375@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=485480375" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 485480375" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+    <a href="https://www.zhihu.com/people/bu-yan-92-91" class="tooltipped" target="_blank" data-tooltip="关注我的知乎: https://www.zhihu.com/people/bu-yan-92-91" data-position="top" data-delay="50">
+        <i class="fab fa-zhihu1">知</i>
+    </a>
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+    
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
