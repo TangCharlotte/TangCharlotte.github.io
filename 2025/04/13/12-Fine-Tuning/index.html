@@ -654,7 +654,362 @@
 <p>Train Epoch: 5 [57600&#x2F;60000 (96%)]        Loss: 0.279425</p>
 <p>Test set: Average loss: 0.1718, Accuracy: 9461&#x2F;10000 (95%)</p>
 </blockquote>
-<h2 id="7-选修内容"><a href="#7-选修内容" class="headerlink" title="7 选修内容"></a>7 <a target="_blank" rel="noopener" href="http://localhost:8888/files/13-fine-tuning-01/optional/index.ipynb?_xsrf=2%7Cae0d2c71%7C210dc1c6729a7a86b8cdd1c4ac1722a3%7C1742464210">选修内容</a></h2>
+<h2 id="7-选修内容"><a href="#7-选修内容" class="headerlink" title="7 选修内容"></a>7 <a target="_blank" rel="noopener" href="http://localhost:8888/files/13-fine-tuning-01/optional/index.ipynb?_xsrf=2%7Cae0d2c71%7C210dc1c6729a7a86b8cdd1c4ac1722a3%7C1742464210">选修内容</a></h2><h2 id="8-什么是训练-预训练-微调-轻量化微调"><a href="#8-什么是训练-预训练-微调-轻量化微调" class="headerlink" title="8 什么是训练&#x2F;预训练&#x2F;微调&#x2F;轻量化微调"></a>8 什么是训练&#x2F;预训练&#x2F;微调&#x2F;轻量化微调</h2><ul>
+<li>模型训练（Training）</li>
+<li>预训练（Pre-Training）</li>
+<li>微调（Fine-Tuning）</li>
+<li>轻量化微调（Parameter Efficient Fine-Tuning, PEFT）</li>
+</ul>
+<img src="/2025/04/13/12-Fine-Tuning/1744596203915-14.png" class="">
+
+<p>回忆上面的实验</p>
+<ul>
+<li>MNIST 手写体识别实验，就是 Training</li>
+<li>电影评论情感分类实验，就是 Fine-Tuning</li>
+</ul>
+<p>Pretraing 代码参考</p>
+<ul>
+<li>不大的模型：以 GPT-2 模型为例<ul>
+<li>第一步：训练 Tokenizer，代码参考：<a target="_blank" rel="noopener" href="http://localhost:8888/files/14-fine-tuning-02/pretraining/train_tokenizer.py?_xsrf=2%7Cae0d2c71%7C210dc1c6729a7a86b8cdd1c4ac1722a3%7C1742464210">pretraining&#x2F;train_tokenizer.py</a></li>
+<li>第二步：预训练模型，代码参考：<a target="_blank" rel="noopener" href="http://localhost:8888/files/14-fine-tuning-02/pretraining/pretrain_gpt2.py?_xsrf=2%7Cae0d2c71%7C210dc1c6729a7a86b8cdd1c4ac1722a3%7C1742464210">pretraining&#x2F;pretrain_gpt2.py</a></li>
+<li>训练条件：8 X A100 40GB GPUs，训练时间 &gt;1 周</li>
+<li>更快的实现：<a target="_blank" rel="noopener" href="https://github.com/karpathy/llm.c">karpathy&#x2F;llm.c</a><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/karpathy/llm.c/discussions/481">Reproducing GPT-2 (124M) in llm.c in 90 minutes for $20</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>大语言模型：<a target="_blank" rel="noopener" href="https://github.com/allenai/OLMo">OLMo</a><ul>
+<li>开源了预训练一个 LLM 的完整过程和数据集</li>
+</ul>
+</li>
+</ul>
+<h2 id="9-Transformer-结构简介"><a href="#9-Transformer-结构简介" class="headerlink" title="9 Transformer 结构简介"></a>9 Transformer 结构简介</h2><p>Transformer 是组成 LLM 的基本单元。</p>
+<p>或者说，一个 LLM 就是一个 N 层 Transformer 网络，例如 GPT-3.5 是 96 层。</p>
+<img src="/2025/04/13/12-Fine-Tuning/1744596203905-1.gif" class="">
+
+<h3 id="9-1-Transformer-内部解构简图"><a href="#9-1-Transformer-内部解构简图" class="headerlink" title="9.1 Transformer 内部解构简图"></a>9.1 Transformer 内部解构简图</h3><img src="/2025/04/13/12-Fine-Tuning/1744596203905-2.png" class="">
+
+<p><strong>Self-Attention 的计算</strong></p>
+<img src="/2025/04/13/12-Fine-Tuning/1744596203905-3.png" class="">
+
+<p><strong>全连接层：</strong></p>
+<ul>
+<li>回忆上节课的全连接网络</li>
+<li>这里的激活函数一般是 GELU 或 Swish</li>
+</ul>
+<p>为了严谨：在 Self-Attention 和全连接网络之间还有个残差和 LayerNorm，图中未展示</p>
+<h3 id="9-2-LM-Head-选"><a href="#9-2-LM-Head-选" class="headerlink" title="9.2 LM Head (选)"></a>9.2 LM Head (选)</h3><img src="/2025/04/13/12-Fine-Tuning/1744596203905-4.png" class="">
+
+<p><strong>扩展阅读：</strong></p>
+<ul>
+<li>更详细的Transformer网络拆解（Encoder-Decoder）：<a target="_blank" rel="noopener" href="https://jalammar.github.io/illustrated-transformer/">https://jalammar.github.io/illustrated-transformer/</a></li>
+<li>更详细的GPT模型拆解：<a target="_blank" rel="noopener" href="https://jalammar.github.io/illustrated-gpt2/">https://jalammar.github.io/illustrated-gpt2/</a></li>
+</ul>
+<h2 id="10-轻量化微调"><a href="#10-轻量化微调" class="headerlink" title="10 轻量化微调"></a>10 轻量化微调</h2><img src="/2025/04/13/12-Fine-Tuning/1744596203905-5.png" class="">
+
+<ul>
+<li>定义微调数据集加载器</li>
+<li>定义数据处理函数</li>
+<li>加载预训练模型：AutoModel.from_pretrained(MODEL_NAME_OR_PATH)</li>
+<li>在预训练模型上增加任务相关输出层 （如果需要）</li>
+<li>加载预训练 Tokenizer：AutoTokenizer.from_pretrained(MODEL_NAME_OR_PATH)</li>
+<li><strong>定义注入参数的方法（见下文）</strong></li>
+<li>定义各种超参</li>
+<li>定义 Trainer</li>
+<li>定义 Evaluation Metric</li>
+<li>开始训练</li>
+</ul>
+<h3 id="10-1-注入伪-Embedding-或-Hidden-States（选）"><a href="#10-1-注入伪-Embedding-或-Hidden-States（选）" class="headerlink" title="10.1 注入伪 Embedding 或 Hidden States（选）"></a>10.1 注入伪 Embedding 或 Hidden States（选）</h3><ol>
+<li>Prompt Tuning</li>
+</ol>
+<ul>
+<li>在输入序列前，额外加入一组伪 Embedding 向量</li>
+<li>只训练这组伪 Embedding，从而达到参数微调的效果</li>
+</ul>
+<img src="/2025/04/13/12-Fine-Tuning/1744596203905-6.png" class="">
+
+<ol>
+<li>P-Tuning</li>
+</ol>
+<ul>
+<li>用一个生成器生成上述伪 Embedding</li>
+<li>只有生成器的参数是可训练的</li>
+</ul>
+<img src="/2025/04/13/12-Fine-Tuning/1744596203905-7.png" class="">
+
+<ol>
+<li>Prefix-Tuning</li>
+</ol>
+<ul>
+<li>伪造前面的 Hidden States</li>
+<li>只训练伪造的这个 Prefix</li>
+</ul>
+<img src="/2025/04/13/12-Fine-Tuning/1744596203905-8.png" class="">
+
+<p><strong>划重点：</strong> 此类方法作为早期的 PEFT 方法，经过一段时间检验后，在通用性和最终效果上普遍不如 LoRA 类方法。目前只有 GLM 系列模型官方仍有延用 Prefix-Tuning。建议作为了解即可。</p>
+<h3 id="10-2-注入参数矩阵"><a href="#10-2-注入参数矩阵" class="headerlink" title="10.2 注入参数矩阵"></a>10.2 注入参数矩阵</h3><ol>
+<li>LoRA</li>
+</ol>
+<ul>
+<li>在 Transformer 的参数矩阵上加一个低秩矩阵（A×B）</li>
+<li>只训练 A，B</li>
+<li>理论上可以把上述方法应用于 Transformer 中的任意参数矩阵，包括 Embedding 矩阵</li>
+<li>通常应用于 Query, Value 两个参数矩阵</li>
+</ul>
+<img src="/2025/04/13/12-Fine-Tuning/1744596203905-9.png" class="">
+
+<ol>
+<li>QLoRA</li>
+</ol>
+<p>什么是模型量化</p>
+<img src="/2025/04/13/12-Fine-Tuning/1744596203905-10.png" class="">
+
+<img src="/2025/04/13/12-Fine-Tuning/1744596203906-11.png" class="">
+
+<p>更多参考: <a target="_blank" rel="noopener" href="https://huggingface.co/blog/hf-bitsandbytes-integration">https://huggingface.co/blog/hf-bitsandbytes-integration</a></p>
+<p>QLoRA 引入了许多创新来在不牺牲性能的情况下节省显存：</p>
+<ul>
+<li>4 位 NormalFloat（NF4），一种对于正态分布权重而言信息理论上最优的新数据类型</li>
+<li>双重量化，通过量化量化常数来减少平均内存占用</li>
+<li>分页优化器，用于管理内存峰值</li>
+</ul>
+<p>原文实现：单个 48G 的 GPU 显卡上微调 65B 的参数模型，保持 16 字节微调任务的性能</p>
+<h2 id="11-实战"><a href="#11-实战" class="headerlink" title="11 实战"></a>11 <strong>实战</strong></h2><p>基于 GLM 4, Llama 3 或 Qwen2， 微调一个同时具有 NLU 和问答能力对话机器人</p>
+<h3 id="11-1-数据源"><a href="#11-1-数据源" class="headerlink" title="11.1 数据源"></a>11.1 数据源</h3><p>酒店预订场景 <a target="_blank" rel="noopener" href="https://github.com/thu-coai/CrossWOZ">https://github.com/thu-coai/CrossWOZ</a></p>
+<p>酒店数据库 <a target="_blank" rel="noopener" href="https://github.com/thu-coai/CrossWOZ/blob/master/data/crosswoz/database/hotel_db.json">https://github.com/thu-coai/CrossWOZ/blob/master/data/crosswoz/database/hotel_db.json</a></p>
+<h3 id="11-2-数据增强"><a href="#11-2-数据增强" class="headerlink" title="11.2 数据增强"></a>11.2 数据增强</h3><ul>
+<li>从 CrossWOZ 数据集中抽取了只关于酒店的对话</li>
+<li>利用 ChatGPT 进行如下修改和补充<ul>
+<li>对设施的描述更口语化<ul>
+<li>“找一家有国际长途电话的酒店” -&gt; “找一家能打国际长途的酒店”</li>
+</ul>
+</li>
+<li>补充一定比例的多轮问答，和结束语对话（p&#x3D;0.3）<ul>
+<li>针对只提及一个酒店时的问答：“这个酒店的电话是多少”</li>
+<li>针对推荐多个酒店时的对比问答：“哪个酒店评分更高”</li>
+<li>结束语：“好的，祝您入住愉快”</li>
+</ul>
+</li>
+<li>补充按酒店名（简称）、价格上限查询的对话（原数据中没有这类说法）</li>
+</ul>
+</li>
+</ul>
+<p>数据增强的代码参考 <a target="_blank" rel="noopener" href="http://localhost:8888/files/14-fine-tuning-02/data_augmentation.zip?_xsrf=2%7Cae0d2c71%7C210dc1c6729a7a86b8cdd1c4ac1722a3%7C1742464210">data_augmentation.zip</a></p>
+<p>最终按 8:1:1 拆分训练集、验证集和测试</p>
+<p><strong>原始样本</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span><span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你好，我出差想去酒店住宿。请帮我推荐一家公共区域和部分房间提供wifi服务，评分是4分以上的酒店。&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;search&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;facilities&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;公共区域和部分房间提供wifi&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;rating_range_lower&quot;</span><span class="punctuation">:</span> <span class="number">4.0</span><span class="punctuation">&#125;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;return&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;records&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span><span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;北京龙鼎华鼎云酒店&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;舒适型&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;address&quot;</span><span class="punctuation">:</span> <span class="string">&quot;北京朝阳区潘家园东里18号&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;subway&quot;</span><span class="punctuation">:</span> <span class="string">&quot;劲松地铁站D口&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;phone&quot;</span><span class="punctuation">:</span> <span class="string">&quot;010-52001188&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;facilities&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;公共区域和部分房间提供wifi&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;宽带上网&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;国际长途电话&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;吹风机&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;24小时热水&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;中式餐厅&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;会议室&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;无烟房&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;商务中心&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;洗衣服务&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;行李寄存&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;叫醒服务&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;price&quot;</span><span class="punctuation">:</span> <span class="number">-1.0</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;rating&quot;</span><span class="punctuation">:</span> <span class="number">4.3</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;hotel_id&quot;</span><span class="punctuation">:</span> <span class="number">24</span><span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;assistant&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;那您去北京龙鼎华鼎云酒店住宿吧，酒店质量很好。&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>增强后样本</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span><span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你好，我出差想去酒店住宿。请帮我推荐一家提供无线网络且评分在4分以上的酒店。&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;search&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;facilities&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;无线网络&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;rating_range_lower&quot;</span><span class="punctuation">:</span> <span class="number">4.0</span><span class="punctuation">&#125;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;return&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;records&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span><span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;北京龙鼎华鼎云酒店&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;舒适型&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;address&quot;</span><span class="punctuation">:</span> <span class="string">&quot;北京朝阳区潘家园东里18号&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;subway&quot;</span><span class="punctuation">:</span> <span class="string">&quot;劲松地铁站D口&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;phone&quot;</span><span class="punctuation">:</span> <span class="string">&quot;010-52001188&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;facilities&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;公共区域和部分房间提供wifi&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;宽带上网&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;国际长途电话&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;吹风机&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;24小时热水&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;中式餐厅&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;会议室&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;无烟房&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;商务中心&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;洗衣服务&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;行李寄存&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;叫醒服务&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;price&quot;</span><span class="punctuation">:</span> <span class="number">-1.0</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;rating&quot;</span><span class="punctuation">:</span> <span class="number">4.3</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;hotel_id&quot;</span><span class="punctuation">:</span> <span class="number">24</span><span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;assistant&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;那您去北京龙鼎华鼎云酒店住宿吧，酒店质量很好。&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这个酒店的评分是多少？&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;assistant&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这个酒店的评分是4.3分。&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;好的，我决定入住北京龙鼎华鼎云酒店了。&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span><span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;assistant&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;好的，祝您入住愉快。&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="11-3-数据的基本拼接方式"><a href="#11-3-数据的基本拼接方式" class="headerlink" title="11.3 数据的基本拼接方式"></a>11.3 数据的基本拼接方式</h3><img src="/2025/04/13/12-Fine-Tuning/1744596203906-12.png" class="">
+
+<h3 id="11-4-多轮对话怎么拼"><a href="#11-4-多轮对话怎么拼" class="headerlink" title="11.4 多轮对话怎么拼"></a>11.4 多轮对话怎么拼</h3><h4 id="11-4-1-ChatGLM-2-的方式"><a href="#11-4-1-ChatGLM-2-的方式" class="headerlink" title="11.4.1 ChatGLM 2 的方式"></a><strong>11.4.1</strong> ChatGLM 2 的方式</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">user</span>: 你好</span><br><span class="line"><span class="attr">assistant</span>: 有什么可以帮您</span><br><span class="line"><span class="attr">user</span>: 你喜欢什么颜色</span><br><span class="line"><span class="attr">assistant</span>: 喜欢黑色</span><br><span class="line"><span class="attr">user</span>: 为什么</span><br><span class="line"><span class="attr">assistant</span>: 因为黑色幽默</span><br></pre></td></tr></table></figure>
+
+<p>按照轮次，上述对话将被拆分成 3 个单独的样本</p>
+<ul>
+<li>每个样本以之前的历史为输入</li>
+<li>当前轮的回复为输出</li>
+</ul>
+<p><strong>样本 1</strong></p>
+<p>输入： [Round 0]\n 问: 你好\n 答:</p>
+<p>输出： 有什么可以帮您</p>
+<p><strong>样本 2</strong></p>
+<p>输入： [Round 0]\n 问: 你好\n 答: 有什么可以帮您\n [Round 1]\n 问: 你喜欢什么颜色\n 答:</p>
+<p>输出： 喜欢黑色</p>
+<p><strong>样本 3</strong></p>
+<p>输入： [Round 0]\n 问: 你好\n 答: 有什么可以帮您\n [Round 1]\n 问: 你喜欢什么颜色\n 答: 喜欢黑色\n [Round 2]\n 问: 为什么\n 答:</p>
+<p>输出： 因为黑色幽默</p>
+<h4 id="11-4-2-ChatGLM-3-GLM4-9B-的方式"><a href="#11-4-2-ChatGLM-3-GLM4-9B-的方式" class="headerlink" title="11.4.2 ChatGLM 3 &#x2F; GLM4-9B 的方式"></a><strong>11.4.2</strong> ChatGLM 3 &#x2F; GLM4-9B 的方式</h4><p>因为 CausalLM 是一直从左往右预测的，我们可以直接在多轮对话中标识出多段输出。</p>
+<img src="/2025/04/13/12-Fine-Tuning/1744596203906-13.png" class="">
+
+<p>具体如下：</p>
+<p>角色<strong>special token</strong>用于标识分隔出多轮对话，同时也可以防范注入攻击</p>
+<ul>
+<li><code>&lt;|system|&gt;</code> #系统提示词，指明模型可使用的工具等信息</li>
+<li><code>&lt;|user|&gt;</code> #用户输入，用户的指令</li>
+<li><code>&lt;|assistant|&gt;</code> #模型回复，或模型思考要做的事情</li>
+<li><code>&lt;|observation|&gt;</code> #工具调用、代码执行结果</li>
+</ul>
+<p>注意：<strong>这里&lt;|role|&gt;这种是一个 token</strong>，而不是一串文本，所以不能通过<code>tokenizer.encode(&#39;&lt;role&gt;&#39;)</code>来得到</p>
+<p>角色后跟随的是 metadata，对于 function calling 来说，metadata 是调用的函数和相应参数；对其他角色的对话，metadata 为空</p>
+<ul>
+<li>多轮对话 finetune 时根据角色添加 loss_mask</li>
+<li>在一遍计算中为多轮回复计算 loss</li>
+</ul>
+<p><code>&lt;|system|&gt;</code>你是一个名为 GhatGLM 的人工智能助手。你是基于智谱AI训练的语言模型 GLM-4 模型开发的，你的任务是针对用户的问题和要求提供适当的答复和支持。\n\n# 可用工具\n\n## function_name1\n\n{…}\n\n## function_name2\n\n{…}\n在调用上述函数时，请使用 Json 格式表示调用的参数。”</p>
+<p><code>&lt;|user|&gt;</code> 北京的天气怎么样？</p>
+<p><code>&lt;|assistant|&gt;</code> get_weather\n{“location”:”北京”}</p>
+<p>&lt;|observation|&gt; {“temperature_c”: 12, “description”: “haze”}</p>
+<p><code>&lt;|assistant|&gt;</code> 根据天气工具的信息，北京的天气是：温度 12 摄氏度，有雾。</p>
+<p>&lt;|user|&gt; 这样的天气适合外出活动吗？</p>
+<p><code>&lt;|assistant|&gt;</code> 北京现在有雾，气温较低，建议您考虑一下是否适合外出进行锻炼。</p>
+<p>&lt;|user|&gt;</p>
+<p>高亮部分为需要计算 loss 的 token。<strong>注意&lt;|assistant|＞后的内容和角色 token 都需要算 loss。</strong></p>
+<p>此部分可以参考 GLM4 的<a target="_blank" rel="noopener" href="https://huggingface.co/THUDM/glm-4-9b/blob/main/tokenization_chatglm.py">官方实现</a>： <code>tokenizer</code> 的代码中的 <code>apply_chat_template</code> 方法。</p>
+<p><strong>格式化后的数据样例</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;messages&quot;: [&#123;&quot;role&quot;: &quot;system&quot;,</span><br><span class="line">      &quot;content&quot;: &quot;&quot;,</span><br><span class="line">      &quot;tools&quot;: [&#123;&quot;type&quot;: &quot;function&quot;,</span><br><span class="line">          &quot;function&quot;: &#123;&quot;name&quot;: &quot;search_hotels&quot;,</span><br><span class="line">            &quot;description&quot;: &quot;根据用户的需求生成查询条件来查酒店&quot;,</span><br><span class="line">            &quot;parameters&quot;: &#123;&quot;type&quot;: &quot;object&quot;,</span><br><span class="line">              &quot;properties&quot;: &#123;&quot;name&quot;: &#123;&quot;type&quot;: &quot;string&quot;,</span><br><span class="line">                  &quot;description&quot;: &quot;酒店名称&quot;&#125;,</span><br><span class="line">                &quot;type&quot;: &#123;&quot;type&quot;: &quot;string&quot;,</span><br><span class="line">                  &quot;enum&quot;: [&quot;豪华型&quot;,</span><br><span class="line">                    &quot;经济型&quot;,</span><br><span class="line">                    &quot;舒适型&quot;,</span><br><span class="line">                    &quot;高档型&quot;],</span><br><span class="line">                  &quot;description&quot;: &quot;酒店类型&quot;&#125;,</span><br><span class="line">                &quot;facilities&quot;: &#123;&quot;type&quot;: &quot;array&quot;,</span><br><span class="line">                  &quot;items&quot;: &#123;&quot;type&quot;: &quot;string&quot;&#125;,</span><br><span class="line">                  &quot;description&quot;: &quot;酒店能提供的设施列表&quot;&#125;,</span><br><span class="line">                &quot;price_range_lower&quot;: &#123;&quot;type&quot;: &quot;number&quot;,</span><br><span class="line">                  &quot;minimum&quot;: <span class="number">0</span>,</span><br><span class="line">                  &quot;description&quot;: &quot;价格下限&quot;&#125;,</span><br><span class="line">                &quot;price_range_upper&quot;: &#123;&quot;type&quot;: &quot;number&quot;,</span><br><span class="line">                  &quot;minimum&quot;: <span class="number">0</span>,</span><br><span class="line">                  &quot;description&quot;: &quot;价格上限&quot;&#125;,</span><br><span class="line">                &quot;rating_range_lower&quot;: &#123;&quot;type&quot;: &quot;number&quot;,</span><br><span class="line">                  &quot;minimum&quot;: <span class="number">0</span>,</span><br><span class="line">                  &quot;maximum&quot;: <span class="number">5</span>,</span><br><span class="line">                  &quot;description&quot;: &quot;评分下限&quot;&#125;,</span><br><span class="line">                &quot;rating_range_upper&quot;: &#123;&quot;type&quot;: &quot;number&quot;,</span><br><span class="line">                  &quot;minimum&quot;: <span class="number">0</span>,</span><br><span class="line">                  &quot;maximum&quot;: <span class="number">5</span>,</span><br><span class="line">                  &quot;description&quot;: &quot;评分上限&quot;&#125;&#125;,</span><br><span class="line">              &quot;required&quot;: []&#125;&#125;&#125;]&#125;,</span><br><span class="line">    &#123;&quot;role&quot;: &quot;user&quot;,</span><br><span class="line">      &quot;content&quot;: &quot;我想找一家叫瑞洁宾舍民宿的酒店&quot;&#125;,</span><br><span class="line">    &#123;&quot;role&quot;: &quot;assistant&quot;,</span><br><span class="line">      &quot;content&quot;: &quot;search_hotels\n&#123;\&quot;name\&quot;: \&quot;瑞洁宾舍民宿\&quot;&#125;&quot;&#125;,</span><br><span class="line">    &#123;&quot;role&quot;: &quot;observation&quot;,</span><br><span class="line">      &quot;content&quot;: &quot;[&#123;\&quot;address\&quot;: \&quot;北京西城区新农街<span class="number">17</span>号\&quot;, \&quot;facilities\&quot;: \&quot;酒店提供的设施:公共区域和部分房间提供wifi;国际长途电话;吹风机;<span class="number">24</span>小时热水;西式餐厅;无烟房;早餐服务;接站服务;接机服务;接待外宾;行李寄存;看护小孩服务;叫醒服务;收费停车位\&quot;, \&quot;hotel_id\&quot;: 782, \&quot;name\&quot;: \&quot;北京瑞洁宾舍民宿\&quot;, \&quot;phone\&quot;: \&quot;<span class="number">010</span><span class="number">-83133338</span>\&quot;, \&quot;price\&quot;: 249, \&quot;rating\&quot;: 4.5, \&quot;subway\&quot;: \&quot;珠市口地铁站D口\&quot;, \&quot;type\&quot;: \&quot;舒适型\&quot;&#125;]&quot;&#125;,</span><br><span class="line">    &#123;&quot;role&quot;: &quot;assistant&quot;,</span><br><span class="line">      &quot;content&quot;: &quot;为您查到北京瑞洁宾舍民宿，您要选择这家吗&quot;&#125;]&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>划重点：</strong></p>
+<ol>
+<li>在 messages 字段中组织对话轮次</li>
+<li>在 tools 的定义放在 system 角色中，描述 function 和 parameters 的定义</li>
+<li>以 user 和 assistant 标识出用户输入与系统回复</li>
+<li>在 function call 的角色为 assistant，格式为 function_name\n{“arg”:”val”, …}</li>
+<li>以 observation 标识出 function 的返回结果</li>
+</ol>
+<h3 id="11-5-如何在-Llama3-Qwen2-中实现类似-Function-Calling-的效果"><a href="#11-5-如何在-Llama3-Qwen2-中实现类似-Function-Calling-的效果" class="headerlink" title="11.5 如何在 Llama3&#x2F;Qwen2 中实现类似 Function Calling 的效果"></a>11.5 如何在 Llama3&#x2F;Qwen2 中实现类似 Function Calling 的效果</h3><ol>
+<li>我们自定义 user、assistant、search、return 四个角色<ol>
+<li>因为只有一个 function，我们直接把 function 标识成 search</li>
+</ol>
+</li>
+<li>每轮 assistant 和 search 前缀也由模型自动生成，我们以此判断是 function 还是文本回复</li>
+<li>类似 GLM4-9b，我们以预留的特殊 token，来标识每个轮次的角色和轮次结束<ol>
+<li>例如：<code>&lt;|start_header_id|&gt;</code><em>角色</em><code>&lt;|end_header_id|&gt;</code><em>内容 … …</em><code>&lt;|eot_id|&gt;</code></li>
+<li>其中 <code>&lt;|start_header_id|&gt;</code>，<code>&lt;|end_header_id|&gt;</code>，<code>&lt;|eot_id|&gt;</code> 是 Llama 3 预留的特殊 token</li>
+</ol>
+</li>
+</ol>
+<h4 id="11-5-1-Function-Call-的样例"><a href="#11-5-1-Function-Call-的样例" class="headerlink" title="11.5.1 Function Call 的样例"></a><strong>11.5.1 Function Call 的样例</strong></h4><p><strong>输入</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;|start_header_id|&gt;`user`&lt;|end_header_id|&gt;`你好，请帮我推荐一个提供无烟房的舒适型酒店可以吗？`&lt;|eot_id|&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;|start_header_id|&gt;`search`&lt;|end_header_id|&gt;`&#123;&quot;facilities&quot;: [&quot;无烟房&quot;], &quot;type&quot;: &quot;舒适型&quot;&#125;&#125;`&lt;|eot_id|&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="11-5-2-文本回复的样例"><a href="#11-5-2-文本回复的样例" class="headerlink" title="11.5.2 文本回复的样例"></a><strong>11.5.2 文本回复的样例</strong></h4><p><strong>输入</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;|start_header_id|&gt;`user`&lt;|end_header_id|&gt;`你好，请帮我推荐一个提供无烟房的舒适型酒店可以吗？`&lt;|eot_id|&gt;</span><br><span class="line">&lt;|start_header_id|&gt;`search`&lt;|end_header_id|&gt;`&#123;&quot;facilities&quot;: [&quot;无烟房&quot;], &quot;type&quot;: &quot;舒适型&quot;&#125;&#125;`&lt;|eot_id|&gt;</span><br><span class="line">&lt;|start_header_id|&gt;`return`&lt;|end_header_id|&gt;`[&#123;&quot;name&quot;: &quot;北京红驿栈酒店&quot;, &quot;type&quot;: &quot;舒适型&quot;, &quot;address&quot;: &quot;北京朝阳区东直门外春秀路太平庄 10 号(主副楼在一幢建筑里)&quot;, &quot;subway&quot;: &quot;东直门地铁站 E 口&quot;, &quot;phone&quot;: &quot;010-64171066&quot;, &quot;facilities&quot;: [&quot;公共区域和部分房间提供 wifi&quot;, &quot;宽带上网&quot;, &quot;国际长途电话&quot;, &quot;吹风机&quot;, &quot;24 小时热水&quot;, &quot;暖气&quot;, &quot;无烟房&quot;, &quot;早餐服务&quot;, &quot;接待外宾&quot;, &quot;行李寄存&quot;, &quot;叫醒服务&quot;], &quot;price&quot;: 344.0, &quot;rating&quot;: 4.7, &quot;hotel_id&quot;: 51&#125;, &#123;&quot;name&quot;: &quot;维也纳国际酒店(北京广安门店)&quot;, &quot;type&quot;: &quot;舒适型&quot;, &quot;address&quot;: &quot;北京西城区白广路 7 号&quot;, &quot;subway&quot;: &quot;广安门内地铁站 C 口&quot;, &quot;phone&quot;: &quot;010-83539988&quot;, &quot;facilities&quot;: [&quot;酒店各处提供 wifi&quot;, &quot;宽带上网&quot;, &quot;吹风机&quot;, &quot;24 小时热水&quot;, &quot;中式餐厅&quot;, &quot;会议室&quot;, &quot;无烟房&quot;, &quot;商务中心&quot;, &quot;早餐服务&quot;, &quot;洗衣服务&quot;, &quot;行李寄存&quot;, &quot;叫醒服务&quot;], &quot;price&quot;: 553.0, &quot;rating&quot;: 4.7, &quot;hotel_id&quot;: 56&#125;]&#125;]`&lt;|eot_id|&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;|start_header_id|&gt;`assistant`&lt;|end_header_id|&gt;`没问题，推荐你去北京红驿栈酒店和维也纳国际酒店(北京广安门店)，都挺好的。`&lt;|eot_id|&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="11-6-编写训练代码"><a href="#11-6-编写训练代码" class="headerlink" title="11.6 编写训练代码"></a>11.6 编写训练代码</h3><p><strong>见附件:</strong> <strong><a target="_blank" rel="noopener" href="http://localhost:8888/files/14-fine-tuning-02/fine-tuning-lab.zip?_xsrf=2%7Cae0d2c71%7C210dc1c6729a7a86b8cdd1c4ac1722a3%7C1742464210">fine-tuning-lab.zip</a></strong></p>
+<h3 id="11-7-训练后，在测试集上的参考指标"><a href="#11-7-训练后，在测试集上的参考指标" class="headerlink" title="11.7 训练后，在测试集上的参考指标"></a>11.7 训练后，在测试集上的参考指标</h3><ol>
+<li>针对 Function Calling 的每个参数（即 Slot），我们评估准确率、召回率、F1 值</li>
+<li>针对文本回复，我们评估输出文本与参考文本之间的 BLEU Score</li>
+<li>如果本该是 Function Calling 的轮次，模型回复了文本，则所有指标为 0，反之 BLEU Score 为 0</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Method</th>
+<th>BLEU-4</th>
+<th>SLOT-P</th>
+<th>SLOT-R</th>
+<th>SLOT-F1</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GLM4-9B</td>
+<td>Functional Call</td>
+<td>53.53</td>
+<td>82.79</td>
+<td>73.47</td>
+<td>77.85</td>
+</tr>
+<tr>
+<td></td>
+<td>QLoRA</td>
+<td>67.41</td>
+<td>95.95</td>
+<td>96.74</td>
+<td>96.34</td>
+</tr>
+<tr>
+<td>Llama3.1-8B</td>
+<td>Prompt</td>
+<td>51.94</td>
+<td>92.55</td>
+<td>87.84</td>
+<td>90.19</td>
+</tr>
+<tr>
+<td></td>
+<td>QLoRA</td>
+<td>66.53</td>
+<td>97.23</td>
+<td>95.98</td>
+<td>96.6</td>
+</tr>
+<tr>
+<td>Qwen2-7B</td>
+<td>Prompt</td>
+<td>23.43</td>
+<td>85.21</td>
+<td>88.91</td>
+<td>88.02</td>
+</tr>
+<tr>
+<td></td>
+<td>LoRA</td>
+<td>66.7</td>
+<td>96.42</td>
+<td>95.34</td>
+<td>95.87</td>
+</tr>
+</tbody></table>
+<p><strong>思考：</strong> 这版模型不支持 “XXX附近的酒店” 这类问法，为什么？</p>
+<h2 id="12-数据准备与处理"><a href="#12-数据准备与处理" class="headerlink" title="12 数据准备与处理"></a>12 数据准备与处理</h2><h3 id="12-1-数据采集"><a href="#12-1-数据采集" class="headerlink" title="12.1 数据采集"></a>12.1 数据采集</h3><ul>
+<li>自然来源（如业务日志）：真实数据</li>
+<li>Web 抓取：近似数据</li>
+<li>人造</li>
+</ul>
+<h3 id="12-2-数据标注"><a href="#12-2-数据标注" class="headerlink" title="12.2 数据标注"></a>12.2 数据标注</h3><ul>
+<li>专业标注公司<ul>
+<li>定标准，定验收指标</li>
+<li>预标注</li>
+<li>反馈与优化</li>
+<li>正式标注</li>
+<li>抽样检查：合格-&gt;验收；不合格-&gt;返工</li>
+</ul>
+</li>
+<li>众包<ul>
+<li>定标准，定检验指标</li>
+<li>抽样每个工作者的质量</li>
+<li>维系高质量标注者社区</li>
+</ul>
+</li>
+<li>主动学习：通过模型选择重要样本，由专家标注，再训练模型</li>
+<li>设计产品形态，在用户自然交互中产生标注数据（例如点赞、收藏）</li>
+</ul>
+<h3 id="12-3-数据清洗"><a href="#12-3-数据清洗" class="headerlink" title="12.3 数据清洗"></a>12.3 数据清洗</h3><ul>
+<li>去除不相关数据</li>
+<li>去除冗余数据（例如重复的样本）</li>
+<li>去除误导性数据（业务相关）</li>
+</ul>
+<h3 id="12-4-样本均衡性"><a href="#12-4-样本均衡性" class="headerlink" title="12.4 样本均衡性"></a>12.4 样本均衡性</h3><ul>
+<li>尽量保证每个标签（场景&#x2F;子问题）都有足够多的训练样本</li>
+<li>每个标签对应的数据量尽量相当<ul>
+<li>或者在保证每个标签样本充值的前提下，数据分布尽量接近真实业务场景的数据分布</li>
+</ul>
+</li>
+<li>数据不均衡时的策略<ul>
+<li>数据增强：为数据不够类别造数据：（1）人工造；（2）通过模板生成再人工标注；（3）由模型自动生成（再人工标注&#x2F;筛选）</li>
+<li>数据少的类别数据绝对数量也充足时，Downsample 一般比 Upsample 效果好</li>
+<li>实在没办法的话，在训练 loss 里加权（一般不是最有效的办法）</li>
+</ul>
+</li>
+<li>根据业务属性，保证其他关键要素的数据覆盖，例如：时间因素、地域因素、用户年龄段等</li>
+</ul>
+<h3 id="12-5-数据集构建"><a href="#12-5-数据集构建" class="headerlink" title="12.5 数据集构建"></a>12.5 数据集构建</h3><ul>
+<li>数据充分的情况下<ul>
+<li>切分训练集（训练模型）、验证集（验证超参）、测试集（检验最终模型+超参的效果）</li>
+<li>以随机采样的方式保证三个集合的数据分布一致性</li>
+<li>在以上三个集合里都尽量保证各个类别&#x2F;场景的数据覆盖</li>
+</ul>
+</li>
+<li>数据实在太少<ul>
+<li>交叉验证</li>
+</ul>
+</li>
+</ul>
+<p><strong>训练不同模型需要多少显存？</strong></p>
+<ul>
+<li>占用显存的大头主要分为四部分：模型参数、前向计算过程中产生的中间激活、后向传递计算得到的梯度、优化器状态。</li>
+<li>HuggingFace 官方推出一个<a target="_blank" rel="noopener" href="https://huggingface.co/spaces/hf-accelerate/model-memory-usage">在线工具</a>，可以估算模型的显存使用情况。</li>
+</ul>
+
                 
             </div>
             <hr/>
